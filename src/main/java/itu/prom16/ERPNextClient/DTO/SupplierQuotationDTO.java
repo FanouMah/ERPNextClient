@@ -1,5 +1,9 @@
 package itu.prom16.ERPNextClient.DTO;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -10,7 +14,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class SupplierQuotationDTO {
-
     @JsonProperty("name")
     private String name;
 
@@ -19,20 +22,20 @@ public class SupplierQuotationDTO {
 
     @JsonProperty("creation")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSSSSS")
-    private String creation;
+    private LocalDateTime creation;
 
     @JsonProperty("modified")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSSSSS")
-    private String modified;
+    private LocalDateTime modified;
 
     @JsonProperty("modified_by")
     private String modifiedBy;
 
     @JsonProperty("docstatus")
-    private Integer docstatus;
+    private int docstatus;
 
     @JsonProperty("idx")
-    private Integer idx;
+    private int idx;
 
     @JsonProperty("title")
     private String title;
@@ -53,28 +56,21 @@ public class SupplierQuotationDTO {
     private String status;
 
     @JsonProperty("transaction_date")
-    private String transactionDate;
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private LocalDate transactionDate;
 
     @JsonProperty("valid_till")
-    private String validTill;
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private LocalDate validTill;
 
     @JsonProperty("quotation_number")
     private String quotationNumber;
-
-    @JsonProperty("amended_from")
-    private String amendedFrom;
-
-    @JsonProperty("cost_center")
-    private String costCenter;
-
-    @JsonProperty("project")
-    private String project;
 
     @JsonProperty("currency")
     private String currency;
 
     @JsonProperty("conversion_rate")
-    private Double conversionRate;
+    private double conversionRate;
 
     @JsonProperty("buying_price_list")
     private String buyingPriceList;
@@ -83,121 +79,88 @@ public class SupplierQuotationDTO {
     private String priceListCurrency;
 
     @JsonProperty("plc_conversion_rate")
-    private Double plcConversionRate;
+    private double plcConversionRate;
 
     @JsonProperty("ignore_pricing_rule")
-    private Integer ignorePricingRule;
+    private int ignorePricingRule;
 
     @JsonProperty("total_qty")
-    private Double totalQty;
+    private double totalQty;
 
     @JsonProperty("total_net_weight")
-    private Double totalNetWeight;
+    private double totalNetWeight;
 
     @JsonProperty("base_total")
-    private Double baseTotal;
+    private double baseTotal;
 
     @JsonProperty("base_net_total")
-    private Double baseNetTotal;
+    private double baseNetTotal;
 
     @JsonProperty("total")
-    private Double total;
+    private double total;
 
     @JsonProperty("net_total")
-    private Double netTotal;
+    private double netTotal;
 
     @JsonProperty("tax_category")
     private String taxCategory;
 
-    @JsonProperty("taxes_and_charges")
-    private String taxesAndCharges;
-
-    @JsonProperty("shipping_rule")
-    private String shippingRule;
-
-    @JsonProperty("incoterm")
-    private String incoterm;
-
-    @JsonProperty("named_place")
-    private String namedPlace;
-
     @JsonProperty("base_taxes_and_charges_added")
-    private Double baseTaxesAndChargesAdded;
+    private double baseTaxesAndChargesAdded;
 
     @JsonProperty("base_taxes_and_charges_deducted")
-    private Double baseTaxesAndChargesDeducted;
+    private double baseTaxesAndChargesDeducted;
 
     @JsonProperty("base_total_taxes_and_charges")
-    private Double baseTotalTaxesAndCharges;
+    private double baseTotalTaxesAndCharges;
 
     @JsonProperty("taxes_and_charges_added")
-    private Double taxesAndChargesAdded;
+    private double taxesAndChargesAdded;
 
     @JsonProperty("taxes_and_charges_deducted")
-    private Double taxesAndChargesDeducted;
+    private double taxesAndChargesDeducted;
 
     @JsonProperty("total_taxes_and_charges")
-    private Double totalTaxesAndCharges;
+    private double totalTaxesAndCharges;
 
     @JsonProperty("apply_discount_on")
     private String applyDiscountOn;
 
     @JsonProperty("base_discount_amount")
-    private Double baseDiscountAmount;
+    private double baseDiscountAmount;
 
     @JsonProperty("additional_discount_percentage")
-    private Double additionalDiscountPercentage;
+    private double additionalDiscountPercentage;
 
     @JsonProperty("discount_amount")
-    private Double discountAmount;
+    private double discountAmount;
 
     @JsonProperty("base_grand_total")
-    private Double baseGrandTotal;
+    private double baseGrandTotal;
 
     @JsonProperty("base_rounding_adjustment")
-    private Double baseRoundingAdjustment;
+    private double baseRoundingAdjustment;
 
     @JsonProperty("base_rounded_total")
-    private Double baseRoundedTotal;
+    private double baseRoundedTotal;
 
     @JsonProperty("base_in_words")
     private String baseInWords;
 
     @JsonProperty("grand_total")
-    private Double grandTotal;
+    private double grandTotal;
 
     @JsonProperty("rounding_adjustment")
-    private Double roundingAdjustment;
+    private double roundingAdjustment;
 
     @JsonProperty("rounded_total")
-    private Double roundedTotal;
+    private double roundedTotal;
 
     @JsonProperty("in_words")
     private String inWords;
 
     @JsonProperty("disable_rounded_total")
-    private Integer disableRoundedTotal;
-
-    @JsonProperty("other_charges_calculation")
-    private String otherChargesCalculation;
-
-    @JsonProperty("supplier_address")
-    private String supplierAddress;
-
-    @JsonProperty("address_display")
-    private String addressDisplay;
-
-    @JsonProperty("contact_person")
-    private String contactPerson;
-
-    @JsonProperty("contact_display")
-    private String contactDisplay;
-
-    @JsonProperty("contact_mobile")
-    private String contactMobile;
-
-    @JsonProperty("contact_email")
-    private String contactEmail;
+    private int disableRoundedTotal;
 
     @JsonProperty("shipping_address")
     private String shippingAddress;
@@ -211,39 +174,25 @@ public class SupplierQuotationDTO {
     @JsonProperty("billing_address_display")
     private String billingAddressDisplay;
 
-    @JsonProperty("tc_name")
-    private String tcName;
-
-    @JsonProperty("terms")
-    private String terms;
-
-    @JsonProperty("letter_head")
-    private String letterHead;
-
     @JsonProperty("group_same_items")
-    private Integer groupSameItems;
-
-    @JsonProperty("select_print_heading")
-    private String selectPrintHeading;
+    private int groupSameItems;
 
     @JsonProperty("language")
     private String language;
 
-    @JsonProperty("auto_repeat")
-    private String autoRepeat;
-
     @JsonProperty("is_subcontracted")
-    private Integer isSubcontracted;
+    private int isSubcontracted;
 
-    @JsonProperty("opportunity")
-    private String opportunity;
+    @JsonProperty("doctype")
+    private String doctype;
 
-    // Default constructor
+    @JsonProperty("items")
+    private List<SupplierQuotationItemDTO> items;
+
     public SupplierQuotationDTO() {
     }
 
-    // Parameterized constructor
-    public SupplierQuotationDTO(String name, String owner, String creation, String modified, String modifiedBy, Integer docstatus, Integer idx, String title, String namingSeries, String supplier, String supplierName, String company, String status, String transactionDate, String validTill, String quotationNumber, String amendedFrom, String costCenter, String project, String currency, Double conversionRate, String buyingPriceList, String priceListCurrency, Double plcConversionRate, Integer ignorePricingRule, Double totalQty, Double totalNetWeight, Double baseTotal, Double baseNetTotal, Double total, Double netTotal, String taxCategory, String taxesAndCharges, String shippingRule, String incoterm, String namedPlace, Double baseTaxesAndChargesAdded, Double baseTaxesAndChargesDeducted, Double baseTotalTaxesAndCharges, Double taxesAndChargesAdded, Double taxesAndChargesDeducted, Double totalTaxesAndCharges, String applyDiscountOn, Double baseDiscountAmount, Double additionalDiscountPercentage, Double discountAmount, Double baseGrandTotal, Double baseRoundingAdjustment, Double baseRoundedTotal, String baseInWords, Double grandTotal, Double roundingAdjustment, Double roundedTotal, String inWords, Integer disableRoundedTotal, String otherChargesCalculation, String supplierAddress, String addressDisplay, String contactPerson, String contactDisplay, String contactMobile, String contactEmail, String shippingAddress, String shippingAddressDisplay, String billingAddress, String billingAddressDisplay, String tcName, String terms, String letterHead, Integer groupSameItems, String selectPrintHeading, String language, String autoRepeat, Integer isSubcontracted, String opportunity) {
+    public SupplierQuotationDTO(String name, String owner, LocalDateTime creation, LocalDateTime modified, String modifiedBy, int docstatus, int idx, String title, String namingSeries, String supplier, String supplierName, String company, String status, LocalDate transactionDate, LocalDate validTill, String quotationNumber, String currency, double conversionRate, String buyingPriceList, String priceListCurrency, double plcConversionRate, int ignorePricingRule, double totalQty, double totalNetWeight, double baseTotal, double baseNetTotal, double total, double netTotal, String taxCategory, double baseTaxesAndChargesAdded, double baseTaxesAndChargesDeducted, double baseTotalTaxesAndCharges, double taxesAndChargesAdded, double taxesAndChargesDeducted, double totalTaxesAndCharges, String applyDiscountOn, double baseDiscountAmount, double additionalDiscountPercentage, double discountAmount, double baseGrandTotal, double baseRoundingAdjustment, double baseRoundedTotal, String baseInWords, double grandTotal, double roundingAdjustment, double roundedTotal, String inWords, int disableRoundedTotal, String shippingAddress, String shippingAddressDisplay, String billingAddress, String billingAddressDisplay, int groupSameItems, String language, int isSubcontracted, String doctype, List<SupplierQuotationItemDTO> items) {
         this.name = name;
         this.owner = owner;
         this.creation = creation;
@@ -260,9 +209,6 @@ public class SupplierQuotationDTO {
         this.transactionDate = transactionDate;
         this.validTill = validTill;
         this.quotationNumber = quotationNumber;
-        this.amendedFrom = amendedFrom;
-        this.costCenter = costCenter;
-        this.project = project;
         this.currency = currency;
         this.conversionRate = conversionRate;
         this.buyingPriceList = buyingPriceList;
@@ -276,10 +222,6 @@ public class SupplierQuotationDTO {
         this.total = total;
         this.netTotal = netTotal;
         this.taxCategory = taxCategory;
-        this.taxesAndCharges = taxesAndCharges;
-        this.shippingRule = shippingRule;
-        this.incoterm = incoterm;
-        this.namedPlace = namedPlace;
         this.baseTaxesAndChargesAdded = baseTaxesAndChargesAdded;
         this.baseTaxesAndChargesDeducted = baseTaxesAndChargesDeducted;
         this.baseTotalTaxesAndCharges = baseTotalTaxesAndCharges;
@@ -299,26 +241,15 @@ public class SupplierQuotationDTO {
         this.roundedTotal = roundedTotal;
         this.inWords = inWords;
         this.disableRoundedTotal = disableRoundedTotal;
-        this.otherChargesCalculation = otherChargesCalculation;
-        this.supplierAddress = supplierAddress;
-        this.addressDisplay = addressDisplay;
-        this.contactPerson = contactPerson;
-        this.contactDisplay = contactDisplay;
-        this.contactMobile = contactMobile;
-        this.contactEmail = contactEmail;
         this.shippingAddress = shippingAddress;
         this.shippingAddressDisplay = shippingAddressDisplay;
         this.billingAddress = billingAddress;
         this.billingAddressDisplay = billingAddressDisplay;
-        this.tcName = tcName;
-        this.terms = terms;
-        this.letterHead = letterHead;
         this.groupSameItems = groupSameItems;
-        this.selectPrintHeading = selectPrintHeading;
         this.language = language;
-        this.autoRepeat = autoRepeat;
         this.isSubcontracted = isSubcontracted;
-        this.opportunity = opportunity;
+        this.doctype = doctype;
+        this.items = items;
     }
 
     public String getName() {
@@ -337,19 +268,19 @@ public class SupplierQuotationDTO {
         this.owner = owner;
     }
 
-    public String getCreation() {
+    public LocalDateTime getCreation() {
         return creation;
     }
 
-    public void setCreation(String creation) {
+    public void setCreation(LocalDateTime creation) {
         this.creation = creation;
     }
 
-    public String getModified() {
+    public LocalDateTime getModified() {
         return modified;
     }
 
-    public void setModified(String modified) {
+    public void setModified(LocalDateTime modified) {
         this.modified = modified;
     }
 
@@ -361,19 +292,19 @@ public class SupplierQuotationDTO {
         this.modifiedBy = modifiedBy;
     }
 
-    public Integer getDocstatus() {
+    public int getDocstatus() {
         return docstatus;
     }
 
-    public void setDocstatus(Integer docstatus) {
+    public void setDocstatus(int docstatus) {
         this.docstatus = docstatus;
     }
 
-    public Integer getIdx() {
+    public int getIdx() {
         return idx;
     }
 
-    public void setIdx(Integer idx) {
+    public void setIdx(int idx) {
         this.idx = idx;
     }
 
@@ -425,19 +356,19 @@ public class SupplierQuotationDTO {
         this.status = status;
     }
 
-    public String getTransactionDate() {
+    public LocalDate getTransactionDate() {
         return transactionDate;
     }
 
-    public void setTransactionDate(String transactionDate) {
+    public void setTransactionDate(LocalDate transactionDate) {
         this.transactionDate = transactionDate;
     }
 
-    public String getValidTill() {
+    public LocalDate getValidTill() {
         return validTill;
     }
 
-    public void setValidTill(String validTill) {
+    public void setValidTill(LocalDate validTill) {
         this.validTill = validTill;
     }
 
@@ -449,30 +380,6 @@ public class SupplierQuotationDTO {
         this.quotationNumber = quotationNumber;
     }
 
-    public String getAmendedFrom() {
-        return amendedFrom;
-    }
-
-    public void setAmendedFrom(String amendedFrom) {
-        this.amendedFrom = amendedFrom;
-    }
-
-    public String getCostCenter() {
-        return costCenter;
-    }
-
-    public void setCostCenter(String costCenter) {
-        this.costCenter = costCenter;
-    }
-
-    public String getProject() {
-        return project;
-    }
-
-    public void setProject(String project) {
-        this.project = project;
-    }
-
     public String getCurrency() {
         return currency;
     }
@@ -481,11 +388,11 @@ public class SupplierQuotationDTO {
         this.currency = currency;
     }
 
-    public Double getConversionRate() {
+    public double getConversionRate() {
         return conversionRate;
     }
 
-    public void setConversionRate(Double conversionRate) {
+    public void setConversionRate(double conversionRate) {
         this.conversionRate = conversionRate;
     }
 
@@ -505,67 +412,67 @@ public class SupplierQuotationDTO {
         this.priceListCurrency = priceListCurrency;
     }
 
-    public Double getPlcConversionRate() {
+    public double getPlcConversionRate() {
         return plcConversionRate;
     }
 
-    public void setPlcConversionRate(Double plcConversionRate) {
+    public void setPlcConversionRate(double plcConversionRate) {
         this.plcConversionRate = plcConversionRate;
     }
 
-    public Integer getIgnorePricingRule() {
+    public int getIgnorePricingRule() {
         return ignorePricingRule;
     }
 
-    public void setIgnorePricingRule(Integer ignorePricingRule) {
+    public void setIgnorePricingRule(int ignorePricingRule) {
         this.ignorePricingRule = ignorePricingRule;
     }
 
-    public Double getTotalQty() {
+    public double getTotalQty() {
         return totalQty;
     }
 
-    public void setTotalQty(Double totalQty) {
+    public void setTotalQty(double totalQty) {
         this.totalQty = totalQty;
     }
 
-    public Double getTotalNetWeight() {
+    public double getTotalNetWeight() {
         return totalNetWeight;
     }
 
-    public void setTotalNetWeight(Double totalNetWeight) {
+    public void setTotalNetWeight(double totalNetWeight) {
         this.totalNetWeight = totalNetWeight;
     }
 
-    public Double getBaseTotal() {
+    public double getBaseTotal() {
         return baseTotal;
     }
 
-    public void setBaseTotal(Double baseTotal) {
+    public void setBaseTotal(double baseTotal) {
         this.baseTotal = baseTotal;
     }
 
-    public Double getBaseNetTotal() {
+    public double getBaseNetTotal() {
         return baseNetTotal;
     }
 
-    public void setBaseNetTotal(Double baseNetTotal) {
+    public void setBaseNetTotal(double baseNetTotal) {
         this.baseNetTotal = baseNetTotal;
     }
 
-    public Double getTotal() {
+    public double getTotal() {
         return total;
     }
 
-    public void setTotal(Double total) {
+    public void setTotal(double total) {
         this.total = total;
     }
 
-    public Double getNetTotal() {
+    public double getNetTotal() {
         return netTotal;
     }
 
-    public void setNetTotal(Double netTotal) {
+    public void setNetTotal(double netTotal) {
         this.netTotal = netTotal;
     }
 
@@ -577,83 +484,51 @@ public class SupplierQuotationDTO {
         this.taxCategory = taxCategory;
     }
 
-    public String getTaxesAndCharges() {
-        return taxesAndCharges;
-    }
-
-    public void setTaxesAndCharges(String taxesAndCharges) {
-        this.taxesAndCharges = taxesAndCharges;
-    }
-
-    public String getShippingRule() {
-        return shippingRule;
-    }
-
-    public void setShippingRule(String shippingRule) {
-        this.shippingRule = shippingRule;
-    }
-
-    public String getIncoterm() {
-        return incoterm;
-    }
-
-    public void setIncoterm(String incoterm) {
-        this.incoterm = incoterm;
-    }
-
-    public String getNamedPlace() {
-        return namedPlace;
-    }
-
-    public void setNamedPlace(String namedPlace) {
-        this.namedPlace = namedPlace;
-    }
-
-    public Double getBaseTaxesAndChargesAdded() {
+    public double getBaseTaxesAndChargesAdded() {
         return baseTaxesAndChargesAdded;
     }
 
-    public void setBaseTaxesAndChargesAdded(Double baseTaxesAndChargesAdded) {
+    public void setBaseTaxesAndChargesAdded(double baseTaxesAndChargesAdded) {
         this.baseTaxesAndChargesAdded = baseTaxesAndChargesAdded;
     }
 
-    public Double getBaseTaxesAndChargesDeducted() {
+    public double getBaseTaxesAndChargesDeducted() {
         return baseTaxesAndChargesDeducted;
     }
 
-    public void setBaseTaxesAndChargesDeducted(Double baseTaxesAndChargesDeducted) {
+    public void setBaseTaxesAndChargesDeducted(double baseTaxesAndChargesDeducted) {
         this.baseTaxesAndChargesDeducted = baseTaxesAndChargesDeducted;
     }
 
-    public Double getBaseTotalTaxesAndCharges() {
+    public double getBaseTotalTaxesAndCharges() {
         return baseTotalTaxesAndCharges;
     }
 
-    public void setBaseTotalTaxesAndCharges(Double baseTotalTaxesAndCharges) {
+    public void setBaseTotalTaxesAndCharges(double baseTotalTaxesAndCharges) {
         this.baseTotalTaxesAndCharges = baseTotalTaxesAndCharges;
     }
 
-    public Double getTaxesAndChargesAdded() {
+    public double getTaxesAndChargesAdded() {
         return taxesAndChargesAdded;
     }
 
-    public void setTaxesAndChargesAdded(Double taxesAndChargesAdded) {
+    public void setTaxesAndChargesAdded(double taxesAndChargesAdded) {
         this.taxesAndChargesAdded = taxesAndChargesAdded;
     }
 
-    public Double getTaxesAndChargesDeducted() {
+    public double getTaxesAndChargesDeducted() {
         return taxesAndChargesDeducted;
     }
 
-    public void setTaxesAndChargesDeducted(Double taxesAndChargesDeducted) {
+    public void setTaxesAndChargesDeducted(double taxesAndChargesDeducted) {
         this.taxesAndChargesDeducted = taxesAndChargesDeducted;
     }
 
-    public Double getTotalTaxesAndCharges() {
+    public double getTotalTaxesAndCharges() {
         return totalTaxesAndCharges;
     }
 
-    public void setTotalTaxesAndCharges(Double totalTaxesAndCharges) {
+    public void setTotalTaxesAndCharges(double totalTaxesAndCharges) {
         this.totalTaxesAndCharges = totalTaxesAndCharges;
     }
 
@@ -665,51 +540,51 @@ public class SupplierQuotationDTO {
         this.applyDiscountOn = applyDiscountOn;
     }
 
-    public Double getBaseDiscountAmount() {
+    public double getBaseDiscountAmount() {
         return baseDiscountAmount;
     }
 
-    public void setBaseDiscountAmount(Double baseDiscountAmount) {
+    public void setBaseDiscountAmount(double baseDiscountAmount) {
         this.baseDiscountAmount = baseDiscountAmount;
     }
 
-    public Double getAdditionalDiscountPercentage() {
+    public double getAdditionalDiscountPercentage() {
         return additionalDiscountPercentage;
     }
 
-    public void setAdditionalDiscountPercentage(Double additionalDiscountPercentage) {
+    public void setAdditionalDiscountPercentage(double additionalDiscountPercentage) {
         this.additionalDiscountPercentage = additionalDiscountPercentage;
     }
 
-    public Double getDiscountAmount() {
+    public double getDiscountAmount() {
         return discountAmount;
     }
 
-    public void setDiscountAmount(Double discountAmount) {
+    public void setDiscountAmount(double discountAmount) {
         this.discountAmount = discountAmount;
     }
 
-    public Double getBaseGrandTotal() {
+    public double getBaseGrandTotal() {
         return baseGrandTotal;
     }
 
-    public void setBaseGrandTotal(Double baseGrandTotal) {
+    public void setBaseGrandTotal(double baseGrandTotal) {
         this.baseGrandTotal = baseGrandTotal;
     }
 
-    public Double getBaseRoundingAdjustment() {
+    public double getBaseRoundingAdjustment() {
         return baseRoundingAdjustment;
     }
 
-    public void setBaseRoundingAdjustment(Double baseRoundingAdjustment) {
+    public void setBaseRoundingAdjustment(double baseRoundingAdjustment) {
         this.baseRoundingAdjustment = baseRoundingAdjustment;
     }
 
-    public Double getBaseRoundedTotal() {
+    public double getBaseRoundedTotal() {
         return baseRoundedTotal;
     }
 
-    public void setBaseRoundedTotal(Double baseRoundedTotal) {
+    public void setBaseRoundedTotal(double baseRoundedTotal) {
         this.baseRoundedTotal = baseRoundedTotal;
     }
 
@@ -721,27 +596,27 @@ public class SupplierQuotationDTO {
         this.baseInWords = baseInWords;
     }
 
-    public Double getGrandTotal() {
+    public double getGrandTotal() {
         return grandTotal;
     }
 
-    public void setGrandTotal(Double grandTotal) {
+    public void setGrandTotal(double grandTotal) {
         this.grandTotal = grandTotal;
     }
 
-    public Double getRoundingAdjustment() {
+    public double getRoundingAdjustment() {
         return roundingAdjustment;
     }
 
-    public void setRoundingAdjustment(Double roundingAdjustment) {
+    public void setRoundingAdjustment(double roundingAdjustment) {
         this.roundingAdjustment = roundingAdjustment;
     }
 
-    public Double getRoundedTotal() {
+    public double getRoundedTotal() {
         return roundedTotal;
     }
 
-    public void setRoundedTotal(Double roundedTotal) {
+    public void setRoundedTotal(double roundedTotal) {
         this.roundedTotal = roundedTotal;
     }
 
@@ -753,68 +628,12 @@ public class SupplierQuotationDTO {
         this.inWords = inWords;
     }
 
-    public Integer getDisableRoundedTotal() {
+    public int getDisableRoundedTotal() {
         return disableRoundedTotal;
     }
 
-    public void setDisableRoundedTotal(Integer disableRoundedTotal) {
+    public void setDisableRoundedTotal(int disableRoundedTotal) {
         this.disableRoundedTotal = disableRoundedTotal;
-    }
-
-    public String getOtherChargesCalculation() {
-        return otherChargesCalculation;
-    }
-
-    public void setOtherChargesCalculation(String otherChargesCalculation) {
-        this.otherChargesCalculation = otherChargesCalculation;
-    }
-
-    public String getSupplierAddress() {
-        return supplierAddress;
-    }
-
-    public void setSupplierAddress(String supplierAddress) {
-        this.supplierAddress = supplierAddress;
-    }
-
-    public String getAddressDisplay() {
-        return addressDisplay;
-    }
-
-    public void setAddressDisplay(String addressDisplay) {
-        this.addressDisplay = addressDisplay;
-    }
-
-    public String getContactPerson() {
-        return contactPerson;
-    }
-
-    public void setContactPerson(String contactPerson) {
-        this.contactPerson = contactPerson;
-    }
-
-    public String getContactDisplay() {
-        return contactDisplay;
-    }
-
-    public void setContactDisplay(String contactDisplay) {
-        this.contactDisplay = contactDisplay;
-    }
-
-    public String getContactMobile() {
-        return contactMobile;
-    }
-
-    public void setContactMobile(String contactMobile) {
-        this.contactMobile = contactMobile;
-    }
-
-    public String getContactEmail() {
-        return contactEmail;
-    }
-
-    public void setContactEmail(String contactEmail) {
-        this.contactEmail = contactEmail;
     }
 
     public String getShippingAddress() {
@@ -849,44 +668,12 @@ public class SupplierQuotationDTO {
         this.billingAddressDisplay = billingAddressDisplay;
     }
 
-    public String getTcName() {
-        return tcName;
-    }
-
-    public void setTcName(String tcName) {
-        this.tcName = tcName;
-    }
-
-    public String getTerms() {
-        return terms;
-    }
-
-    public void setTerms(String terms) {
-        this.terms = terms;
-    }
-
-    public String getLetterHead() {
-        return letterHead;
-    }
-
-    public void setLetterHead(String letterHead) {
-        this.letterHead = letterHead;
-    }
-
-    public Integer getGroupSameItems() {
+    public int getGroupSameItems() {
         return groupSameItems;
     }
 
-    public void setGroupSameItems(Integer groupSameItems) {
+    public void setGroupSameItems(int groupSameItems) {
         this.groupSameItems = groupSameItems;
-    }
-
-    public String getSelectPrintHeading() {
-        return selectPrintHeading;
-    }
-
-    public void setSelectPrintHeading(String selectPrintHeading) {
-        this.selectPrintHeading = selectPrintHeading;
     }
 
     public String getLanguage() {
@@ -897,27 +684,27 @@ public class SupplierQuotationDTO {
         this.language = language;
     }
 
-    public String getAutoRepeat() {
-        return autoRepeat;
-    }
-
-    public void setAutoRepeat(String autoRepeat) {
-        this.autoRepeat = autoRepeat;
-    }
-
-    public Integer getIsSubcontracted() {
+    public int getIsSubcontracted() {
         return isSubcontracted;
     }
 
-    public void setIsSubcontracted(Integer isSubcontracted) {
+    public void setIsSubcontracted(int isSubcontracted) {
         this.isSubcontracted = isSubcontracted;
     }
 
-    public String getOpportunity() {
-        return opportunity;
+    public String getDoctype() {
+        return doctype;
     }
 
-    public void setOpportunity(String opportunity) {
-        this.opportunity = opportunity;
+    public void setDoctype(String doctype) {
+        this.doctype = doctype;
+    }
+
+    public List<SupplierQuotationItemDTO> getItems() {
+        return items;
+    }
+
+    public void setItems(List<SupplierQuotationItemDTO> items) {
+        this.items = items;
     }
 }

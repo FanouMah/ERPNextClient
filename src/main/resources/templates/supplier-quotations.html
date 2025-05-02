@@ -15,7 +15,8 @@
             <th scope="col">Titre</th>
             <th scope="col">Date</th>
             <th scope="col">Valid Till</th>
-            <th scope="col">Grand Total</th>
+            <th scope="col">Items</th>
+            <th scope="col">Total</th>
           </tr>
         </thead>
         <tbody>
@@ -24,7 +25,29 @@
             <td th:text="${sq.title}"></td>
             <td th:text="${sq.creation}"></td>
             <td th:text="${sq.validTill}"></td>
-            <td th:text="${sq.grandTotal}"></td>
+            <td>
+                <ul th:each="item : ${sq.items}">
+                  <li>
+                    <span th:text="${item.itemName} + ' : ' "></span>
+                    <form th:action="@{/SupplierQuotationItem/update}" method="post" style="display:inline;">
+                      <input type="hidden" name="itemName" th:value="${item.name}" />
+                      <input type="hidden" name="supplierName" th:value="${supplierName}" />
+                      <span th:if="${sq.docstatus == 0}">
+                        <input type="number" th:value="${item.qty}" name="qty" min="0" step="any">
+                        <span th:text="${item.uom}"></span>
+                        <span> * </span>
+                        <input type="number" th:value="${item.rate}" name="rate" min="0" step="any">
+                        <span th:text="${sq.currency}"></span>
+                        <button type="submit" class="btn btn-sm btn-primary">Mettre à jour</button>
+                      </span>
+                      <span th:unless="${sq.docstatus == 0}" th:text="${item.qty} + ' ' + ${item.uom}"></span>
+                      <span th:unless="${sq.docstatus == 0}"> * </span>
+                      <span th:unless="${sq.docstatus == 0}" th:text="${item.rate} + ' ' + ${sq.currency}"></span>
+                    </form>
+                  </li>
+                </ul>
+            </td>
+            <td th:text="${sq.grandTotal} + ' ' + ${sq.currency}"></td>
           </tr>
         </tbody>
     </table>
@@ -32,5 +55,6 @@
         <p th:text="${error}"></p>
     </div>
     <a th:href="@{/}">Home</a>
+    <a th:href="@{/suppliers}" >Liste des fournisseurs</a>
 </body>
 </html>
