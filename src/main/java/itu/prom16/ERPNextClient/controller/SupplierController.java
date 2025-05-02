@@ -10,11 +10,13 @@ import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.ui.Model;
+
+import itu.prom16.ERPNextClient.DTO.PurchaseOrderDTO;
 import itu.prom16.ERPNextClient.DTO.SupplierDTO;
 import itu.prom16.ERPNextClient.DTO.SupplierQuotationDTO;
+import itu.prom16.ERPNextClient.service.PurchaseOrderService;
 import itu.prom16.ERPNextClient.service.SupplierQuotationService;
 import itu.prom16.ERPNextClient.service.SupplierService;
-import jakarta.servlet.http.HttpServletResponse;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -92,4 +94,28 @@ public class SupplierController {
         supplierName = URLEncoder.encode(supplierName, StandardCharsets.UTF_8).replace("+", "%20");
         return "redirect:/supplier/"+supplierName+"/quotations";
     }
+
+    @Autowired
+    private PurchaseOrderService purchaseOrderService;
+
+    @GetMapping("/supplier/{supplierName}/purchase-orders")
+    public String showSupplierPurchaseOrders(
+            @PathVariable("supplierName") String supplierName,
+            @CookieValue(value = "sid", required = false) String sid,
+            Model model) {
+
+        if (sid != null && !sid.isEmpty()) {
+            try {
+                List<PurchaseOrderDTO> purchaseOrders = purchaseOrderService.getPurchaseOrdersBySupplier(sid, supplierName);
+                model.addAttribute("purchaseOrders", purchaseOrders);
+                model.addAttribute("supplierName", supplierName);
+            } catch (RuntimeException e) {
+                model.addAttribute("error", e.getMessage());
+            }
+            return "purchase-orders";
+        } else {
+            return "redirect:/";
+        }
+    }
+    
 }

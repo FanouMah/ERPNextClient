@@ -23,7 +23,7 @@
             <td th:text="${supplier.name}"></td>
             <td>
                 <a th:href="@{'/supplier/' + ${supplier.name} + '/quotations'}" class="btn btn-primary">demandes de devis</a>
-                <a class="btn btn-primary">commandes</a>
+                <a th:href="@{'/supplier/' + ${supplier.name} + '/purchase-orders'}" class="btn btn-primary">commandes</a>
           </tr>
         </tbody>
     </table>
