@@ -1,0 +1,12 @@
+{"properties": [
+  {
+    "name": "erpnext.api.base-url",
+    "type": "java.lang.String",
+    "description": "base url of the erpnext"
+  },
+  {
+    "name": "erpnext.api.token",
+    "type": "java.lang.String",
+    "description": "A description for 'erpnext.api.token'"
+  }
+]}

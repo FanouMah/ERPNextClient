@@ -1,11 +1,19 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Connexion ERPNext</title>
 </head>
 <body>
-    <h1>Hello World</h1>
+<h2>Connexion à ERPNext</h2>
+
+<form th:action="@{/login}" method="post">
+    <label>Nom d'utilisateur : <input type="text" name="usr" required /></label><br/>
+    <label>Mot de passe : <input type="password" name="pwd" required /></label><br/>
+    <button type="submit">Se connecter</button>
+</form>
+
+<div th:if="${error}" style="color: red;">
+    <p th:text="${error}"></p>
+</div>
 </body>
 </html>
