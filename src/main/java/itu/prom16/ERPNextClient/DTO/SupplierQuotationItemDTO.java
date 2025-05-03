@@ -192,347 +192,132 @@ public class SupplierQuotationItemDTO {
         this.doctype = doctype;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getOwner() {
-        return owner;
-    }
-
-    public void setOwner(String owner) {
-        this.owner = owner;
-    }
-
-    public LocalDateTime getCreation() {
-        return creation;
-    }
-
-    public void setCreation(LocalDateTime creation) {
-        this.creation = creation;
-    }
-
-    public LocalDateTime getModified() {
-        return modified;
-    }
-
-    public void setModified(LocalDateTime modified) {
-        this.modified = modified;
-    }
-
-    public String getModifiedBy() {
-        return modifiedBy;
-    }
-
-    public void setModifiedBy(String modifiedBy) {
-        this.modifiedBy = modifiedBy;
-    }
-
-    public int getDocstatus() {
-        return docstatus;
-    }
-
-    public void setDocstatus(int docstatus) {
-        this.docstatus = docstatus;
-    }
-
-    public int getIdx() {
-        return idx;
-    }
-
-    public void setIdx(int idx) {
-        this.idx = idx;
-    }
-
-    public String getItemCode() {
-        return itemCode;
-    }
-
-    public void setItemCode(String itemCode) {
-        this.itemCode = itemCode;
-    }
-
-    public String getItemName() {
-        return itemName;
-    }
-
-    public void setItemName(String itemName) {
-        this.itemName = itemName;
-    }
-
-    public int getLeadTimeDays() {
-        return leadTimeDays;
-    }
-
-    public void setLeadTimeDays(int leadTimeDays) {
-        this.leadTimeDays = leadTimeDays;
-    }
-
-    public int getIsFreeItem() {
-        return isFreeItem;
-    }
-
-    public void setIsFreeItem(int isFreeItem) {
-        this.isFreeItem = isFreeItem;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getItemGroup() {
-        return itemGroup;
-    }
-
-    public void setItemGroup(String itemGroup) {
-        this.itemGroup = itemGroup;
-    }
-
-    public String getImage() {
-        return image;
-    }
-
-    public void setImage(String image) {
-        this.image = image;
-    }
-
-    public double getQty() {
-        return qty;
-    }
-
-    public void setQty(double qty) {
-        this.qty = qty;
-    }
-
-    public String getStockUom() {
-        return stockUom;
-    }
-
-    public void setStockUom(String stockUom) {
-        this.stockUom = stockUom;
-    }
-
-    public String getUom() {
-        return uom;
-    }
-
-    public void setUom(String uom) {
-        this.uom = uom;
-    }
-
-    public double getConversionFactor() {
-        return conversionFactor;
-    }
-
-    public void setConversionFactor(double conversionFactor) {
-        this.conversionFactor = conversionFactor;
-    }
-
-    public double getStockQty() {
-        return stockQty;
-    }
-
-    public void setStockQty(double stockQty) {
-        this.stockQty = stockQty;
-    }
-
-    public double getPriceListRate() {
-        return priceListRate;
-    }
-
-    public void setPriceListRate(double priceListRate) {
-        this.priceListRate = priceListRate;
-    }
-
-    public double getDiscountPercentage() {
-        return discountPercentage;
-    }
-
-    public void setDiscountPercentage(double discountPercentage) {
-        this.discountPercentage = discountPercentage;
-    }
-
-    public double getDiscountAmount() {
-        return discountAmount;
-    }
-
-    public void setDiscountAmount(double discountAmount) {
-        this.discountAmount = discountAmount;
-    }
-
-    public double getDistributedDiscountAmount() {
-        return distributedDiscountAmount;
-    }
-
-    public void setDistributedDiscountAmount(double distributedDiscountAmount) {
-        this.distributedDiscountAmount = distributedDiscountAmount;
-    }
-
-    public double getBasePriceListRate() {
-        return basePriceListRate;
-    }
-
-    public void setBasePriceListRate(double basePriceListRate) {
-        this.basePriceListRate = basePriceListRate;
-    }
-
-    public double getRate() {
-        return rate;
-    }
-
-    public void setRate(double rate) {
-        this.rate = rate;
-    }
-
-    public double getAmount() {
-        return amount;
-    }
-
-    public void setAmount(double amount) {
-        this.amount = amount;
-    }
-
-    public double getBaseRate() {
-        return baseRate;
-    }
-
-    public void setBaseRate(double baseRate) {
-        this.baseRate = baseRate;
-    }
-
-    public double getBaseAmount() {
-        return baseAmount;
-    }
-
-    public void setBaseAmount(double baseAmount) {
-        this.baseAmount = baseAmount;
-    }
-
-    public String getPricingRules() {
-        return pricingRules;
-    }
-
-    public void setPricingRules(String pricingRules) {
-        this.pricingRules = pricingRules;
-    }
-
-    public double getNetRate() {
-        return netRate;
-    }
-
-    public void setNetRate(double netRate) {
-        this.netRate = netRate;
-    }
-
-    public double getNetAmount() {
-        return netAmount;
-    }
-
-    public void setNetAmount(double netAmount) {
-        this.netAmount = netAmount;
-    }
-
-    public double getBaseNetRate() {
-        return baseNetRate;
-    }
-
-    public void setBaseNetRate(double baseNetRate) {
-        this.baseNetRate = baseNetRate;
-    }
-
-    public double getBaseNetAmount() {
-        return baseNetAmount;
-    }
-
-    public void setBaseNetAmount(double baseNetAmount) {
-        this.baseNetAmount = baseNetAmount;
-    }
-
-    public double getWeightPerUnit() {
-        return weightPerUnit;
-    }
-
-    public void setWeightPerUnit(double weightPerUnit) {
-        this.weightPerUnit = weightPerUnit;
-    }
-
-    public double getTotalWeight() {
-        return totalWeight;
-    }
-
-    public void setTotalWeight(double totalWeight) {
-        this.totalWeight = totalWeight;
-    }
-
-    public String getWarehouse() {
-        return warehouse;
-    }
-
-    public void setWarehouse(String warehouse) {
-        this.warehouse = warehouse;
-    }
-
-    public String getItemTaxRate() {
-        return itemTaxRate;
-    }
-
-    public void setItemTaxRate(String itemTaxRate) {
-        this.itemTaxRate = itemTaxRate;
-    }
-
-    public String getCostCenter() {
-        return costCenter;
-    }
-
-    public void setCostCenter(String costCenter) {
-        this.costCenter = costCenter;
-    }
-
-    public int getPageBreak() {
-        return pageBreak;
-    }
-
-    public void setPageBreak(int pageBreak) {
-        this.pageBreak = pageBreak;
-    }
-
-    public String getParent() {
-        return parent;
-    }
-
-    public void setParent(String parent) {
-        this.parent = parent;
-    }
-
-    public String getParentField() {
-        return parentField;
-    }
-
-    public void setParentField(String parentField) {
-        this.parentField = parentField;
-    }
-
-    public String getParentType() {
-        return parentType;
-    }
-
-    public void setParentType(String parentType) {
-        this.parentType = parentType;
-    }
-
-    public String getDoctype() {
-        return doctype;
-    }
-
-    public void setDoctype(String doctype) {
-        this.doctype = doctype;
-    }
+    public String getName() { return name;}
+    public void setName(String name) {this.name = name; }
+
+    public String getOwner() { return owner;}
+    public void setOwner(String owner) {this.owner = owner; }
+
+    public LocalDateTime getCreation() { return creation;}
+    public void setCreation(LocalDateTime creation) {this.creation = creation; }
+
+    public LocalDateTime getModified() { return modified;}
+    public void setModified(LocalDateTime modified) {this.modified = modified; }
+
+    public String getModifiedBy() { return modifiedBy;}
+    public void setModifiedBy(String modifiedBy) {this.modifiedBy = modifiedBy; }
+
+    public int getDocstatus() { return docstatus;}
+    public void setDocstatus(int docstatus) {this.docstatus = docstatus; }
+
+    public int getIdx() { return idx;}
+    public void setIdx(int idx) {this.idx = idx; }
+
+    public String getItemCode() { return itemCode;}
+    public void setItemCode(String itemCode) {this.itemCode = itemCode; }
+
+    public String getItemName() { return itemName;}
+    public void setItemName(String itemName) {this.itemName = itemName; }
+
+    public int getLeadTimeDays() { return leadTimeDays;}
+    public void setLeadTimeDays(int leadTimeDays) {this.leadTimeDays = leadTimeDays; }
+
+    public int getIsFreeItem() { return isFreeItem;}
+    public void setIsFreeItem(int isFreeItem) {this.isFreeItem = isFreeItem; }
+
+    public String getDescription() { return description;}
+    public void setDescription(String description) {this.description = description; }
+
+    public String getItemGroup() { return itemGroup;}
+    public void setItemGroup(String itemGroup) {this.itemGroup = itemGroup; }
+
+    public String getImage() { return image;}
+    public void setImage(String image) {this.image = image; }
+
+    public double getQty() { return qty;}
+    public void setQty(double qty) {this.qty = qty; }
+
+    public String getStockUom() { return stockUom;}
+    public void setStockUom(String stockUom) {this.stockUom = stockUom; }
+
+    public String getUom() { return uom;}
+    public void setUom(String uom) {this.uom = uom; }
+
+    public double getConversionFactor() { return conversionFactor;}
+    public void setConversionFactor(double conversionFactor) {this.conversionFactor = conversionFactor; }
+
+    public double getStockQty() { return stockQty;}
+    public void setStockQty(double stockQty) {this.stockQty = stockQty; }
+
+    public double getPriceListRate() { return priceListRate;}
+    public void setPriceListRate(double priceListRate) {this.priceListRate = priceListRate; }
+
+    public double getDiscountPercentage() { return discountPercentage;}
+    public void setDiscountPercentage(double discountPercentage) {this.discountPercentage = discountPercentage; }
+
+    public double getDiscountAmount() { return discountAmount;}
+    public void setDiscountAmount(double discountAmount) {this.discountAmount = discountAmount; }
+
+    public double getDistributedDiscountAmount() { return distributedDiscountAmount;}
+    public void setDistributedDiscountAmount(double distributedDiscountAmount) {this.distributedDiscountAmount = distributedDiscountAmount; }
+
+    public double getBasePriceListRate() { return basePriceListRate;}
+    public void setBasePriceListRate(double basePriceListRate) {this.basePriceListRate = basePriceListRate; }
+
+    public double getRate() { return rate;}
+    public void setRate(double rate) {this.rate = rate; }
+
+    public double getAmount() { return amount;}
+    public void setAmount(double amount) {this.amount = amount; }
+
+    public double getBaseRate() { return baseRate;}
+    public void setBaseRate(double baseRate) {this.baseRate = baseRate; }
+
+    public double getBaseAmount() { return baseAmount;}
+    public void setBaseAmount(double baseAmount) {this.baseAmount = baseAmount; }
+
+    public String getPricingRules() { return pricingRules;}
+    public void setPricingRules(String pricingRules) {this.pricingRules = pricingRules; }
+
+    public double getNetRate() { return netRate;}
+    public void setNetRate(double netRate) {this.netRate = netRate; }
+
+    public double getNetAmount() { return netAmount;}
+    public void setNetAmount(double netAmount) {this.netAmount = netAmount; }
+
+    public double getBaseNetRate() { return baseNetRate;}
+    public void setBaseNetRate(double baseNetRate) {this.baseNetRate = baseNetRate; }
+
+    public double getBaseNetAmount() { return baseNetAmount;}
+    public void setBaseNetAmount(double baseNetAmount) {this.baseNetAmount = baseNetAmount; }
+
+    public double getWeightPerUnit() { return weightPerUnit;}
+    public void setWeightPerUnit(double weightPerUnit) {this.weightPerUnit = weightPerUnit; }
+
+    public double getTotalWeight() { return totalWeight;}
+    public void setTotalWeight(double totalWeight) {this.totalWeight = totalWeight; }
+
+    public String getWarehouse() { return warehouse;}
+    public void setWarehouse(String warehouse) {this.warehouse = warehouse; }
+
+    public String getItemTaxRate() { return itemTaxRate;}
+    public void setItemTaxRate(String itemTaxRate) {this.itemTaxRate = itemTaxRate; }
+
+    public String getCostCenter() { return costCenter;}
+    public void setCostCenter(String costCenter) {this.costCenter = costCenter; }
+
+    public int getPageBreak() { return pageBreak;}
+    public void setPageBreak(int pageBreak) {this.pageBreak = pageBreak; }
+
+    public String getParent() { return parent;}
+    public void setParent(String parent) {this.parent = parent; }
+
+    public String getParentField() { return parentField;}
+    public void setParentField(String parentField) {this.parentField = parentField; }
+
+    public String getParentType() { return parentType;}
+    public void setParentType(String parentType) {this.parentType = parentType; }
+
+    public String getDoctype() { return doctype;}
+    public void setDoctype(String doctype) {this.doctype = doctype; }
 }

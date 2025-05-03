@@ -179,340 +179,130 @@ public class SupplierDTO {
         this.releaseDate = releaseDate;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getOwner() {
-        return owner;
-    }
-
-    public void setOwner(String owner) {
-        this.owner = owner;
-    }
-
-    public LocalDateTime getCreation() {
-        return creation;
-    }
-
-    public void setCreation(LocalDateTime creation) {
-        this.creation = creation;
-    }
-
-    public LocalDateTime getModified() {
-        return modified;
-    }
-
-    public void setModified(LocalDateTime modified) {
-        this.modified = modified;
-    }
-
-    public String getModifiedBy() {
-        return modifiedBy;
-    }
-
-    public void setModifiedBy(String modifiedBy) {
-        this.modifiedBy = modifiedBy;
-    }
-
-    public int getDocstatus() {
-        return docstatus;
-    }
-
-    public void setDocstatus(int docstatus) {
-        this.docstatus = docstatus;
-    }
-
-    public int getIdx() {
-        return idx;
-    }
-
-    public void setIdx(int idx) {
-        this.idx = idx;
-    }
-
-    public String getNamingSeries() {
-        return namingSeries;
-    }
-
-    public void setNamingSeries(String namingSeries) {
-        this.namingSeries = namingSeries;
-    }
-
-    public String getSupplierName() {
-        return supplierName;
-    }
-
-    public void setSupplierName(String supplierName) {
-        this.supplierName = supplierName;
-    }
-
-    public String getCountry() {
-        return country;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
-    }
-
-    public String getSupplierGroup() {
-        return supplierGroup;
-    }
-
-    public void setSupplierGroup(String supplierGroup) {
-        this.supplierGroup = supplierGroup;
-    }
-
-    public String getSupplierType() {
-        return supplierType;
-    }
-
-    public void setSupplierType(String supplierType) {
-        this.supplierType = supplierType;
-    }
-
-    public boolean isIsTransporter() {
-        return isTransporter;
-    }
-
-    public void setIsTransporter(boolean isTransporter) {
-        this.isTransporter = isTransporter;
-    }
-
-    public String getImage() {
-        return image;
-    }
-
-    public void setImage(String image) {
-        this.image = image;
-    }
-
-    public String getDefaultCurrency() {
-        return defaultCurrency;
-    }
-
-    public void setDefaultCurrency(String defaultCurrency) {
-        this.defaultCurrency = defaultCurrency;
-    }
-
-    public String getDefaultBankAccount() {
-        return defaultBankAccount;
-    }
-
-    public void setDefaultBankAccount(String defaultBankAccount) {
-        this.defaultBankAccount = defaultBankAccount;
-    }
-
-    public String getDefaultPriceList() {
-        return defaultPriceList;
-    }
-
-    public void setDefaultPriceList(String defaultPriceList) {
-        this.defaultPriceList = defaultPriceList;
-    }
-
-    public boolean isIsInternalSupplier() {
-        return isInternalSupplier;
-    }
-
-    public void setIsInternalSupplier(boolean isInternalSupplier) {
-        this.isInternalSupplier = isInternalSupplier;
-    }
-
-    public String getRepresentsCompany() {
-        return representsCompany;
-    }
-
-    public void setRepresentsCompany(String representsCompany) {
-        this.representsCompany = representsCompany;
-    }
-
-    public String getSupplierDetails() {
-        return supplierDetails;
-    }
-
-    public void setSupplierDetails(String supplierDetails) {
-        this.supplierDetails = supplierDetails;
-    }
-
-    public String getWebsite() {
-        return website;
-    }
-
-    public void setWebsite(String website) {
-        this.website = website;
-    }
-
-    public String getLanguage() {
-        return language;
-    }
-
-    public void setLanguage(String language) {
-        this.language = language;
-    }
-
-    public String getTaxId() {
-        return taxId;
-    }
-
-    public void setTaxId(String taxId) {
-        this.taxId = taxId;
-    }
-
-    public String getTaxCategory() {
-        return taxCategory;
-    }
-
-    public void setTaxCategory(String taxCategory) {
-        this.taxCategory = taxCategory;
-    }
-
-    public String getTaxWithholdingCategory() {
-        return taxWithholdingCategory;
-    }
-
-    public void setTaxWithholdingCategory(String taxWithholdingCategory) {
-        this.taxWithholdingCategory = taxWithholdingCategory;
-    }
-
-    public String getSupplierPrimaryAddress() {
-        return supplierPrimaryAddress;
-    }
-
-    public void setSupplierPrimaryAddress(String supplierPrimaryAddress) {
-        this.supplierPrimaryAddress = supplierPrimaryAddress;
-    }
-
-    public String getPrimaryAddress() {
-        return primaryAddress;
-    }
-
-    public void setPrimaryAddress(String primaryAddress) {
-        this.primaryAddress = primaryAddress;
-    }
-
-    public String getSupplierPrimaryContact() {
-        return supplierPrimaryContact;
-    }
-
-    public void setSupplierPrimaryContact(String supplierPrimaryContact) {
-        this.supplierPrimaryContact = supplierPrimaryContact;
-    }
-
-    public String getMobileNo() {
-        return mobileNo;
-    }
-
-    public void setMobileNo(String mobileNo) {
-        this.mobileNo = mobileNo;
-    }
-
-    public String getEmailId() {
-        return emailId;
-    }
-
-    public void setEmailId(String emailId) {
-        this.emailId = emailId;
-    }
-
-    public String getPaymentTerms() {
-        return paymentTerms;
-    }
-
-    public void setPaymentTerms(String paymentTerms) {
-        this.paymentTerms = paymentTerms;
-    }
-
-    public boolean isAllowPurchaseInvoiceCreationWithoutPurchaseOrder() {
-        return allowPurchaseInvoiceCreationWithoutPurchaseOrder;
-    }
-
-    public void setAllowPurchaseInvoiceCreationWithoutPurchaseOrder(boolean allowPurchaseInvoiceCreationWithoutPurchaseOrder) {
-        this.allowPurchaseInvoiceCreationWithoutPurchaseOrder = allowPurchaseInvoiceCreationWithoutPurchaseOrder;
-    }
-
-    public boolean isAllowPurchaseInvoiceCreationWithoutPurchaseReceipt() {
-        return allowPurchaseInvoiceCreationWithoutPurchaseReceipt;
-    }
-
-    public void setAllowPurchaseInvoiceCreationWithoutPurchaseReceipt(boolean allowPurchaseInvoiceCreationWithoutPurchaseReceipt) {
-        this.allowPurchaseInvoiceCreationWithoutPurchaseReceipt = allowPurchaseInvoiceCreationWithoutPurchaseReceipt;
-    }
-
-    public boolean isIsFrozen() {
-        return isFrozen;
-    }
-
-    public void setIsFrozen(boolean isFrozen) {
-        this.isFrozen = isFrozen;
-    }
-
-    public boolean isDisabled() {
-        return disabled;
-    }
-
-    public void setDisabled(boolean disabled) {
-        this.disabled = disabled;
-    }
-
-    public boolean isWarnRfqs() {
-        return warnRfqs;
-    }
-
-    public void setWarnRfqs(boolean warnRfqs) {
-        this.warnRfqs = warnRfqs;
-    }
-
-    public boolean isWarnPos() {
-        return warnPos;
-    }
-
-    public void setWarnPos(boolean warnPos) {
-        this.warnPos = warnPos;
-    }
-
-    public boolean isPreventRfqs() {
-        return preventRfqs;
-    }
-
-    public void setPreventRfqs(boolean preventRfqs) {
-        this.preventRfqs = preventRfqs;
-    }
-
-    public boolean isPreventPos() {
-        return preventPos;
-    }
-
-    public void setPreventPos(boolean preventPos) {
-        this.preventPos = preventPos;
-    }
-
-    public boolean isOnHold() {
-        return onHold;
-    }
-
-    public void setOnHold(boolean onHold) {
-        this.onHold = onHold;
-    }
-
-    public String getHoldType() {
-        return holdType;
-    }
-
-    public void setHoldType(String holdType) {
-        this.holdType = holdType;
-    }
-
-    public LocalDateTime getReleaseDate() {
-        return releaseDate;
-    }
-
-    public void setReleaseDate(LocalDateTime releaseDate) {
-        this.releaseDate = releaseDate;
-    }
+    public String getName() { return name;}
+    public void setName(String name) {this.name = name;}
+
+    public String getOwner() { return owner;}
+    public void setOwner(String owner) {this.owner = owner;}
+
+    public LocalDateTime getCreation() { return creation;}
+    public void setCreation(LocalDateTime creation) {this.creation = creation;}
+
+    public LocalDateTime getModified() { return modified;}
+    public void setModified(LocalDateTime modified) {this.modified = modified;}
+
+    public String getModifiedBy() { return modifiedBy;}
+    public void setModifiedBy(String modifiedBy) {this.modifiedBy = modifiedBy;}
+
+    public int getDocstatus() { return docstatus;}
+    public void setDocstatus(int docstatus) {this.docstatus = docstatus;}
+
+    public int getIdx() { return idx;}
+    public void setIdx(int idx) {this.idx = idx;}
+
+    public String getNamingSeries() { return namingSeries;}
+    public void setNamingSeries(String namingSeries) {this.namingSeries = namingSeries;}
+
+    public String getSupplierName() { return supplierName;}
+    public void setSupplierName(String supplierName) {this.supplierName = supplierName;}
+
+    public String getCountry() { return country;}
+    public void setCountry(String country) {this.country = country;}
+
+    public String getSupplierGroup() { return supplierGroup;}
+    public void setSupplierGroup(String supplierGroup) {this.supplierGroup = supplierGroup;}
+
+    public String getSupplierType() { return supplierType;}
+    public void setSupplierType(String supplierType) {this.supplierType = supplierType;}
+
+    public boolean isIsTransporter() { return isTransporter;}
+    public void setIsTransporter(boolean isTransporter) {this.isTransporter = isTransporter;}
+
+    public String getImage() { return image;}
+    public void setImage(String image) {this.image = image;}
+
+    public String getDefaultCurrency() { return defaultCurrency;}
+    public void setDefaultCurrency(String defaultCurrency) {this.defaultCurrency = defaultCurrency;}
+
+    public String getDefaultBankAccount() { return defaultBankAccount;}
+    public void setDefaultBankAccount(String defaultBankAccount) {this.defaultBankAccount = defaultBankAccount;}
+
+    public String getDefaultPriceList() { return defaultPriceList;}
+    public void setDefaultPriceList(String defaultPriceList) {this.defaultPriceList = defaultPriceList;}
+
+    public boolean isIsInternalSupplier() { return isInternalSupplier;}
+    public void setIsInternalSupplier(boolean isInternalSupplier) {this.isInternalSupplier = isInternalSupplier;}
+
+    public String getRepresentsCompany() { return representsCompany;}
+    public void setRepresentsCompany(String representsCompany) {this.representsCompany = representsCompany;}
+
+    public String getSupplierDetails() { return supplierDetails;}
+    public void setSupplierDetails(String supplierDetails) {this.supplierDetails = supplierDetails;}
+
+    public String getWebsite() { return website;}
+    public void setWebsite(String website) {this.website = website;}
+
+    public String getLanguage() { return language;}
+    public void setLanguage(String language) {this.language = language;}
+
+    public String getTaxId() { return taxId;}
+    public void setTaxId(String taxId) {this.taxId = taxId;}
+
+    public String getTaxCategory() { return taxCategory;}
+    public void setTaxCategory(String taxCategory) {this.taxCategory = taxCategory;}
+
+    public String getTaxWithholdingCategory() { return taxWithholdingCategory;}
+    public void setTaxWithholdingCategory(String taxWithholdingCategory) {this.taxWithholdingCategory = taxWithholdingCategory;}
+
+    public String getSupplierPrimaryAddress() { return supplierPrimaryAddress;}
+    public void setSupplierPrimaryAddress(String supplierPrimaryAddress) {this.supplierPrimaryAddress = supplierPrimaryAddress;}
+
+    public String getPrimaryAddress() { return primaryAddress;}
+    public void setPrimaryAddress(String primaryAddress) {this.primaryAddress = primaryAddress;}
+
+    public String getSupplierPrimaryContact() { return supplierPrimaryContact;}
+    public void setSupplierPrimaryContact(String supplierPrimaryContact) {this.supplierPrimaryContact = supplierPrimaryContact;}
+
+    public String getMobileNo() { return mobileNo;}
+    public void setMobileNo(String mobileNo) {this.mobileNo = mobileNo;}
+
+    public String getEmailId() { return emailId;}
+    public void setEmailId(String emailId) {this.emailId = emailId;}
+
+    public String getPaymentTerms() { return paymentTerms;}
+    public void setPaymentTerms(String paymentTerms) {this.paymentTerms = paymentTerms;}
+
+    public boolean isAllowPurchaseInvoiceCreationWithoutPurchaseOrder() { return allowPurchaseInvoiceCreationWithoutPurchaseOrder;}
+    public void setAllowPurchaseInvoiceCreationWithoutPurchaseOrder(boolean allowPurchaseInvoiceCreationWithoutPurchaseOrder) {this.allowPurchaseInvoiceCreationWithoutPurchaseOrder = allowPurchaseInvoiceCreationWithoutPurchaseOrder;}
+
+    public boolean isAllowPurchaseInvoiceCreationWithoutPurchaseReceipt() { return allowPurchaseInvoiceCreationWithoutPurchaseReceipt;}
+    public void setAllowPurchaseInvoiceCreationWithoutPurchaseReceipt(boolean allowPurchaseInvoiceCreationWithoutPurchaseReceipt) {this.allowPurchaseInvoiceCreationWithoutPurchaseReceipt = allowPurchaseInvoiceCreationWithoutPurchaseReceipt;}
+
+    public boolean isIsFrozen() { return isFrozen;}
+    public void setIsFrozen(boolean isFrozen) {this.isFrozen = isFrozen;}
+
+    public boolean isDisabled() { return disabled;}
+    public void setDisabled(boolean disabled) {this.disabled = disabled;}
+
+    public boolean isWarnRfqs() { return warnRfqs;}
+    public void setWarnRfqs(boolean warnRfqs) {this.warnRfqs = warnRfqs;}
+
+    public boolean isWarnPos() { return warnPos;}
+    public void setWarnPos(boolean warnPos) {this.warnPos = warnPos;}
+
+    public boolean isPreventRfqs() { return preventRfqs;}
+    public void setPreventRfqs(boolean preventRfqs) {this.preventRfqs = preventRfqs;}
+
+    public boolean isPreventPos() { return preventPos;}
+    public void setPreventPos(boolean preventPos) {this.preventPos = preventPos;}
+
+    public boolean isOnHold() { return onHold;}
+    public void setOnHold(boolean onHold) {this.onHold = onHold;}
+
+    public String getHoldType() { return holdType;}
+    public void setHoldType(String holdType) {this.holdType = holdType;}
+
+    public LocalDateTime getReleaseDate() { return releaseDate;}
+    public void setReleaseDate(LocalDateTime releaseDate) {this.releaseDate = releaseDate;}
 
 }
