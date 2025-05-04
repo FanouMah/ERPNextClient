@@ -16,6 +16,7 @@ import itu.prom16.ERPNextClient.DTO.PurchaseInvoiceDTO;
 import itu.prom16.ERPNextClient.DTO.ReferenceDTO;
 import itu.prom16.ERPNextClient.DTO.SalesInvoiceDTO;
 import itu.prom16.ERPNextClient.service.CompanyService;
+import itu.prom16.ERPNextClient.service.ModeOfPaymentService;
 import itu.prom16.ERPNextClient.service.PaymentEntryService;
 import itu.prom16.ERPNextClient.service.PurchaseInvoiceService;
 import itu.prom16.ERPNextClient.service.SalesInvoiceService;
@@ -42,6 +43,9 @@ public class AccountingController {
     @Autowired
     private CompanyService companyService;
 
+    @Autowired
+    private ModeOfPaymentService modeOfPaymentService;
+
     @GetMapping("/accounting")
     public String showAccounting(@CookieValue(value = "sid", required = false) String sid) {
         if (sid != null && !sid.isEmpty()) {
@@ -60,6 +64,7 @@ public class AccountingController {
             try {
                 List<PurchaseInvoiceDTO> purchaseInvoices = purchaseInvoiceService.getPurchaseInvoices(sid);
                 model.addAttribute("purchaseInvoices", purchaseInvoices);
+                model.addAttribute("modeOfPayments", modeOfPaymentService.getModeOfPaymentsEnable(sid));
             } catch (RuntimeException e) {
                 model.addAttribute("error", e.getMessage());
             }
@@ -78,6 +83,7 @@ public class AccountingController {
             try {
                 List<SalesInvoiceDTO> salesInvoices = salesInvoiceService.getSalesInvoices(sid);
                 model.addAttribute("salesInvoices", salesInvoices);
+                model.addAttribute("modeOfPayments", modeOfPaymentService.getModeOfPaymentsEnable(sid));
             } catch (RuntimeException e) {
                 model.addAttribute("error", e.getMessage());
             }

@@ -50,11 +50,9 @@
                         </div>
                         <div class="mb-3">
                           <label for="paymentMethod" class="form-label">Méthode de paiement</label>
-                          <select class="form-select" id="paymentMethod" name="paymentMethod" required onchange="toggleReferenceFields(this)">
-                            <option value="">-- Sélectionner --</option>
-                            <option value="Virement">Virement</option>
-                            <option value="Chèque">Chèque</option>
-                            <option value="Espèces">Espèces</option>
+                          <select class="form-select" id="paymentMethod" name="paymentMethod" onchange="toggleReferenceFields(this)">
+                            <option>-- Sélectionner --</option>
+                            <option th:each="mop : ${modeOfPayments}" th:value="${mop.name}" th:text="${mop.name}"></option>
                           </select>
                         </div>
                         <div class="mb-3">
