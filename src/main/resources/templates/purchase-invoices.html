@@ -16,6 +16,7 @@
             <th scope="col">Total TTC</th>
             <th scope="col">Reste a payer</th>
             <th scope="col">ID</th>
+            <th scope="col">Action</th>
           </tr>
         </thead>
         <tbody>
@@ -25,9 +26,43 @@
             <td th:text="${sq.grandTotal} + ' ' + ${sq.currency}"></td>
             <td th:text="${sq.outstandingAmount} + ' ' + ${sq.currency}"></td>
             <td th:text="${sq.name}"></td>
+            <td>
+              <button th:if="${sq.status} != 'Paid'" class="btn btn-primary" data-bs-toggle="modal" th:attr="data-bs-target='#payModal__' + ${sq.name}">Payer</button>
+
+              <!-- Modal -->
+              <div th:if="${sq.status} != 'Paid'" th:id="'payModal__' + ${sq.name}" class="modal fade" tabindex="-1" aria-labelledby="payModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="payModalLabel">Paiement de la facture</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+                    </div>
+                    <div class="modal-body">
+                      <form th:action="@{/purchase-invoices/pay}" method="post">
+                        <input type="hidden" name="invoiceId" th:value="${sq.name}" />
+                        <div class="mb-3">
+                          <label for="amount" class="form-label">Montant à payer</label>
+                          <input type="number" class="form-control" id="amount" name="amount" th:attr="max=${sq.outstandingAmount}" th:value="${sq.outstandingAmount}" required>
+                        </div>
+                        <div class="mb-3">
+                          <label for="paymentMethod" class="form-label">Méthode de paiement</label>
+                          <select class="form-select" id="paymentMethod" name="paymentMethod" required>
+                            <option value="Virement">Virement</option>
+                            <option value="Chèque">Chèque</option>
+                            <option value="Espèces">Espèces</option>
+                          </select>
+                        </div>
+                        <button type="submit" class="btn btn-success">Confirmer le paiement</button>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </td>
           </tr>
         </tbody>
     </table>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js" integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNLiq" crossorigin="anonymous"></script>
     <div th:if="${error}" style="color: red;">
         <p th:text="${error}"></p>
     </div>

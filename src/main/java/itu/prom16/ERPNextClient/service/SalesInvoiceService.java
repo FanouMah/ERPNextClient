@@ -29,6 +29,37 @@ public class SalesInvoiceService {
     @Value("${erpnext.api.base-url}")
     private String baseUrl;
 
+    public SalesInvoiceDTO gSalesInvoiceDTOById(String sid, String id) {
+        try {
+            String url = baseUrl + "/api/resource/Sales%20Invoice/" + URLEncoder.encode(id, StandardCharsets.UTF_8);
+
+            HttpClient httpClient = HttpClient.newHttpClient();
+
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(url))
+                    .header("Cookie", "sid=" + sid)
+                    .GET()
+                    .build();
+
+            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+            if (response.statusCode() != 200) {
+                throw new RuntimeException("Failed to fetch Sales Invoice by ID, HTTP status code: " + response.statusCode());
+            }
+
+            ObjectMapper objectMapper = new ObjectMapper();
+            objectMapper.registerModule(new JavaTimeModule());
+            objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+            objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
+            JsonNode root = objectMapper.readTree(response.body());
+            JsonNode dataNode = root.path("data");
+
+            return objectMapper.treeToValue(dataNode, SalesInvoiceDTO.class);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to fetch Sales Invoice by ID: " + e.getMessage(), e);
+        }
+    }
+
     public List<SalesInvoiceDTO> getSalesInvoices(String sid) {
         try {
             String fields = URLEncoder.encode("[\"*\"]", StandardCharsets.UTF_8);

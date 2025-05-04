@@ -16,6 +16,7 @@
             <th scope="col">Total TTC</th>
             <th scope="col">Reste a payer</th>
             <th scope="col">ID</th>
+            <th scope="col">Action</th>
           </tr>
         </thead>
         <tbody>
@@ -25,9 +26,71 @@
             <td th:text="${sq.grandTotal} + ' ' + ${sq.currency}"></td>
             <td th:text="${sq.outstandingAmount} + ' ' + ${sq.currency}"></td>
             <td th:text="${sq.name}"></td>
+            <td>
+              <button th:if="${sq.status} != 'Paid'" class="btn btn-primary" data-bs-toggle="modal" th:attr="data-bs-target='#payModal__' + ${sq.name}">Payer</button>
+
+              <!-- Modal -->
+              <div th:if="${sq.status} != 'Paid'" th:id="'payModal__' + ${sq.name}" class="modal fade" tabindex="-1" aria-labelledby="payModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="payModalLabel">Paiement de la facture de Vente <span th:text="${sq.title}"></span> </h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+                    </div>
+                    <div class="modal-body">
+                      <form th:action="@{/accounting/sales-invoice/pay}" method="post">
+                        <input type="hidden" name="invoiceId" th:value="${sq.name}" />
+                        <div class="mb-3">
+                          <label for="postingDate" class="form-label">Date de Paiement</label>
+                          <input type="date" class="form-control" id="postingDate" name="postingDate">
+                        </div>
+                        <div class="mb-3">
+                          <label for="amount" class="form-label">Montant à payer</label>
+                          <input type="number" class="form-control" id="amount" name="amount" th:attr="max=${sq.outstandingAmount}" th:value="${sq.outstandingAmount}" required>
+                        </div>
+                        <div class="mb-3">
+                          <label for="paymentMethod" class="form-label">Méthode de paiement</label>
+                          <select class="form-select" id="paymentMethod" name="paymentMethod" required onchange="toggleReferenceFields(this)">
+                            <option value="">-- Sélectionner --</option>
+                            <option value="Virement">Virement</option>
+                            <option value="Chèque">Chèque</option>
+                            <option value="Espèces">Espèces</option>
+                          </select>
+                        </div>
+                        <div class="mb-3">
+                          <label for="referenceNo" class="form-label">Reference N°</label>
+                          <input type="text" class="form-control" id="referenceNo" name="referenceNo">
+                        </div>
+                        <div class="mb-3">
+                          <label for="referenceDate" class="form-label">Reference Date</label>
+                          <input type="date" class="form-control" id="referenceDate" name="referenceDate">
+                        </div>
+                        <button type="submit" class="btn btn-success">Confirmer le paiement</button>
+                      </form>
+                      <script>
+                        function toggleReferenceFields(select) {
+                          var refNo = document.getElementById('referenceNo');
+                          if (select.value === "") {
+                            refNo.required = true;
+                          } else {
+                            refNo.required = false;
+                          }
+                        }
+                        // On page load, set correct required state
+                        document.addEventListener('DOMContentLoaded', function() {
+                          var select = document.getElementById('paymentMethod');
+                          toggleReferenceFields(select);
+                        });
+                      </script>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </td>
           </tr>
         </tbody>
     </table>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js" integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNLiq" crossorigin="anonymous"></script>
     <div th:if="${error}" style="color: red;">
         <p th:text="${error}"></p>
     </div>
