@@ -72,11 +72,11 @@ public class AuthService {
                 List<String> cookies = response.headers().map().get("set-cookie");
                 return cookies;
             } else {
-                throw new RuntimeException("Erreur HTTP lors du logout : " + response.statusCode());
+                throw new RuntimeException("HTTP error when logging out : " + response.statusCode()+ " - " + response.body());
             }
 
         } catch (Exception e) {
-            throw new RuntimeException("Erreur lors du logout : " + e.getMessage(), e);
+            throw new RuntimeException("Error during logout : " + e.getMessage(), e);
         }
     }
 
