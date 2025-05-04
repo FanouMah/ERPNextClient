@@ -9,6 +9,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -30,6 +31,9 @@ public class PaymentEntryService {
         try {
             HttpClient client = HttpClient.newHttpClient();
             ObjectMapper mapper = new ObjectMapper();
+            mapper.registerModule(new JavaTimeModule());
+            mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+            mapper.setSerializationInclusion(JsonInclude.Include.NON_DEFAULT);
 
             String json = mapper.writeValueAsString(paymentEntry);
 

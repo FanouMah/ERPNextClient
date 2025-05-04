@@ -26,9 +26,9 @@ public class ReferenceDTO {
     @JsonProperty("modified_by")
     private String modifiedBy;
     @JsonProperty("docstatus")
-    private int docstatus;
+    private Integer docstatus;
     @JsonProperty("idx")
-    private int idx;
+    private Integer idx;
     @JsonProperty("reference_doctype")
     private String referenceDoctype;
     @JsonProperty("reference_name")
@@ -39,21 +39,21 @@ public class ReferenceDTO {
     private LocalDate dueDate;
 
     @JsonProperty("payment_term_outstanding")
-    private double paymentTermOutstanding;
+    private Double paymentTermOutstanding;
     @JsonProperty("total_amount")
-    private double totalAmount;
+    private Double totalAmount;
     @JsonProperty("outstanding_amount")
-    private double outstandingAmount;
+    private Double outstandingAmount;
     @JsonProperty("allocated_amount")
-    private double allocatedAmount;
+    private Double allocatedAmount;
     @JsonProperty("exchange_rate")
-    private double exchangeRate;
+    private Double exchangeRate;
     @JsonProperty("exchange_gain_loss")
-    private double exchangeGainLoss;
+    private Double exchangeGainLoss;
     @JsonProperty("account")
     private String account;
     @JsonProperty("payment_request_outstanding")
-    private double paymentRequestOutstanding;
+    private Double paymentRequestOutstanding;
     @JsonProperty("parent")
     private String parent;
     @JsonProperty("parentfield")
@@ -67,9 +67,9 @@ public class ReferenceDTO {
     }
 
     public ReferenceDTO(String name, String owner, LocalDateTime creation, LocalDateTime modified, String modifiedBy,
-                        int docstatus, int idx, String referenceDoctype, String referenceName, LocalDate dueDate,
-                        double paymentTermOutstanding, double totalAmount, double outstandingAmount, double allocatedAmount,
-                        double exchangeRate, double exchangeGainLoss, String account, double paymentRequestOutstanding,
+                        Integer docstatus, Integer idx, String referenceDoctype, String referenceName, LocalDate dueDate,
+                        Double paymentTermOutstanding, Double totalAmount, Double outstandingAmount, Double allocatedAmount,
+                        Double exchangeRate, Double exchangeGainLoss, String account, Double paymentRequestOutstanding,
                         String parent, String parentfield, String parenttype, String doctype) { 
         this.name = name;
         this.owner = owner;
@@ -110,11 +110,11 @@ public class ReferenceDTO {
     public String getModifiedBy() { return modifiedBy; }
     public void setModifiedBy(String modifiedBy) { this.modifiedBy = modifiedBy; }
 
-    public int getDocstatus() { return docstatus; }
-    public void setDocstatus(int docstatus) { this.docstatus = docstatus; }
+    public Integer getDocstatus() { return docstatus; }
+    public void setDocstatus(Integer docstatus) { this.docstatus = docstatus; }
 
-    public int getIdx() { return idx; }
-    public void setIdx(int idx) { this.idx = idx; }
+    public Integer getIdx() { return idx; }
+    public void setIdx(Integer idx) { this.idx = idx; }
 
     public String getReferenceDoctype() { return referenceDoctype; }
     public void setReferenceDoctype(String referenceDoctype) { this.referenceDoctype = referenceDoctype; }
@@ -125,29 +125,29 @@ public class ReferenceDTO {
     public LocalDate getDueDate() { return dueDate; }
     public void setDueDate(LocalDate dueDate) { this.dueDate = dueDate; }
 
-    public double getPaymentTermOutstanding() { return paymentTermOutstanding; }
-    public void setPaymentTermOutstanding(double paymentTermOutstanding) { this.paymentTermOutstanding = paymentTermOutstanding; }
+    public Double getPaymentTermOutstanding() { return paymentTermOutstanding; }
+    public void setPaymentTermOutstanding(Double paymentTermOutstanding) { this.paymentTermOutstanding = paymentTermOutstanding; }
 
-    public double getTotalAmount() { return totalAmount; }
-    public void setTotalAmount(double totalAmount) { this.totalAmount = totalAmount; }
+    public Double getTotalAmount() { return totalAmount; }
+    public void setTotalAmount(Double totalAmount) { this.totalAmount = totalAmount; }
 
-    public double getOutstandingAmount() { return outstandingAmount; }
-    public void setOutstandingAmount(double outstandingAmount) { this.outstandingAmount = outstandingAmount; }
+    public Double getOutstandingAmount() { return outstandingAmount; }
+    public void setOutstandingAmount(Double outstandingAmount) { this.outstandingAmount = outstandingAmount; }
 
-    public double getAllocatedAmount() { return allocatedAmount; }
-    public void setAllocatedAmount(double allocatedAmount) { this.allocatedAmount = allocatedAmount; }
+    public Double getAllocatedAmount() { return allocatedAmount; }
+    public void setAllocatedAmount(Double allocatedAmount) { this.allocatedAmount = allocatedAmount; }
 
-    public double getExchangeRate() { return exchangeRate; }
-    public void setExchangeRate(double exchangeRate) { this.exchangeRate = exchangeRate; }
+    public Double getExchangeRate() { return exchangeRate; }
+    public void setExchangeRate(Double exchangeRate) { this.exchangeRate = exchangeRate; }
 
-    public double getExchangeGainLoss() { return exchangeGainLoss; }
-    public void setExchangeGainLoss(double exchangeGainLoss) { this.exchangeGainLoss = exchangeGainLoss; }
+    public Double getExchangeGainLoss() { return exchangeGainLoss; }
+    public void setExchangeGainLoss(Double exchangeGainLoss) { this.exchangeGainLoss = exchangeGainLoss; }
 
     public String getAccount() { return account; }
     public void setAccount(String account) { this.account = account; }
 
-    public double getPaymentRequestOutstanding() { return paymentRequestOutstanding; }
-    public void setPaymentRequestOutstanding(double paymentRequestOutstanding) { this.paymentRequestOutstanding = paymentRequestOutstanding; }
+    public Double getPaymentRequestOutstanding() { return paymentRequestOutstanding; }
+    public void setPaymentRequestOutstanding(Double paymentRequestOutstanding) { this.paymentRequestOutstanding = paymentRequestOutstanding; }
 
     public String getParent() { return parent; }
     public void setParent(String parent) { this.parent = parent; }

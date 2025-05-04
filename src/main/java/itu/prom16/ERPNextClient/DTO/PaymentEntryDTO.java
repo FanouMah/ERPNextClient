@@ -28,9 +28,9 @@ public class PaymentEntryDTO {
     @JsonProperty("modified_by")
     private String modifiedBy;
     @JsonProperty("docstatus")
-    private int docstatus;
+    private Integer docstatus;
     @JsonProperty("idx")
-    private int idx;
+    private Integer idx;
     @JsonProperty("naming_series")
     private String namingSeries;
     @JsonProperty("payment_type")
@@ -53,13 +53,13 @@ public class PaymentEntryDTO {
     @JsonProperty("party_name")
     private String partyName;
     @JsonProperty("book_advance_payments_in_separate_party_account")
-    private int bookAdvancePaymentsInSeparatePartyAccount;
+    private Integer bookAdvancePaymentsInSeparatePartyAccount;
     @JsonProperty("reconcile_on_advance_payment_date")
-    private int reconcileOnAdvancePaymentDate;
+    private Integer reconcileOnAdvancePaymentDate;
     @JsonProperty("advance_reconciliation_takes_effect_on")
     private String advanceReconciliationTakesEffectOn;
     @JsonProperty("party_balance")
-    private double partyBalance;
+    private Double partyBalance;
     @JsonProperty("paid_from")
     private String paidFrom;
     @JsonProperty("paid_from_account_type")
@@ -67,7 +67,7 @@ public class PaymentEntryDTO {
     @JsonProperty("paid_from_account_currency")
     private String paidFromAccountCurrency;
     @JsonProperty("paid_from_account_balance")
-    private double paidFromAccountBalance;
+    private Double paidFromAccountBalance;
     @JsonProperty("paid_to")
     private String paidTo;
     @JsonProperty("paid_to_account_type")
@@ -75,41 +75,41 @@ public class PaymentEntryDTO {
     @JsonProperty("paid_to_account_currency")
     private String paidToAccountCurrency;
     @JsonProperty("paid_to_account_balance")
-    private double paidToAccountBalance;
+    private Double paidToAccountBalance;
     @JsonProperty("paid_amount")
-    private double paidAmount;
+    private Double paidAmount;
     @JsonProperty("paid_amount_after_tax")
-    private double paidAmountAfterTax;
+    private Double paidAmountAfterTax;
     @JsonProperty("source_exchange_rate")
-    private double sourceExchangeRate;
+    private Double sourceExchangeRate;
     @JsonProperty("base_paid_amount")
-    private double basePaidAmount;
+    private Double basePaidAmount;
     @JsonProperty("base_paid_amount_after_tax")
-    private double basePaidAmountAfterTax;
+    private Double basePaidAmountAfterTax;
     @JsonProperty("received_amount")
-    private double receivedAmount;
+    private Double receivedAmount;
     @JsonProperty("received_amount_after_tax")
-    private double receivedAmountAfterTax;
+    private Double receivedAmountAfterTax;
     @JsonProperty("target_exchange_rate")
-    private double targetExchangeRate;
+    private Double targetExchangeRate;
     @JsonProperty("base_received_amount")
-    private double baseReceivedAmount;
+    private Double baseReceivedAmount;
     @JsonProperty("base_received_amount_after_tax")
-    private double baseReceivedAmountAfterTax;
+    private Double baseReceivedAmountAfterTax;
     @JsonProperty("total_allocated_amount")
-    private double totalAllocatedAmount;
+    private Double totalAllocatedAmount;
     @JsonProperty("base_total_allocated_amount")
-    private double baseTotalAllocatedAmount;
+    private Double baseTotalAllocatedAmount;
     @JsonProperty("unallocated_amount")
-    private double unallocatedAmount;
+    private Double unallocatedAmount;
     @JsonProperty("difference_amount")
-    private double differenceAmount;
+    private Double differenceAmount;
     @JsonProperty("apply_tax_withholding_amount")
-    private int applyTaxWithholdingAmount;
+    private Integer applyTaxWithholdingAmount;
     @JsonProperty("base_total_taxes_and_charges")
-    private double baseTotalTaxesAndCharges;
+    private Double baseTotalTaxesAndCharges;
     @JsonProperty("total_taxes_and_charges")
-    private double totalTaxesAndCharges;
+    private Double totalTaxesAndCharges;
     @JsonProperty("reference_no")
     private String referenceNo;
 
@@ -120,7 +120,7 @@ public class PaymentEntryDTO {
     @JsonProperty("status")
     private String status;
     @JsonProperty("custom_remarks")
-    private int customRemarks;
+    private Integer customRemarks;
     @JsonProperty("remarks")
     private String remarks;
     @JsonProperty("base_in_words")
@@ -145,17 +145,17 @@ public class PaymentEntryDTO {
 
     public PaymentEntryDTO() {}
     
-        public PaymentEntryDTO( String name, String owner, LocalDateTime creation, LocalDateTime modified, String modifiedBy, int docstatus,
-                                int idx, String namingSeries, String paymentType, String paymentOrderStatus, LocalDate postingDate, String modeOfPayment,
-                                String company, String partyType, String party, String partyName, int bookAdvancePaymentsInSeparatePartyAccount,
-                                int reconcileOnAdvancePaymentDate, String advanceReconciliationTakesEffectOn, double partyBalance,
-                                String paidFrom, String paidFromAccountType, String paidFromAccountCurrency, double paidFromAccountBalance,
-                                String paidTo, String paidToAccountType, String paidToAccountCurrency, double paidToAccountBalance, double paidAmount,
-                                double paidAmountAfterTax, double sourceExchangeRate, double basePaidAmount, double basePaidAmountAfterTax,
-                                double receivedAmount, double receivedAmountAfterTax, double targetExchangeRate, double baseReceivedAmount,
-                                double baseReceivedAmountAfterTax, double totalAllocatedAmount, double baseTotalAllocatedAmount, double unallocatedAmount,
-                                double differenceAmount, int applyTaxWithholdingAmount, double baseTotalTaxesAndCharges, double totalTaxesAndCharges,
-                                String referenceNo, LocalDate referenceDate, String status, int customRemarks, String remarks, String baseInWords,
+        public PaymentEntryDTO( String name, String owner, LocalDateTime creation, LocalDateTime modified, String modifiedBy, Integer docstatus,
+                                Integer idx, String namingSeries, String paymentType, String paymentOrderStatus, LocalDate postingDate, String modeOfPayment,
+                                String company, String partyType, String party, String partyName, Integer bookAdvancePaymentsInSeparatePartyAccount,
+                                Integer reconcileOnAdvancePaymentDate, String advanceReconciliationTakesEffectOn, Double partyBalance,
+                                String paidFrom, String paidFromAccountType, String paidFromAccountCurrency, Double paidFromAccountBalance,
+                                String paidTo, String paidToAccountType, String paidToAccountCurrency, Double paidToAccountBalance, Double paidAmount,
+                                Double paidAmountAfterTax, Double sourceExchangeRate, Double basePaidAmount, Double basePaidAmountAfterTax,
+                                Double receivedAmount, Double receivedAmountAfterTax, Double targetExchangeRate, Double baseReceivedAmount,
+                                Double baseReceivedAmountAfterTax, Double totalAllocatedAmount, Double baseTotalAllocatedAmount, Double unallocatedAmount,
+                                Double differenceAmount, Integer applyTaxWithholdingAmount, Double baseTotalTaxesAndCharges, Double totalTaxesAndCharges,
+                                String referenceNo, LocalDate referenceDate, String status, Integer customRemarks, String remarks, String baseInWords,
                                 String isOpening, String inWords, String title, String doctype, List<ReferenceDTO> references, List<Object> deductions,
                                 List<Object> taxes) {
             this.name = name;
@@ -233,11 +233,11 @@ public class PaymentEntryDTO {
         public String getModifiedBy() { return modifiedBy; }
         public void setModifiedBy(String modifiedBy) { this.modifiedBy = modifiedBy; }
 
-        public int getDocstatus() { return docstatus; }
-        public void setDocstatus(int docstatus) { this.docstatus = docstatus; }
+        public Integer getDocstatus() { return docstatus; }
+        public void setDocstatus(Integer docstatus) { this.docstatus = docstatus; }
 
-        public int getIdx() { return idx; }
-        public void setIdx(int idx) { this.idx = idx; }
+        public Integer getIdx() { return idx; }
+        public void setIdx(Integer idx) { this.idx = idx; }
 
         public String getNamingSeries() { return namingSeries; }
         public void setNamingSeries(String namingSeries) { this.namingSeries = namingSeries; }
@@ -266,17 +266,17 @@ public class PaymentEntryDTO {
         public String getPartyName() { return partyName; }
         public void setPartyName(String partyName) { this.partyName = partyName; }
 
-        public int getBookAdvancePaymentsInSeparatePartyAccount() { return bookAdvancePaymentsInSeparatePartyAccount; }
-        public void setBookAdvancePaymentsInSeparatePartyAccount(int bookAdvancePaymentsInSeparatePartyAccount) { this.bookAdvancePaymentsInSeparatePartyAccount = bookAdvancePaymentsInSeparatePartyAccount; }
+        public Integer getBookAdvancePaymentsInSeparatePartyAccount() { return bookAdvancePaymentsInSeparatePartyAccount; }
+        public void setBookAdvancePaymentsInSeparatePartyAccount(Integer bookAdvancePaymentsInSeparatePartyAccount) { this.bookAdvancePaymentsInSeparatePartyAccount = bookAdvancePaymentsInSeparatePartyAccount; }
 
-        public int getReconcileOnAdvancePaymentDate() { return reconcileOnAdvancePaymentDate; }
-        public void setReconcileOnAdvancePaymentDate(int reconcileOnAdvancePaymentDate) { this.reconcileOnAdvancePaymentDate = reconcileOnAdvancePaymentDate; }
+        public Integer getReconcileOnAdvancePaymentDate() { return reconcileOnAdvancePaymentDate; }
+        public void setReconcileOnAdvancePaymentDate(Integer reconcileOnAdvancePaymentDate) { this.reconcileOnAdvancePaymentDate = reconcileOnAdvancePaymentDate; }
 
         public String getAdvanceReconciliationTakesEffectOn() { return advanceReconciliationTakesEffectOn; }
         public void setAdvanceReconciliationTakesEffectOn(String advanceReconciliationTakesEffectOn) { this.advanceReconciliationTakesEffectOn = advanceReconciliationTakesEffectOn; }
 
-        public double getPartyBalance() { return partyBalance; }
-        public void setPartyBalance(double partyBalance) { this.partyBalance = partyBalance; }
+        public Double getPartyBalance() { return partyBalance; }
+        public void setPartyBalance(Double partyBalance) { this.partyBalance = partyBalance; }
 
         public String getPaidFrom() { return paidFrom; }
         public void setPaidFrom(String paidFrom) { this.paidFrom = paidFrom; }
@@ -287,8 +287,8 @@ public class PaymentEntryDTO {
         public String getPaidFromAccountCurrency() { return paidFromAccountCurrency; }
         public void setPaidFromAccountCurrency(String paidFromAccountCurrency) { this.paidFromAccountCurrency = paidFromAccountCurrency; }
 
-        public double getPaidFromAccountBalance() { return paidFromAccountBalance; }
-        public void setPaidFromAccountBalance(double paidFromAccountBalance) { this.paidFromAccountBalance = paidFromAccountBalance; }
+        public Double getPaidFromAccountBalance() { return paidFromAccountBalance; }
+        public void setPaidFromAccountBalance(Double paidFromAccountBalance) { this.paidFromAccountBalance = paidFromAccountBalance; }
 
         public String getPaidTo() { return paidTo; }
         public void setPaidTo(String paidTo) { this.paidTo = paidTo; }
@@ -299,59 +299,59 @@ public class PaymentEntryDTO {
         public String getPaidToAccountCurrency() { return paidToAccountCurrency; }
         public void setPaidToAccountCurrency(String paidToAccountCurrency) { this.paidToAccountCurrency = paidToAccountCurrency; }
 
-        public double getPaidToAccountBalance() { return paidToAccountBalance; }
-        public void setPaidToAccountBalance(double paidToAccountBalance) { this.paidToAccountBalance = paidToAccountBalance; }
+        public Double getPaidToAccountBalance() { return paidToAccountBalance; }
+        public void setPaidToAccountBalance(Double paidToAccountBalance) { this.paidToAccountBalance = paidToAccountBalance; }
 
-        public double getPaidAmount() { return paidAmount; }
-        public void setPaidAmount(double paidAmount) { this.paidAmount = paidAmount; }
+        public Double getPaidAmount() { return paidAmount; }
+        public void setPaidAmount(Double paidAmount) { this.paidAmount = paidAmount; }
 
-        public double getPaidAmountAfterTax() { return paidAmountAfterTax; }
-        public void setPaidAmountAfterTax(double paidAmountAfterTax) { this.paidAmountAfterTax = paidAmountAfterTax; }
+        public Double getPaidAmountAfterTax() { return paidAmountAfterTax; }
+        public void setPaidAmountAfterTax(Double paidAmountAfterTax) { this.paidAmountAfterTax = paidAmountAfterTax; }
 
-        public double getSourceExchangeRate() { return sourceExchangeRate; }
-        public void setSourceExchangeRate(double sourceExchangeRate) { this.sourceExchangeRate = sourceExchangeRate; }
+        public Double getSourceExchangeRate() { return sourceExchangeRate; }
+        public void setSourceExchangeRate(Double sourceExchangeRate) { this.sourceExchangeRate = sourceExchangeRate; }
 
-        public double getBasePaidAmount() { return basePaidAmount; }
-        public void setBasePaidAmount(double basePaidAmount) { this.basePaidAmount = basePaidAmount; }
+        public Double getBasePaidAmount() { return basePaidAmount; }
+        public void setBasePaidAmount(Double basePaidAmount) { this.basePaidAmount = basePaidAmount; }
 
-        public double getBasePaidAmountAfterTax() { return basePaidAmountAfterTax; }
-        public void setBasePaidAmountAfterTax(double basePaidAmountAfterTax) { this.basePaidAmountAfterTax = basePaidAmountAfterTax; }
+        public Double getBasePaidAmountAfterTax() { return basePaidAmountAfterTax; }
+        public void setBasePaidAmountAfterTax(Double basePaidAmountAfterTax) { this.basePaidAmountAfterTax = basePaidAmountAfterTax; }
 
-        public double getReceivedAmount() { return receivedAmount; }
-        public void setReceivedAmount(double receivedAmount) { this.receivedAmount = receivedAmount; }
+        public Double getReceivedAmount() { return receivedAmount; }
+        public void setReceivedAmount(Double receivedAmount) { this.receivedAmount = receivedAmount; }
 
-        public double getReceivedAmountAfterTax() { return receivedAmountAfterTax; }
-        public void setReceivedAmountAfterTax(double receivedAmountAfterTax) { this.receivedAmountAfterTax = receivedAmountAfterTax; }
+        public Double getReceivedAmountAfterTax() { return receivedAmountAfterTax; }
+        public void setReceivedAmountAfterTax(Double receivedAmountAfterTax) { this.receivedAmountAfterTax = receivedAmountAfterTax; }
 
-        public double getTargetExchangeRate() { return targetExchangeRate; }
-        public void setTargetExchangeRate(double targetExchangeRate) { this.targetExchangeRate = targetExchangeRate; }
+        public Double getTargetExchangeRate() { return targetExchangeRate; }
+        public void setTargetExchangeRate(Double targetExchangeRate) { this.targetExchangeRate = targetExchangeRate; }
 
-        public double getBaseReceivedAmount() { return baseReceivedAmount; }
-        public void setBaseReceivedAmount(double baseReceivedAmount) { this.baseReceivedAmount = baseReceivedAmount; }
+        public Double getBaseReceivedAmount() { return baseReceivedAmount; }
+        public void setBaseReceivedAmount(Double baseReceivedAmount) { this.baseReceivedAmount = baseReceivedAmount; }
 
-        public double getBaseReceivedAmountAfterTax() { return baseReceivedAmountAfterTax; }
-        public void setBaseReceivedAmountAfterTax(double baseReceivedAmountAfterTax) { this.baseReceivedAmountAfterTax = baseReceivedAmountAfterTax; }
+        public Double getBaseReceivedAmountAfterTax() { return baseReceivedAmountAfterTax; }
+        public void setBaseReceivedAmountAfterTax(Double baseReceivedAmountAfterTax) { this.baseReceivedAmountAfterTax = baseReceivedAmountAfterTax; }
 
-        public double getTotalAllocatedAmount() { return totalAllocatedAmount; }
-        public void setTotalAllocatedAmount(double totalAllocatedAmount) { this.totalAllocatedAmount = totalAllocatedAmount; }
+        public Double getTotalAllocatedAmount() { return totalAllocatedAmount; }
+        public void setTotalAllocatedAmount(Double totalAllocatedAmount) { this.totalAllocatedAmount = totalAllocatedAmount; }
 
-        public double getBaseTotalAllocatedAmount() { return baseTotalAllocatedAmount; }
-        public void setBaseTotalAllocatedAmount(double baseTotalAllocatedAmount) { this.baseTotalAllocatedAmount = baseTotalAllocatedAmount; }
+        public Double getBaseTotalAllocatedAmount() { return baseTotalAllocatedAmount; }
+        public void setBaseTotalAllocatedAmount(Double baseTotalAllocatedAmount) { this.baseTotalAllocatedAmount = baseTotalAllocatedAmount; }
 
-        public double getUnallocatedAmount() { return unallocatedAmount; }
-        public void setUnallocatedAmount(double unallocatedAmount) { this.unallocatedAmount = unallocatedAmount; }
+        public Double getUnallocatedAmount() { return unallocatedAmount; }
+        public void setUnallocatedAmount(Double unallocatedAmount) { this.unallocatedAmount = unallocatedAmount; }
 
-        public double getDifferenceAmount() { return differenceAmount; }
-        public void setDifferenceAmount(double differenceAmount) { this.differenceAmount = differenceAmount; }
+        public Double getDifferenceAmount() { return differenceAmount; }
+        public void setDifferenceAmount(Double differenceAmount) { this.differenceAmount = differenceAmount; }
 
-        public int getApplyTaxWithholdingAmount() { return applyTaxWithholdingAmount; }
-        public void setApplyTaxWithholdingAmount(int applyTaxWithholdingAmount) { this.applyTaxWithholdingAmount = applyTaxWithholdingAmount; }
+        public Integer getApplyTaxWithholdingAmount() { return applyTaxWithholdingAmount; }
+        public void setApplyTaxWithholdingAmount(Integer applyTaxWithholdingAmount) { this.applyTaxWithholdingAmount = applyTaxWithholdingAmount; }
 
-        public double getBaseTotalTaxesAndCharges() { return baseTotalTaxesAndCharges; }
-        public void setBaseTotalTaxesAndCharges(double baseTotalTaxesAndCharges) { this.baseTotalTaxesAndCharges = baseTotalTaxesAndCharges; }
+        public Double getBaseTotalTaxesAndCharges() { return baseTotalTaxesAndCharges; }
+        public void setBaseTotalTaxesAndCharges(Double baseTotalTaxesAndCharges) { this.baseTotalTaxesAndCharges = baseTotalTaxesAndCharges; }
 
-        public double getTotalTaxesAndCharges() { return totalTaxesAndCharges; }
-        public void setTotalTaxesAndCharges(double totalTaxesAndCharges) { this.totalTaxesAndCharges = totalTaxesAndCharges; }
+        public Double getTotalTaxesAndCharges() { return totalTaxesAndCharges; }
+        public void setTotalTaxesAndCharges(Double totalTaxesAndCharges) { this.totalTaxesAndCharges = totalTaxesAndCharges; }
 
         public String getReferenceNo() { return referenceNo; }
         public void setReferenceNo(String referenceNo) { this.referenceNo = referenceNo; }
@@ -362,8 +362,8 @@ public class PaymentEntryDTO {
         public String getStatus() { return status; }
         public void setStatus(String status) { this.status = status; }
 
-        public int getCustomRemarks() { return customRemarks; }
-        public void setCustomRemarks(int customRemarks) { this.customRemarks = customRemarks; }
+        public Integer getCustomRemarks() { return customRemarks; }
+        public void setCustomRemarks(Integer customRemarks) { this.customRemarks = customRemarks; }
 
         public String getRemarks() { return remarks; }
         public void setRemarks(String remarks) { this.remarks = remarks; }

@@ -108,6 +108,20 @@ public class AccountingController {
             return "redirect:/";
         }
 
+        if (paymentMethod.isEmpty() && referenceNo.isEmpty()) {
+            model.addAttribute("error", "Please provide at least one of the payment method or reference number.");
+            return "redirect:/accounting/sales-invoices";
+            
+        }
+
+        if (paymentMethod.isEmpty()) {
+            paymentMethod = null;
+        }
+
+        if (referenceNo.isEmpty()) {
+            referenceNo = null;
+        }
+
         try {
 
             SalesInvoiceDTO salesInvoice = salesInvoiceService.gSalesInvoiceDTOById(sid, invoiceId);
@@ -150,10 +164,10 @@ public class AccountingController {
             PaymentEntryDTO createdPaymentEntry = paymentEntryService.createPaymentEntry(sid, paymentEntry);
 
             model.addAttribute("paymentEntry", createdPaymentEntry);
-            return "payment-entry-success";
+            return "redirect:/accounting/sales-invoices";
         } catch (RuntimeException e) {
             model.addAttribute("error", e.getMessage());
-            return "payment-entry-failure";
+            return "redirect:/accounting/sales-invoices";
         }
     }
 
