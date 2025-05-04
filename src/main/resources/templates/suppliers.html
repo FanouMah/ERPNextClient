@@ -145,6 +145,9 @@
                     </tr>
                   </thead>
                   <tbody>
+                    <tr th:if="${suppliers.empty}">
+                      <td colspan="5" class="text-center text-muted">Empty</td>
+                    </tr>
                     <tr th:each="supplier : ${suppliers}">
                       <td><a href="#" th:text="${supplier.name}"></a></td>
                       <td th:text="${supplier.supplierName}"></td>
