@@ -73,13 +73,13 @@
           <h6 class="ps-4 ms-2 text-uppercase text-xs text-dark font-weight-bolder opacity-5">Accounting</h6>
         </li>
         <li class="nav-item">
-          <a class="nav-link active bg-gradient-info text-white animate__animated animate__fadeIn" th:href="@{/accounting/purchase-invoices}">
+          <a class="nav-link text-dark" th:href="@{/accounting/purchase-invoices}">
             <i class="material-symbols-rounded opacity-5">receipt_long</i>
             <span class="nav-link-text ms-1">Purchase Invoices</span>
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link text-dark" th:href="@{/accounting/sales-invoices}">
+          <a class="nav-link active bg-gradient-info text-white animate__animated animate__fadeIn" th:href="@{/accounting/sales-invoices}">
             <i class="material-symbols-rounded opacity-5">shopping_cart</i>
             <span class="nav-link-text ms-1">Sale Invoices</span>
           </a>
@@ -128,7 +128,7 @@
       </div>
     </nav>
     <!-- End Navbar -->
-    <div class="container-fluid py-2">
+    <div class="container-fluid py-2 d-flex flex-column justify-content-between" style="min-height: 94vh;">
       <div class="row mb-4">
         <div class="col-12">
           <div class="card my-4">
