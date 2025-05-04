@@ -26,11 +26,17 @@ public class AuthController {
     private AuthService service;
 
     @GetMapping("/")
-    public String showLoginPage(@CookieValue(value = "sid", required = false) String sid) {
-        if (sid != null && service.isLoggedIn(sid)) {
-            return "home";
-        } else {
-            return "sign-in";
+    public String showLoginPage(@CookieValue(value = "sid", required = false) String sid, Model model) {
+        try {
+            if (sid != null && service.isLoggedIn(sid)) {
+                return "home";
+            } else {
+                return "sign-in";
+            }
+        } catch (Exception e) {
+            model.addAttribute("code", "500");
+            model.addAttribute("error", e.getMessage());
+            return "error-500";
         }
     }
 
@@ -55,7 +61,7 @@ public class AuthController {
         } catch (Exception e) {
             model.addAttribute("code", "500");
             model.addAttribute("error", e.getMessage());
-            return "error-page";
+            return "error-500";
         }
     }
     

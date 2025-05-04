@@ -96,7 +96,7 @@ public class AuthService {
             return response.statusCode() == 200;
 
         } catch (Exception e) {
-            throw new RuntimeException("Erreur lors de la vérification de l'état de connexion : " + e.getMessage(), e);
+            throw new RuntimeException("Error checking connection status : " + e.getMessage(), e);
         }
     }
 }
