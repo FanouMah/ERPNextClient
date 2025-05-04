@@ -162,8 +162,8 @@ public class AccountingController {
             paymentEntry.setReferences(references);
 
             PaymentEntryDTO createdPaymentEntry = paymentEntryService.createPaymentEntry(sid, paymentEntry);
-
-            model.addAttribute("paymentEntry", createdPaymentEntry);
+            paymentEntryService.submitPaymentEntry(sid, createdPaymentEntry.getName());
+            
             return "redirect:/accounting/sales-invoices";
         } catch (RuntimeException e) {
             model.addAttribute("error", e.getMessage());

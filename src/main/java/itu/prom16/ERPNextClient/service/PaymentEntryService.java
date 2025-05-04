@@ -66,4 +66,26 @@ public class PaymentEntryService {
             throw new RuntimeException("Failed to create Payment Entry : " + e.getMessage(), e);
         }
     }
+
+    public void submitPaymentEntry(String sid, String paymentEntryName) {
+        try {
+            HttpClient client = HttpClient.newHttpClient();
+            
+            HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(baseUrl + "/api/resource/Payment%20Entry/" + paymentEntryName + "?run_method=submit"))
+                .header("Content-Type", "application/json")
+                .header("Cookie", "sid=" + sid)
+                .POST(HttpRequest.BodyPublishers.noBody())
+                .build();
+
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+            if (response.statusCode() != 200) {
+                throw new RuntimeException("Failed to submit Payment Entry, HTTP status code: " + response.statusCode());
+            }
+
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to submit Payment Entry : " + e.getMessage(), e);
+        }
+    }
 }
