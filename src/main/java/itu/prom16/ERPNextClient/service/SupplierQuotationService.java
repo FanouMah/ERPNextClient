@@ -79,7 +79,7 @@ public class SupplierQuotationService {
 
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
             if (response.statusCode() != 200) {
-                throw new RuntimeException("Failed to fetch Supplier Quotation list, HTTP status code: " + response.statusCode());
+                throw new RuntimeException("Failed to fetch Supplier Quotation list, HTTP status code : " + response.statusCode() + " - " + response.body());
             }
 
             ObjectMapper objectMapper = new ObjectMapper();
@@ -122,7 +122,7 @@ public class SupplierQuotationService {
 
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
             if (response.statusCode() != 200) {
-                throw new RuntimeException("Failed to update Supplier Quotation Item, HTTP status code: " + response.statusCode());
+                throw new RuntimeException("Failed to update Supplier Quotation Item, HTTP status code: " + response.statusCode() + " - " + response.body());
             }
         } catch (Exception e) {
             throw new RuntimeException("Failed to update Supplier Quotation Item: " + e.getMessage(), e);
