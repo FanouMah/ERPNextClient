@@ -41,7 +41,7 @@
   <aside class="sidenav navbar navbar-vertical navbar-expand-xs border-radius-lg fixed-start ms-2  bg-white my-2" id="sidenav-main">
     <div class="sidenav-header">
       <i class="fas fa-times p-3 cursor-pointer text-dark opacity-5 position-absolute end-0 top-0 d-none d-xl-none" aria-hidden="true" id="iconSidenav"></i>
-    <a class="navbar-brand px-4 py-3 m-0 d-flex align-items-center flex-row flex-nowrap mb-2 mb-lg-0 mx-0 gap-2" th:href="@{/}" target="_blank" style="gap:8px;">
+    <a class="navbar-brand px-4 py-3 m-0 d-flex align-items-center flex-row flex-nowrap mb-2 mb-lg-0 mx-0 gap-2" th:href="@{/}" style="gap:8px;">
       <div class="fb-69e70d9e"><svg fill="none" height="30" viewBox="0 0 24 24" width="30" xmlns="http://www.w3.org/2000/svg">
         <path d="M0 4.8C0 2.14903 2.14903 0 4.8 0H19.2C21.851 0 24 2.14903 24 4.8V19.2C24 21.851 21.851 24 19.2 24H4.8C2.14903 24 0 21.851 0 19.2V4.8Z" fill="#0089FF"></path>
         <path clip-rule="evenodd" d="M16.1729 7.90735H15.7703H10.5368H7.91999V5.76025H16.1729V7.90735ZM10.5367 12.9394V15.8916H16.2399V18.0387H7.91992V10.7923H10.5367H15.7702V12.9394H10.5367Z" fill="white" fill-rule="evenodd"></path>
@@ -72,7 +72,7 @@
         <li class="nav-item mt-3">
           <h6 class="ps-4 ms-2 text-uppercase text-xs text-dark font-weight-bolder opacity-5">Accounting</h6>
         </li>
-        <li class="nav-item"></li>
+        <li class="nav-item">
           <a class="nav-link text-dark" th:href="@{/accounting/purchase-invoices}">
             <i class="material-symbols-rounded opacity-5">receipt_long</i>
             <span class="nav-link-text ms-1">Purchase Invoices</span>
@@ -90,7 +90,7 @@
       <div class="mx-3">
         <div class="d-flex align-items-center mb-3">
             <i class="material-symbols-rounded me-2">person</i>
-            <span id="user-fullname" style="font-size: 0.75rem;">Utilisateur</span>
+            <span id="user-fullname" class="text-xs font-weight-bolder">Utilisateur</span>
         </div>
         <a class="btn bg-gradient-danger w-100" th:href="@{/logout}" type="button"> <i class="material-symbols-rounded me-2">logout</i> logout</a>
       </div>
