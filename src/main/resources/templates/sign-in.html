@@ -18,42 +18,52 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <link rel="icon" type="image/png" href="../assets/img/favicon.ico">
+  <link rel="icon" type="image/png" th:href="@{/assets/img/favicon.ico}">
   <title>
     ERPNext - Sign In
   </title>
   <!--     Fonts and icons     -->
   <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700,900" />
   <!-- Nucleo Icons -->
-  <link href="../assets/css/nucleo-icons.css" rel="stylesheet" />
-  <link href="../assets/css/nucleo-svg.css" rel="stylesheet" />
+  <link th:href="@{/assets/css/nucleo-icons.css}" rel="stylesheet" />
+  <link th:href="@{/assets/css/nucleo-svg.css}" rel="stylesheet" />
   <!-- Font Awesome Icons -->
   <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
   <!-- Material Icons -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0" />
   <!-- CSS Files -->
-  <link id="pagestyle" href="../assets/css/material-dashboard.css?v=3.2.0" rel="stylesheet" />
+  <link id="pagestyle" th:href="@{/assets/css/material-dashboard.css?v=3.2.0}" rel="stylesheet" />
 </head>
 
 <body class="bg-gray-200">
   <main class="main-content  mt-0">
-    <div class="page-header align-items-start min-vh-100">
+    <div class="page-header align-items-start min-vh-100" style="background-image: url('https://terillium.com/wp-content/uploads/2018/07/HomePage-background.jpg');">
       <span class="mask bg-gradient-dark opacity-6"></span>
       <div class="container my-auto">
         <div class="row">
           <div class="col-lg-4 col-md-8 col-12 mx-auto">
             <div class="card z-index-0 fadeIn3 fadeInBottom">
               <div class="card-body">
-                <div class="py-3 pe-1 d-flex flex-column align-items-center">
-                  <div style="width: 48px; height: 48px;">
+                <div class="py-3 pe-1 mb-5 d-flex flex-column align-items-center">
+                  <div class="mb-2" style="width: 68px; height: 68px;">
                     <svg fill="none" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
                       <path d="M0 9.6C0 4.29807 4.29807 0 9.6 0H38.4C43.7019 0 48 4.29807 48 9.6V38.4C48 43.7019 43.7019 48 38.4 48H9.6C4.29807 48 0 43.7019 0 38.4V9.6Z" fill="#0089FF"></path>
                       <path clip-rule="evenodd" d="M32.3457 15.8147H31.5405H21.0734H15.8399V11.5205H32.3457V15.8147ZM21.0734 25.8787V31.7832H32.4798V36.0774H15.8398V21.5845H21.0734H31.5405V25.8787H21.0734Z" fill="white" fill-rule="evenodd"></path>
                     </svg>
                   </div>
-                  <p class="text-black font-weight-bolder text-center mt-2 mb-0">ERPNext</p>
+                  <div class="fb-d4fba862 "><svg fill="none" height="40" viewBox="0 0 72 14" width="100" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M2.71078 10.9236V7.92056H8.13235V5.73655H0V13.1076H8.6189V10.9236H2.71078Z" fill="#1F272E"></path>
+                    <path d="M10.7042 0.617788H15.7087C18.628 0.617788 20.2962 2.18755 20.2962 4.71281C20.2962 6.41907 19.4621 7.64757 18.0719 8.26182L20.7827 13.1076H17.7939L15.3612 8.67133H13.415V13.1076H10.7042V0.617788ZM15.2221 6.55557C16.7513 6.55557 17.5159 5.94131 17.5159 4.71281C17.5159 3.4843 16.7513 2.8018 15.2221 2.8018H13.415V6.55557H15.2221Z" fill="#1F272E"></path>
+                    <path d="M27.1774 0.617788C30.0967 0.617788 31.7649 2.3923 31.7649 4.84931C31.7649 7.37457 30.0967 9.08083 27.1079 9.08083H24.8142V13.1076H22.1034V0.617788H27.1774ZM26.6909 6.96507C28.22 6.96507 28.9846 6.14606 28.9846 4.84931C28.9846 3.6208 28.22 2.8018 26.6909 2.8018H24.8837V6.96507H26.6909Z" fill="#1F272E"></path>
+                    <path d="M8.5494 2.8018V0.617788H0V2.8018H8.5494Z" fill="#1F272E"></path>
+                    <path d="M44.4733 0.5V13.3123H42.1335L36.5594 5.24832H36.4656V13.3123H33.7567V0.5H36.134L41.6643 8.55775H41.7769V0.5H44.4733Z" fill="#1F272E"></path>
+                    <path d="M50.653 13.5C49.6645 13.5 48.8137 13.2998 48.1005 12.8994C47.3915 12.4949 46.8451 11.9235 46.4614 11.1853C46.0777 10.4429 45.8859 9.56497 45.8859 8.55149C45.8859 7.56304 46.0777 6.69554 46.4614 5.94899C46.8451 5.20244 47.3852 4.62063 48.0818 4.20356C48.7824 3.78649 49.604 3.57796 50.5466 3.57796C51.1806 3.57796 51.7707 3.68014 52.3171 3.8845C52.8676 4.0847 53.3472 4.38707 53.756 4.79163C54.1688 5.19618 54.49 5.70501 54.7194 6.31809C54.9488 6.92701 55.0635 7.6402 55.0635 8.45765V9.18961H46.9494V7.53802H52.5548C52.5548 7.15432 52.4714 6.81441 52.3046 6.51829C52.1377 6.22217 51.9063 5.9907 51.6101 5.82387C51.3182 5.65287 50.9783 5.56737 50.5904 5.56737C50.1859 5.56737 49.8272 5.66121 49.5144 5.84889C49.2057 6.0324 48.9638 6.28056 48.7887 6.59336C48.6135 6.90199 48.5238 7.24607 48.5197 7.6256V9.19586C48.5197 9.67132 48.6073 10.0821 48.7824 10.4283C48.9618 10.7745 49.2141 11.0414 49.5394 11.2291C49.8647 11.4167 50.2505 11.5106 50.6968 11.5106C50.9929 11.5106 51.264 11.4689 51.51 11.3855C51.7561 11.3021 51.9667 11.1769 52.1419 11.0101C52.3171 10.8433 52.4505 10.6389 52.5423 10.397L55.0072 10.5597C54.882 11.1519 54.6255 11.6691 54.2377 12.1112C53.854 12.5491 53.3577 12.8911 52.7487 13.1372C52.144 13.3791 51.4454 13.5 50.653 13.5Z" fill="#1F272E"></path>
+                    <path d="M58.4702 3.70308L60.2344 7.06256L62.0423 3.70308H64.7762L61.9923 8.5077L64.8513 13.3123H62.1299L60.2344 9.99038L58.3701 13.3123H55.6174L58.4702 8.5077L55.7175 3.70308H58.4702Z" fill="#1F272E"></path>
+                    <path d="M71.0826 3.70308V5.70501H65.2958V3.70308H71.0826ZM66.6095 1.40087H69.2746V10.3595C69.2746 10.6056 69.3121 10.7974 69.3872 10.935C69.4623 11.0685 69.5665 11.1623 69.7 11.2166C69.8376 11.2708 69.9961 11.2979 70.1755 11.2979C70.3006 11.2979 70.4257 11.2875 70.5508 11.2666C70.6759 11.2416 70.7719 11.2228 70.8386 11.2103L71.2578 13.1935C71.1243 13.2352 70.9366 13.2831 70.6947 13.3373C70.4528 13.3957 70.1588 13.4312 69.8126 13.4437C69.1703 13.4687 68.6073 13.3832 68.1235 13.1872C67.6439 12.9912 67.2706 12.6867 67.0037 12.2738C66.7367 11.8609 66.6054 11.3396 66.6095 10.7098V1.40087Z" fill="#1F272E"></path>
+                    </svg>
+                  </div>
                 </div>
-                <form th:action="@{/login}" method="post" class="text-start">
+                <form th:action="@{/login}" method="post" class="text-start mx-4">
                   <div class="input-group input-group-outline my-3">
                     <label class="form-label">Email</label>
                     <input type="text" name="usr" required class="form-control">
@@ -63,15 +73,14 @@
                     <input type="password" name="pwd" required class="form-control">
                   </div>
 
+                  <div class="text-center mb-3">
+                    <button type="submit" class="btn bg-gradient-info w-100 my-4 mb-3">Sign in</button>
+                  </div>
                   <div th:if="${error}" class="alert alert-danger alert-dismissible text-white" role="alert">
                     <span class="text-sm" th:text="${error}" ></span>
                     <button type="button" class="btn-close text-lg py-3 opacity-10" data-bs-dismiss="alert" aria-label="Close">
                       <span aria-hidden="true">&times;</span>
                     </button>
-                  </div>
-
-                  <div class="text-center">
-                    <button type="submit" class="btn bg-gradient-dark w-100 my-4 mb-2">Sign in</button>
                   </div>
                 </form>
               </div>
@@ -96,10 +105,10 @@
     </div>
   </main>
   <!--   Core JS Files   -->
-  <script src="../assets/js/core/popper.min.js"></script>
-  <script src="../assets/js/core/bootstrap.min.js"></script>
-  <script src="../assets/js/plugins/perfect-scrollbar.min.js"></script>
-  <script src="../assets/js/plugins/smooth-scrollbar.min.js"></script>
+  <script th:src="@{/assets/js/core/popper.min.js}"></script>
+  <script th:src="@{/assets/js/core/bootstrap.min.js}"></script>
+  <script th:src="@{/assets/js/plugins/perfect-scrollbar.min.js}"></script>
+  <script th:src="@{/assets/js/plugins/smooth-scrollbar.min.js}"></script>
   <script>
     var win = navigator.platform.indexOf('Win') > -1;
     if (win && document.querySelector('#sidenav-scrollbar')) {
@@ -112,7 +121,7 @@
   <!-- Github buttons -->
   <script async defer src="https://buttons.github.io/buttons.js"></script>
   <!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc -->
-  <script src="../assets/js/material-dashboard.min.js?v=3.2.0"></script>
+  <script th:src="@{/assets/js/material-dashboard.min.js?v=3.2.0}"></script>
 </body>
 
 </html>
