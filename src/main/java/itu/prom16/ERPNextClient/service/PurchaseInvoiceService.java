@@ -43,7 +43,7 @@ public class PurchaseInvoiceService {
 
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
             if (response.statusCode() != 200) {
-                throw new RuntimeException("Failed to fetch Purchase Invoice by ID, HTTP status code: " + response.statusCode());
+                throw new RuntimeException("Failed to fetch Purchase Invoice by ID, HTTP status code: " + response.statusCode() + ", Response: " + response.body());
             }
 
             ObjectMapper objectMapper = new ObjectMapper();
@@ -77,7 +77,7 @@ public class PurchaseInvoiceService {
     
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
             if (response.statusCode() != 200) {
-                throw new RuntimeException("Failed to fetch Purchase Invoice, HTTP status code: " + response.statusCode());
+                throw new RuntimeException("Failed to fetch Purchase Invoice, HTTP status code: " + response.statusCode() + ", Response: " + response.body());
             }
     
             ObjectMapper objectMapper = new ObjectMapper();

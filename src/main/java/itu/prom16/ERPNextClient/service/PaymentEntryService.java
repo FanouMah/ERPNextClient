@@ -47,7 +47,7 @@ public class PaymentEntryService {
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
             if (response.statusCode() != 200) {
-                throw new RuntimeException("Failed to create Payment Entry, HTTP status code: " + response.statusCode());
+                throw new RuntimeException("Failed to create Payment Entry, HTTP status code: " + response.statusCode() + ", Response: " + response.body());
             }
 
             ObjectMapper objectMapper = new ObjectMapper();
@@ -81,7 +81,7 @@ public class PaymentEntryService {
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
             if (response.statusCode() != 200) {
-                throw new RuntimeException("Failed to submit Payment Entry, HTTP status code: " + response.statusCode());
+                throw new RuntimeException("Failed to submit Payment Entry, HTTP status code: " + response.statusCode() + ", Response: " + response.body());
             }
 
         } catch (Exception e) {
