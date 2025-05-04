@@ -29,7 +29,7 @@ public class SalesInvoiceService {
     @Value("${erpnext.api.base-url}")
     private String baseUrl;
 
-    public SalesInvoiceDTO gSalesInvoiceDTOById(String sid, String id) {
+    public SalesInvoiceDTO getSalesInvoiceDTOById(String sid, String id) {
         try {
             String url = baseUrl + "/api/resource/Sales%20Invoice/" + URLEncoder.encode(id, StandardCharsets.UTF_8);
 

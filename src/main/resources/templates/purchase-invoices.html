@@ -34,26 +34,52 @@
                 <div class="modal-dialog">
                   <div class="modal-content">
                     <div class="modal-header">
-                      <h5 class="modal-title" id="payModalLabel">Paiement de la facture</h5>
+                      <h5 class="modal-title" id="payModalLabel">Paiement de la facture d'achat N°<span th:text="${sq.name}"></span> </h5>
                       <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
                     </div>
                     <div class="modal-body">
-                      <form th:action="@{/purchase-invoices/pay}" method="post">
+                      <form th:action="@{/accounting/purchase-invoice/pay}" method="post">
                         <input type="hidden" name="invoiceId" th:value="${sq.name}" />
+                        <div class="mb-3">
+                          <label for="postingDate" class="form-label">Date de Paiement</label>
+                          <input type="date" class="form-control" id="postingDate" name="postingDate" value="2025-05-04" required>
+                        </div>
                         <div class="mb-3">
                           <label for="amount" class="form-label">Montant à payer</label>
                           <input type="number" class="form-control" id="amount" name="amount" th:attr="max=${sq.outstandingAmount}" th:value="${sq.outstandingAmount}" required>
                         </div>
                         <div class="mb-3">
                           <label for="paymentMethod" class="form-label">Méthode de paiement</label>
-                          <select class="form-select" id="paymentMethod" name="paymentMethod" required>
-                            <option value="Virement">Virement</option>
-                            <option value="Chèque">Chèque</option>
-                            <option value="Espèces">Espèces</option>
+                          <select class="form-select" id="paymentMethod" name="paymentMethod" onchange="toggleReferenceFields(this)">
+                            <option value="">-- Sélectionner --</option>
+                            <option th:each="mop : ${modeOfPayments}" th:value="${mop.name}" th:text="${mop.name}"></option>
                           </select>
+                        </div>
+                        <div class="mb-3">
+                          <label for="referenceNo" class="form-label">Reference N°</label>
+                          <input type="text" class="form-control" id="referenceNo" name="referenceNo">
+                        </div>
+                        <div class="mb-3">
+                          <label for="referenceDate" class="form-label">Reference Date</label>
+                          <input type="date" class="form-control" id="referenceDate" name="referenceDate" value="2025-05-04" required>
                         </div>
                         <button type="submit" class="btn btn-success">Confirmer le paiement</button>
                       </form>
+                      <script>
+                        function toggleReferenceFields(select) {
+                          var refNo = document.getElementById('referenceNo');
+                          if (select.value === "") {
+                            refNo.required = true;
+                          } else {
+                            refNo.required = false;
+                          }
+                        }
+                        // On page load, set correct required state
+                        document.addEventListener('DOMContentLoaded', function() {
+                          var select = document.getElementById('paymentMethod');
+                          toggleReferenceFields(select);
+                        });
+                      </script>
                     </div>
                   </div>
                 </div>
