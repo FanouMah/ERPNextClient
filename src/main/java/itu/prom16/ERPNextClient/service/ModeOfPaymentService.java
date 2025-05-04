@@ -48,7 +48,7 @@ public class ModeOfPaymentService {
     
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
             if (response.statusCode() != 200) {
-                throw new RuntimeException("Failed to fetch Mode of Payment, HTTP status code: " + response.statusCode());
+                throw new RuntimeException("Failed to fetch Mode of Payment, HTTP status code: " + response.statusCode() + " - " + response.body());
             }
     
             ObjectMapper objectMapper = new ObjectMapper();

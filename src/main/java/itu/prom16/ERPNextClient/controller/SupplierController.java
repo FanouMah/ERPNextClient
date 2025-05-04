@@ -20,6 +20,7 @@ import itu.prom16.ERPNextClient.service.SupplierService;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 
 /**
@@ -31,6 +32,12 @@ public class SupplierController {
 
     @Autowired
     private SupplierService supplierService;
+
+    @Autowired
+    private SupplierQuotationService supplierQuotationservice;
+
+    @Autowired
+    private PurchaseOrderService purchaseOrderService;
     
     @GetMapping("/suppliers")
     public String showSuppliers(@CookieValue(value = "sid", required = false) String sid, Model model) {
@@ -39,17 +46,15 @@ public class SupplierController {
                 List<SupplierDTO> suppliers = supplierService.getSuppliers(sid);
                 model.addAttribute("suppliers", suppliers);
             } catch (RuntimeException e) {
+                model.addAttribute("code", "500");
                 model.addAttribute("error", e.getMessage());
+                return "error-500";
             } 
             return "suppliers";
         } else {
             return "redirect:/";
         }
     }
-
-    
-    @Autowired
-    private SupplierQuotationService supplierQuotationservice;
 
     @GetMapping("/supplier/{supplierName}/quotations")
     public String showSupplierQuotations(
@@ -63,7 +68,9 @@ public class SupplierController {
                 model.addAttribute("supplierQuotations", supplierQuotations);
                 model.addAttribute("supplierName", supplierName);
             } catch (RuntimeException e) {
+                model.addAttribute("code", "500");
                 model.addAttribute("error", e.getMessage());
+                return "error-500";
             }
             return "supplier-quotations";
         } else {
@@ -79,6 +86,7 @@ public class SupplierController {
         @RequestParam("supplierName") String supplierName,
         @RequestParam("qty") double qty,
         @RequestParam("rate") double rate,
+        RedirectAttributes redirectAttributes,
         Model model) {
 
         if (sid == null || sid.isEmpty()) {
@@ -86,17 +94,16 @@ public class SupplierController {
         }
 
         try {
-        supplierQuotationservice.updateSupplierQuotationItem(sid, system_user , itemName, qty, rate);
-        model.addAttribute("success", "Item updated successfully.");
+            supplierQuotationservice.updateSupplierQuotationItem(sid, system_user , itemName, qty, rate);
+            redirectAttributes.addFlashAttribute("success", "Item updated successfully.");
         } catch (RuntimeException e) {
-        model.addAttribute("error", e.getMessage());
+            model.addAttribute("code", "500");
+            model.addAttribute("error", e.getMessage());
+            return "error-500";
         }
         supplierName = URLEncoder.encode(supplierName, StandardCharsets.UTF_8).replace("+", "%20");
         return "redirect:/supplier/"+supplierName+"/quotations";
     }
-
-    @Autowired
-    private PurchaseOrderService purchaseOrderService;
 
     @GetMapping("/supplier/{supplierName}/purchase-orders")
     public String showSupplierPurchaseOrders(
@@ -110,7 +117,9 @@ public class SupplierController {
                 model.addAttribute("purchaseOrders", purchaseOrders);
                 model.addAttribute("supplierName", supplierName);
             } catch (RuntimeException e) {
+                model.addAttribute("code", "500");
                 model.addAttribute("error", e.getMessage());
+                return "error-500";
             }
             return "purchase-orders";
         } else {

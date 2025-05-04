@@ -49,7 +49,7 @@ public class PurchaseOrderService {
     
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
             if (response.statusCode() != 200) {
-                throw new RuntimeException("Failed to fetch Purchase Order, HTTP status code: " + response.statusCode());
+                throw new RuntimeException("Failed to fetch Purchase Order, HTTP status code: " + response.statusCode() + " - " + response.body());
             }
     
             ObjectMapper objectMapper = new ObjectMapper();

@@ -9,7 +9,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import itu.prom16.ERPNextClient.DTO.PaymentEntryDTO;
 import itu.prom16.ERPNextClient.DTO.PurchaseInvoiceDTO;
@@ -22,6 +21,7 @@ import itu.prom16.ERPNextClient.service.PurchaseInvoiceService;
 import itu.prom16.ERPNextClient.service.SalesInvoiceService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 
 /**
@@ -66,7 +66,9 @@ public class AccountingController {
                 model.addAttribute("purchaseInvoices", purchaseInvoices);
                 model.addAttribute("modeOfPayments", modeOfPaymentService.getModeOfPaymentsEnable(sid));
             } catch (RuntimeException e) {
+                model.addAttribute("code", "500");
                 model.addAttribute("error", e.getMessage());
+                return "error-500";
             }
             return "purchase-invoices";
         } else {
@@ -85,7 +87,9 @@ public class AccountingController {
                 model.addAttribute("salesInvoices", salesInvoices);
                 model.addAttribute("modeOfPayments", modeOfPaymentService.getModeOfPaymentsEnable(sid));
             } catch (RuntimeException e) {
+                model.addAttribute("code", "500");
                 model.addAttribute("error", e.getMessage());
+                return "error-500";
             }
             return "sales-invoices";
         } else {
@@ -102,6 +106,7 @@ public class AccountingController {
             @RequestParam String paymentMethod,
             @RequestParam String referenceNo,
             @RequestParam String referenceDate,
+            RedirectAttributes redirectAttributes,
             Model model) {
 
         if (sid == null || sid.isEmpty()) {
@@ -109,7 +114,7 @@ public class AccountingController {
         }
 
         if (paymentMethod.isEmpty() && referenceNo.isEmpty()) {
-            model.addAttribute("error", "Please provide at least one of the payment method or reference number.");
+            redirectAttributes.addFlashAttribute("error", "Please provide at least one of the payment method or reference number.");
             return "redirect:/accounting/purchase-invoices";
             
         }
@@ -163,10 +168,13 @@ public class AccountingController {
             PaymentEntryDTO createdPaymentEntry = paymentEntryService.createPaymentEntry(sid, paymentEntry);
             paymentEntryService.submitPaymentEntry(sid, createdPaymentEntry.getName());
             
+            redirectAttributes.addFlashAttribute("success", "The payment N° "+createdPaymentEntry.getName()+" has been successfully created and validated.");
+            
             return "redirect:/accounting/purchase-invoices";
         } catch (RuntimeException e) {
+            model.addAttribute("code", "500");
             model.addAttribute("error", e.getMessage());
-            return "redirect:/accounting/purchase-invoices";
+            return "error-500";
         }
     }
 
@@ -179,6 +187,7 @@ public class AccountingController {
             @RequestParam String paymentMethod,
             @RequestParam String referenceNo,
             @RequestParam String referenceDate,
+            RedirectAttributes redirectAttributes,
             Model model) {
 
         if (sid == null || sid.isEmpty()) {
@@ -186,7 +195,7 @@ public class AccountingController {
         }
 
         if (paymentMethod.isEmpty() && referenceNo.isEmpty()) {
-            model.addAttribute("error", "Please provide at least one of the payment method or reference number.");
+            redirectAttributes.addFlashAttribute("error", "Please provide at least one of the payment method or reference number.");
             return "redirect:/accounting/sales-invoices";
             
         }
@@ -241,31 +250,13 @@ public class AccountingController {
             PaymentEntryDTO createdPaymentEntry = paymentEntryService.createPaymentEntry(sid, paymentEntry);
             paymentEntryService.submitPaymentEntry(sid, createdPaymentEntry.getName());
             
+            redirectAttributes.addFlashAttribute("success", "The payment N° "+createdPaymentEntry.getName()+" has been successfully created and validated.");
+            
             return "redirect:/accounting/sales-invoices";
         } catch (RuntimeException e) {
+            model.addAttribute("code", "500");
             model.addAttribute("error", e.getMessage());
-            return "redirect:/accounting/sales-invoices";
+            return "error-500";
         }
     }
-
-    @GetMapping("/company/{companyName}/mode-of-payment/{modePaymentName}/default-account")
-    public String getCompanyDefaultAccount(
-        @CookieValue(value = "sid", required = false) String sid,
-        @PathVariable("companyName") String companyName,
-        @PathVariable("modePaymentName") String modePaymentName,
-        Model model) {
-
-        if (sid == null || sid.isEmpty()) {
-            return "redirect:/";
-        }
-
-        try {
-            String accounts = companyService.getDefaultAccountByModePaymentName(sid, companyName, modePaymentName);
-
-        } catch (RuntimeException e) {
-            model.addAttribute("error", e.getMessage());
-        }
-        return "company-default-accounts";
-    }
-    
 }

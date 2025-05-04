@@ -14,6 +14,8 @@ import org.springframework.stereotype.Service;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import itu.prom16.ERPNextClient.exception.HttpUnauthorizedException;
+
 /**
  *
  * @author Fanou
@@ -38,20 +40,19 @@ public class AuthService {
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString(StandardCharsets.UTF_8));
 
             if (response.statusCode() == 200) {
-                List<String> cookies = response.headers().map().get("set-cookie");
-                return cookies;
-
+                return response.headers().map().get("set-cookie");
             } else if (response.statusCode() == 401) {
-                // Lire le message d’erreur
                 JsonNode body = mapper.readTree(response.body());
-                String message = body.path("message").asText("Erreur de connexion");
-                throw new RuntimeException(message);
+                String message = body.path("message").asText("");
+                throw new HttpUnauthorizedException(message);
             } else {
-                throw new RuntimeException("Erreur HTTP: " + response.statusCode());
+                throw new RuntimeException("HTTP error : " + response.statusCode() + " - " + response.body());
             }
 
+        } catch (HttpUnauthorizedException e) {
+            throw e;
         } catch (Exception e) {
-            throw new RuntimeException("Erreur lors du login: " + e.getMessage(), e);
+            throw new RuntimeException("Error while logging in: " + e.getMessage(), e);
         }
     }
 
@@ -71,11 +72,11 @@ public class AuthService {
                 List<String> cookies = response.headers().map().get("set-cookie");
                 return cookies;
             } else {
-                throw new RuntimeException("Erreur HTTP lors du logout : " + response.statusCode());
+                throw new RuntimeException("HTTP error when logging out : " + response.statusCode()+ " - " + response.body());
             }
 
         } catch (Exception e) {
-            throw new RuntimeException("Erreur lors du logout : " + e.getMessage(), e);
+            throw new RuntimeException("Error during logout : " + e.getMessage(), e);
         }
     }
 
@@ -95,7 +96,7 @@ public class AuthService {
             return response.statusCode() == 200;
 
         } catch (Exception e) {
-            throw new RuntimeException("Erreur lors de la vérification de l'état de connexion : " + e.getMessage(), e);
+            throw new RuntimeException("Error checking connection status : " + e.getMessage(), e);
         }
     }
 }

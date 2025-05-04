@@ -6,6 +6,9 @@ import java.time.LocalTime;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
+import itu.prom16.ERPNextClient.config.FlexibleLocalTimeDeserializer;
 
 /**
  *
@@ -44,7 +47,7 @@ public class PurchaseInvoiceDTO {
     private LocalDate postingDate;
 
     @JsonProperty("posting_time")
-    @JsonFormat(pattern = "H:mm:ss.SSSSSS")
+    @JsonDeserialize(using = FlexibleLocalTimeDeserializer.class)
     private LocalTime postingTime;
 
     @JsonProperty("set_posting_time")
