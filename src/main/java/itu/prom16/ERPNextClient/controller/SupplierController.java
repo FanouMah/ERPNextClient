@@ -117,7 +117,9 @@ public class SupplierController {
                 model.addAttribute("purchaseOrders", purchaseOrders);
                 model.addAttribute("supplierName", supplierName);
             } catch (RuntimeException e) {
+                model.addAttribute("code", "500");
                 model.addAttribute("error", e.getMessage());
+                return "error-500";
             }
             return "purchase-orders";
         } else {
