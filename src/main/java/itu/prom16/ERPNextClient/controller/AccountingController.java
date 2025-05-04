@@ -9,7 +9,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import itu.prom16.ERPNextClient.DTO.PaymentEntryDTO;
 import itu.prom16.ERPNextClient.DTO.PurchaseInvoiceDTO;
@@ -247,25 +246,4 @@ public class AccountingController {
             return "redirect:/accounting/sales-invoices";
         }
     }
-
-    @GetMapping("/company/{companyName}/mode-of-payment/{modePaymentName}/default-account")
-    public String getCompanyDefaultAccount(
-        @CookieValue(value = "sid", required = false) String sid,
-        @PathVariable("companyName") String companyName,
-        @PathVariable("modePaymentName") String modePaymentName,
-        Model model) {
-
-        if (sid == null || sid.isEmpty()) {
-            return "redirect:/";
-        }
-
-        try {
-            String accounts = companyService.getDefaultAccountByModePaymentName(sid, companyName, modePaymentName);
-
-        } catch (RuntimeException e) {
-            model.addAttribute("error", e.getMessage());
-        }
-        return "company-default-accounts";
-    }
-    
 }
