@@ -186,9 +186,9 @@
                         <p class="text-sm font-weight-bold mb-0" th:text="${pi.outstandingAmount} + ' ' + ${pi.currency}"></p>
                       </td>
                       <td class="align-middle">
-                        <button th:if="${pi.status} != 'Paid' and ${pi.status} != 'Cancelled'" class="btn btn-link text-dark px-3 mb-0" data-bs-toggle="modal" th:attr="data-bs-target='#EditModal__' + ${pi.name}"><i class="material-symbols-rounded text-sm me-2">Payments</i>Pay</button>
+                        <button th:if="${pi.status} != 'Paid' and ${pi.status} != 'Cancelled' and ${pi.status} != 'Draft'" class="btn btn-link text-dark px-3 mb-0" data-bs-toggle="modal" th:attr="data-bs-target='#EditModal__' + ${pi.name}"><i class="material-symbols-rounded text-sm me-2">Payments</i>Pay</button>
                         <!-- Modal -->
-                        <div th:if="${pi.status} != 'Paid' and ${pi.status} != 'Cancelled'" th:id="'EditModal__' + ${pi.name}" class="modal fade" tabindex="-1" aria-labelledby="payModalLabel" aria-hidden="true">
+                        <div th:if="${pi.status} != 'Paid' and ${pi.status} != 'Cancelled' and ${pi.status} != 'Draft'" th:id="'EditModal__' + ${pi.name}" class="modal fade" tabindex="-1" aria-labelledby="payModalLabel" aria-hidden="true">
                           <div class="modal-dialog modal-lg">
                             <div class="modal-content">
                               <div class="modal-header text-white">
