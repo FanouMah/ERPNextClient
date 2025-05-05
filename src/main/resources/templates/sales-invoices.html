@@ -73,13 +73,13 @@
           <h6 class="ps-4 ms-2 text-uppercase text-xs text-dark font-weight-bolder opacity-5">Accounting</h6>
         </li>
         <li class="nav-item">
-          <a class="nav-link active bg-gradient-info text-white animate__animated animate__fadeIn" th:href="@{/accounting/purchase-invoices}">
+          <a class="nav-link text-dark" th:href="@{/accounting/purchase-invoices}">
             <i class="material-symbols-rounded opacity-5">receipt_long</i>
             <span class="nav-link-text ms-1">Purchase Invoices</span>
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link text-dark" th:href="@{/accounting/sales-invoices}">
+          <a class="nav-link active bg-gradient-info text-white animate__animated animate__fadeIn" th:href="@{/accounting/sales-invoices}">
             <i class="material-symbols-rounded opacity-5">shopping_cart</i>
             <span class="nav-link-text ms-1">Sale Invoices</span>
           </a>
@@ -107,12 +107,12 @@
           </ol>
         </nav>
         <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
-          <!-- <div class="ms-md-auto pe-md-3 d-flex align-items-center">
-            <div class="input-group input-group-outline">
+          <div class="ms-md-auto pe-md-3 d-flex align-items-center">
+            <!-- <div class="input-group input-group-outline">
               <label class="form-label">Type here...</label>
               <input type="text" class="form-control">
-            </div>
-          </div> -->
+            </div> -->
+          </div>
           <ul class="navbar-nav d-flex align-items-center  justify-content-end">
             <li class="nav-item d-xl-none ps-3 d-flex align-items-center">
               <a href="javascript:;" class="nav-link text-body p-0" id="iconNavbarSidenav">
@@ -128,7 +128,7 @@
       </div>
     </nav>
     <!-- End Navbar -->
-    <div class="container-fluid py-2">
+    <div class="container-fluid py-2 d-flex flex-column justify-content-between" style="min-height: 94vh;">
       <div class="row mb-4">
         <div class="col-12">
           <div class="card my-4">
@@ -200,7 +200,7 @@
                                   <input type="hidden" name="invoiceId" th:value="${pi.name}" />
                                   <div class="input-group input-group-static my-3">
                                     <label>Posting Date</label>
-                                    <input type="date" id="postingDate" name="postingDate" value="2025-05-04" required class="form-control">
+                                    <input type="date" id="postingDate" name="postingDate" required class="form-control">
                                   </div>
                                   <div class="input-group input-group-static my-3">
                                     <label>Paid Amount (<span th:text="${pi.currency}"></span>)</label>
@@ -219,7 +219,7 @@
                                   </div>
                                   <div class="input-group input-group-static my-3">
                                     <label>Cheque/Reference Date</label>
-                                    <input type="date" class="form-control" id="referenceDate" name="referenceDate" value="2025-05-04" required>
+                                    <input type="date" class="form-control" id="referenceDate" name="referenceDate" required>
                                   </div>
                                   <div class="alert alert-info text-white text-sm mb-3" role="alert">
                                     <i class="material-symbols-rounded me-2" style="vertical-align: middle;">info</i>
@@ -239,6 +239,15 @@
                                   // On page load, set correct required state
                                   document.addEventListener('DOMContentLoaded', function() {
                                     var select = document.getElementById('paymentMethod');
+                                    var select = document.getElementById('paymentMethod');
+                                    var today = new Date();
+                                    var yyyy = today.getFullYear();
+                                    var mm = String(today.getMonth() + 1).padStart(2, '0');
+                                    var dd = String(today.getDate()).padStart(2, '0');
+                                    var formatted = yyyy + '-' + mm + '-' + dd;
+                                    
+                                    document.getElementById('postingDate').value = formatted;
+                                    document.getElementById('referenceDate').value = formatted;
                                     toggleReferenceFields(select);
                                   });
                                 </script>
