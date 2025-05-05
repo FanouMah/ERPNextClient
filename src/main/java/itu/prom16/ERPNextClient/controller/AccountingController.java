@@ -46,15 +46,6 @@ public class AccountingController {
     @Autowired
     private ModeOfPaymentService modeOfPaymentService;
 
-    @GetMapping("/accounting")
-    public String showAccounting(@CookieValue(value = "sid", required = false) String sid) {
-        if (sid != null && !sid.isEmpty()) {
-            return "accounting";
-        } else {
-            return "redirect:/";
-        }
-    }
-
     @GetMapping("/accounting/purchase-invoices")
     public String showPurchaseInvoices(
             @CookieValue(value = "sid", required = false) String sid,
