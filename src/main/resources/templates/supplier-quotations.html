@@ -140,6 +140,7 @@
                     <tr>
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">ID</th>
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Title</th>
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Status</th>
                       <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Date</th>
                       <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Valid Till</th>
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Grand Total</th>
@@ -155,6 +156,16 @@
                         <h6 class="mb-0 text-sm"><a href="#" th:text="${sq.name}"></a></h6>
                       </td>
                       <td class="text-sm font-weight-bold mb-0" th:text="${sq.title}"></td>
+                      <td class="align-middle text-center text-sm po-status">
+                        <span th:switch="${sq.status}">
+                            <span th:case="'Draft'" class="badge badge-sm bg-gradient-primary">Draft</span>
+                            <span th:case="'Submitted'" class="badge badge-sm bg-gradient-success">Submitted</span>
+                            <span th:case="'Cancelled'" class="badge badge-sm bg-gradient-danger">Cancelled</span>
+                          <span th:case="*"
+                            class="badge badge-sm bg-gradient-secondary"
+                            th:text="${sq.status}">Unknown</span>
+                        </span>
+                      </td>
                       <td class="align-middle text-center">
                         <span class="text-secondary text-xs font-weight-bold"th:text="${sq.transactionDate}"></span>
                       </td>
