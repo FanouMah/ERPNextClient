@@ -14,6 +14,7 @@ import itu.prom16.ERPNextClient.DTO.PaymentEntryDTO;
 import itu.prom16.ERPNextClient.DTO.PurchaseInvoiceDTO;
 import itu.prom16.ERPNextClient.DTO.ReferenceDTO;
 import itu.prom16.ERPNextClient.DTO.SalesInvoiceDTO;
+import itu.prom16.ERPNextClient.exception.CSRFTokenException;
 import itu.prom16.ERPNextClient.service.CompanyService;
 import itu.prom16.ERPNextClient.service.ModeOfPaymentService;
 import itu.prom16.ERPNextClient.service.PaymentEntryService;
@@ -56,6 +57,8 @@ public class AccountingController {
                 List<PurchaseInvoiceDTO> purchaseInvoices = purchaseInvoiceService.getPurchaseInvoices(sid);
                 model.addAttribute("purchaseInvoices", purchaseInvoices);
                 model.addAttribute("modeOfPayments", modeOfPaymentService.getModeOfPaymentsEnable(sid));
+            } catch (CSRFTokenException ex) {
+                return "redirect:/logout";
             } catch (RuntimeException e) {
                 model.addAttribute("code", "500");
                 model.addAttribute("error", e.getMessage());
@@ -77,6 +80,8 @@ public class AccountingController {
                 List<SalesInvoiceDTO> salesInvoices = salesInvoiceService.getSalesInvoices(sid);
                 model.addAttribute("salesInvoices", salesInvoices);
                 model.addAttribute("modeOfPayments", modeOfPaymentService.getModeOfPaymentsEnable(sid));
+            } catch (CSRFTokenException ex) {
+                return "redirect:/logout";
             } catch (RuntimeException e) {
                 model.addAttribute("code", "500");
                 model.addAttribute("error", e.getMessage());
@@ -162,6 +167,8 @@ public class AccountingController {
             redirectAttributes.addFlashAttribute("success", "The payment N° "+createdPaymentEntry.getName()+" has been successfully created and validated.");
             
             return "redirect:/accounting/purchase-invoices";
+        } catch (CSRFTokenException ex) {
+            return "redirect:/logout";
         } catch (RuntimeException e) {
             model.addAttribute("code", "500");
             model.addAttribute("error", e.getMessage());
@@ -244,6 +251,8 @@ public class AccountingController {
             redirectAttributes.addFlashAttribute("success", "The payment N° "+createdPaymentEntry.getName()+" has been successfully created and validated.");
             
             return "redirect:/accounting/sales-invoices";
+        } catch (CSRFTokenException ex) {
+            return "redirect:/logout";
         } catch (RuntimeException e) {
             model.addAttribute("code", "500");
             model.addAttribute("error", e.getMessage());

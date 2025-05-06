@@ -16,6 +16,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import itu.prom16.ERPNextClient.DTO.SupplierDTO;
+import itu.prom16.ERPNextClient.exception.CSRFTokenException;
 
 import java.net.URLEncoder;
 
@@ -30,6 +31,7 @@ public class SupplierService {
 
     public List<SupplierDTO> getSuppliers(String sid) {
         try {
+            ObjectMapper objectMapper = new ObjectMapper();
             String fieldsParam = URLEncoder.encode("[\"*\"]", StandardCharsets.UTF_8.toString());
             String url = baseUrl + "/api/resource/Supplier?fields=" + fieldsParam;
 
@@ -43,10 +45,14 @@ public class SupplierService {
 
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
             if (response.statusCode() != 200) {
+                JsonNode root = objectMapper.readTree(response.body());
+                String excType = root.path("exc_type").asText();
+                if ("CSRFTokenError".equals(excType)) {
+                    throw new CSRFTokenException("CSRF token error while updating Supplier Quotation Item: " + response.body());
+                }
                 throw new RuntimeException("Failed to fetch suppliers, HTTP status code: " + response.statusCode() + " - " + response.body());
             }
 
-            ObjectMapper objectMapper = new ObjectMapper();
             objectMapper.registerModule(new JavaTimeModule());
             objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
             objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
@@ -55,6 +61,8 @@ public class SupplierService {
             JsonNode dataNode = root.path("data");
 
             return objectMapper.readValue(dataNode.toString(), new TypeReference<List<SupplierDTO>>() {});
+        } catch (CSRFTokenException e) {
+            throw e;
         } catch (Exception e) {
             throw new RuntimeException("Failed to fetch suppliers : " + e.getMessage(), e);
         }

@@ -17,6 +17,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
+import itu.prom16.ERPNextClient.exception.CSRFTokenException;
+
 /**
  *
  * @author Fanou
@@ -28,6 +30,7 @@ public class CompanyService {
 
     public String getDefaultAccount(String sid, String companyName) {
         try {
+            ObjectMapper objectMapper = new ObjectMapper();
             String fieldsParam = URLEncoder.encode("[\"default_bank_account\"]", StandardCharsets.UTF_8.toString());
             String filtersParam = URLEncoder.encode("[[\"Company\",\"name\",\"=\",\"" + companyName + "\"]]", StandardCharsets.UTF_8.toString());
             String url = baseUrl + "/api/resource/Company?fields=" + fieldsParam + "&filters=" + filtersParam;
@@ -42,10 +45,14 @@ public class CompanyService {
 
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
             if (response.statusCode() != 200) {
+                JsonNode root = objectMapper.readTree(response.body());
+                String excType = root.path("exc_type").asText();
+                if ("CSRFTokenError".equals(excType)) {
+                    throw new CSRFTokenException("CSRF token error while updating Supplier Quotation Item: " + response.body());
+                }
                 throw new RuntimeException("Failed to fetch company accounts, HTTP status code: " + response.statusCode() + " - " + response.body());
             }
             
-            ObjectMapper objectMapper = new ObjectMapper();
             objectMapper.registerModule(new JavaTimeModule());
             objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
             objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
@@ -59,6 +66,8 @@ public class CompanyService {
             }
             throw new RuntimeException("No default account found for company " + companyName);
 
+        } catch (CSRFTokenException e) {
+            throw e;
         } catch (Exception e) {
             throw new RuntimeException("Failed to fetch default account: " + e.getMessage(), e);
         }
@@ -66,6 +75,7 @@ public class CompanyService {
 
     public Map<String, String> getDefaultAccounts(String sid, String companyName) {
         try {
+            ObjectMapper objectMapper = new ObjectMapper();
             String fieldsParam = URLEncoder.encode("[\"default_bank_account\",\"default_cash_account\"]", StandardCharsets.UTF_8.toString());
             String filtersParam = URLEncoder.encode("[[\"Company\",\"name\",\"=\",\"" + companyName + "\"]]", StandardCharsets.UTF_8.toString());
             String url = baseUrl + "/api/resource/Company?fields=" + fieldsParam + "&filters=" + filtersParam;
@@ -80,10 +90,14 @@ public class CompanyService {
 
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
             if (response.statusCode() != 200) {
+                JsonNode root = objectMapper.readTree(response.body());
+                String excType = root.path("exc_type").asText();
+                if ("CSRFTokenError".equals(excType)) {
+                    throw new CSRFTokenException("CSRF token error while updating Supplier Quotation Item: " + response.body());
+                }
                 throw new RuntimeException("Failed to fetch company accounts, HTTP status code: " + response.statusCode() + " - " + response.body());
             }
 
-            ObjectMapper objectMapper = new ObjectMapper();
             objectMapper.registerModule(new JavaTimeModule());
             objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
             objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
@@ -98,6 +112,8 @@ public class CompanyService {
                 result.put("default_cash_account", companyNode.path("default_cash_account").asText(""));
             }
             return result;
+        } catch (CSRFTokenException e) {
+            throw e;
         } catch (Exception e) {
             throw new RuntimeException("Failed to fetch default accounts: " + e.getMessage(), e);
         }
@@ -105,6 +121,7 @@ public class CompanyService {
 
     public String getDefaultAccountByModePaymentName(String sid, String companyName, String modePaymentName) {
         try {
+            ObjectMapper objectMapper = new ObjectMapper();
             String url = baseUrl + "/api/resource/Mode%20of%20Payment/" + URLEncoder.encode(modePaymentName, StandardCharsets.UTF_8);
 
             HttpClient httpClient = HttpClient.newHttpClient();
@@ -117,10 +134,14 @@ public class CompanyService {
 
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
             if (response.statusCode() != 200) {
+                                JsonNode root = objectMapper.readTree(response.body());
+                String excType = root.path("exc_type").asText();
+                if ("CSRFTokenError".equals(excType)) {
+                    throw new CSRFTokenException("CSRF token error while updating Supplier Quotation Item: " + response.body());
+                }
                 throw new RuntimeException("Failed to fetch company accounts, HTTP status code: " + response.statusCode()+ " - " + response.body());
             }
 
-            ObjectMapper objectMapper = new ObjectMapper();
             JsonNode root = objectMapper.readTree(response.body());
     
             JsonNode accounts = root.path("data").path("accounts");
@@ -133,6 +154,8 @@ public class CompanyService {
     
             throw new RuntimeException("No default account found for company " + companyName + " and mode of payment " + modePaymentName);
 
+        } catch (CSRFTokenException e) {
+            throw e;
         } catch (Exception e) {
             throw new RuntimeException("Failed to fetch default accounts: " + e.getMessage(), e);
         }

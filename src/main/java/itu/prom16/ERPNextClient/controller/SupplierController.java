@@ -46,6 +46,8 @@ public class SupplierController {
             try {
                 List<SupplierDTO> suppliers = supplierService.getSuppliers(sid);
                 model.addAttribute("suppliers", suppliers);
+            } catch (CSRFTokenException ex) {
+                return "redirect:/logout";
             } catch (RuntimeException e) {
                 model.addAttribute("code", "500");
                 model.addAttribute("error", e.getMessage());
@@ -68,6 +70,8 @@ public class SupplierController {
                 List<SupplierQuotationDTO> supplierQuotations = supplierQuotationservice.getRequestForQuotationsBySupplier(sid, supplierName);
                 model.addAttribute("supplierQuotations", supplierQuotations);
                 model.addAttribute("supplierName", supplierName);
+            } catch (CSRFTokenException ex) {
+                return "redirect:/logout";
             } catch (RuntimeException e) {
                 model.addAttribute("code", "500");
                 model.addAttribute("error", e.getMessage());
@@ -102,7 +106,7 @@ public class SupplierController {
             redirectAttributes.addFlashAttribute("success", "Supplier Quotation updated and submitted successfully.");
         } catch (CSRFTokenException ex) {
             return "redirect:/logout";
-        }catch (RuntimeException e) {
+        } catch (RuntimeException e) {
             model.addAttribute("code", "500");
             model.addAttribute("error", e.getMessage());
             return "error-500";
@@ -122,6 +126,8 @@ public class SupplierController {
                 List<PurchaseOrderDTO> purchaseOrders = purchaseOrderService.getPurchaseOrdersBySupplier(sid, supplierName);
                 model.addAttribute("purchaseOrders", purchaseOrders);
                 model.addAttribute("supplierName", supplierName);
+            } catch (CSRFTokenException ex) {
+                return "redirect:/logout";
             } catch (RuntimeException e) {
                 model.addAttribute("code", "500");
                 model.addAttribute("error", e.getMessage());

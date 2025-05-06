@@ -33,6 +33,7 @@ public class SupplierQuotationService {
 
     public SupplierQuotationDTO getRequestForQuotationsByName(String sid, String name) {
         try {
+            ObjectMapper objectMapper = new ObjectMapper();
             String url = baseUrl + "/api/resource/Supplier%20Quotation/" + URLEncoder.encode(name, StandardCharsets.UTF_8);
 
             HttpClient httpClient = HttpClient.newHttpClient();
@@ -45,10 +46,14 @@ public class SupplierQuotationService {
 
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
             if (response.statusCode() != 200) {
+                JsonNode root = objectMapper.readTree(response.body());
+                String excType = root.path("exc_type").asText();
+                if ("CSRFTokenError".equals(excType)) {
+                    throw new CSRFTokenException("CSRF token error while updating Supplier Quotation Item: " + response.body());
+                }
                 throw new RuntimeException("Failed to fetch Supplier Quotation, HTTP status code: " + response.statusCode() + " - " + response.body());
             }
 
-            ObjectMapper objectMapper = new ObjectMapper();
             objectMapper.registerModule(new JavaTimeModule());
             objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
             objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
@@ -58,6 +63,8 @@ public class SupplierQuotationService {
 
             return objectMapper.treeToValue(dataNode, SupplierQuotationDTO.class);
 
+        } catch (CSRFTokenException e) {
+            throw e;
         } catch (Exception e) {
             throw new RuntimeException("Failed to fetch Supplier Quotation: " + e.getMessage(), e);
         }
@@ -65,6 +72,7 @@ public class SupplierQuotationService {
 
     public List<SupplierQuotationDTO> getRequestForQuotationsBySupplier(String sid, String supplierName) {
         try {
+            ObjectMapper objectMapper = new ObjectMapper();
             String filters = URLEncoder.encode("[[\"supplier\",\"=\",\"" + supplierName + "\"]]", StandardCharsets.UTF_8);
 
             String url = baseUrl + "/api/resource/Supplier%20Quotation"
@@ -80,10 +88,13 @@ public class SupplierQuotationService {
 
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
             if (response.statusCode() != 200) {
+                JsonNode root = objectMapper.readTree(response.body());
+                String excType = root.path("exc_type").asText();
+                if ("CSRFTokenError".equals(excType)) {
+                    throw new CSRFTokenException("CSRF token error while updating Supplier Quotation Item: " + response.body());
+                }
                 throw new RuntimeException("Failed to fetch Supplier Quotation list, HTTP status code : " + response.statusCode() + " - " + response.body());
             }
-
-            ObjectMapper objectMapper = new ObjectMapper();
             objectMapper.registerModule(new JavaTimeModule());
             objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
             objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
@@ -100,6 +111,8 @@ public class SupplierQuotationService {
 
             return fullQuotations;
 
+        } catch (CSRFTokenException e) {
+            throw e;
         } catch (Exception e) {
             throw new RuntimeException("Failed to fetch Supplier Quotations with items: " + e.getMessage(), e);
         }
@@ -130,6 +143,8 @@ public class SupplierQuotationService {
                 }
                 throw new RuntimeException("Failed to update Supplier Quotation Item, HTTP status code: " + response.statusCode() + " - " + response.body());
             }
+        } catch (CSRFTokenException e) {
+            throw e;
         } catch (Exception e) {
             throw new RuntimeException("Failed to update Supplier Quotation Item: " + e.getMessage(), e);
         }
@@ -137,6 +152,7 @@ public class SupplierQuotationService {
 
     public void submitSupplierQuotation(String sid, String quotationName) {
         try {
+            ObjectMapper objectMapper = new ObjectMapper();
             HttpClient httpClient = HttpClient.newHttpClient();
 
             HttpRequest request = HttpRequest.newBuilder()
@@ -148,8 +164,15 @@ public class SupplierQuotationService {
 
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
             if (response.statusCode() != 200) {
+                JsonNode root = objectMapper.readTree(response.body());
+                String excType = root.path("exc_type").asText();
+                if ("CSRFTokenError".equals(excType)) {
+                    throw new CSRFTokenException("CSRF token error while updating Supplier Quotation Item: " + response.body());
+                }
                 throw new RuntimeException("Failed to submit Supplier Quotation, HTTP status code: " + response.statusCode() + " - " + response.body());
             }
+        } catch (CSRFTokenException e) {
+            throw e;
         } catch (Exception e) {
             throw new RuntimeException("Failed to submit Supplier Quotation: " + e.getMessage(), e);
         }
