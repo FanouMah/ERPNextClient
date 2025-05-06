@@ -191,22 +191,20 @@
                                     <thead>
                                       <tr>
                                         <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Name</th>
-                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Quantity</th>
-                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Price</th>
-                                        <th class="text-secondary opacity-7"></th>
+                                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Quantity</th>
+                                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Price</th>
                                       </tr>
                                     </thead>
-                                    <tbody>
-                                      <tr th:each="item : ${sq.items}">
-                                        <td class="text-sm font-weight-bold mb-0" th:text="${item.itemName}"></td>
-                                        <form th:action="@{/SupplierQuotationItem/update}" method="post" class="d-flex align-items-center gap-2">
+                                    <form th:action="@{/SupplierQuotation/update}" method="post">
+                                      <tbody>
+                                        <tr th:each="item, iterStat : ${sq.items}">
+                                          <td class="text-sm font-weight-bold mb-0" th:text="${item.itemName}"></td>
                                           <input type="hidden" name="itemName" th:value="${item.name}" />
-                                          <input type="hidden" name="supplierName" th:value="${supplierName}" />
                                           <td class="text-sm font-weight-bold mb-0">
                                             <div class="mx-auto">
                                               <div class="input-group input-group-dynamic">
                                                 <span class="input-group-text" th:text="${item.uom}"></span>
-                                                <input type="number" class="form-control" th:value="${item.qty}" name="qty" min="0" step="any">
+                                                <input type="number" class="form-control" name="qty" th:value="${item.qty}" min="0" step="any">
                                               </div>
                                             </div>
                                           </td>
@@ -214,16 +212,19 @@
                                             <div class="mx-auto">
                                               <div class="input-group input-group-dynamic">
                                                 <span class="input-group-text" th:text="${sq.currency}"></span>
-                                                <input type="number" class="form-control" th:value="${item.rate}" name="rate" min="0" step="any">
+                                                <input type="number" class="form-control" name="rate" th:value="${item.rate}" min="0" step="any">
                                               </div>
                                             </div>
                                           </td>
-                                          <td class="align-middle text-center text-sm">
-                                              <button type="submit" class="btn btn-sm btn-info mb-0">Update</button>
+                                        </tr>
+                                        <tr>
+                                          <td colspan="4" class="text-end">
+                                            <input type="hidden" name="supplierName" th:value="${supplierName}" />
+                                            <button type="submit" class="btn btn-info mb-0">Update</button>
                                           </td>
-                                        </form>
-                                      </tr>
-                                    </tbody>
+                                        </tr>
+                                      </tbody>
+                                    </form>
                                   </table>
                                 </div>
                               </div>

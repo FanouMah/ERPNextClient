@@ -78,14 +78,13 @@ public class SupplierController {
         }
     }
     
-    @PostMapping("/SupplierQuotationItem/update")
-    public String updateSupplierQuotationItem(
+    @PostMapping("/SupplierQuotation/update")
+    public String updateSupplierQuotation(
         @CookieValue(value = "sid", required = false) String sid,
-        @CookieValue(value = "system_user", required = false) String system_user,
-        @RequestParam("itemName") String itemName,
+        @RequestParam("itemName") List<String> itemName,
         @RequestParam("supplierName") String supplierName,
-        @RequestParam("qty") double qty,
-        @RequestParam("rate") double rate,
+        @RequestParam("qty") List<Double> qty,
+        @RequestParam("rate") List<Double> rate,
         RedirectAttributes redirectAttributes,
         Model model) {
 
@@ -94,8 +93,10 @@ public class SupplierController {
         }
 
         try {
-            supplierQuotationservice.updateSupplierQuotationItem(sid, system_user , itemName, qty, rate);
-            redirectAttributes.addFlashAttribute("success", "Item updated successfully.");
+            for (int i = 0; i < itemName.size(); i++) {
+                supplierQuotationservice.updateSupplierQuotationItem(sid, itemName.get(i), qty.get(i), rate.get(i));
+            }
+            redirectAttributes.addFlashAttribute("success", "Supplier Quotation updated successfully.");
         } catch (RuntimeException e) {
             model.addAttribute("code", "500");
             model.addAttribute("error", e.getMessage());

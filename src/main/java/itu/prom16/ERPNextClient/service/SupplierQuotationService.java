@@ -104,7 +104,7 @@ public class SupplierQuotationService {
         }
     }
     
-    public void updateSupplierQuotationItem(String sid, String systemUser, String itemName, double qty, double rate) {
+    public void updateSupplierQuotationItem(String sid, String itemName, double qty, double rate) {
         try {
             String url = baseUrl + "/api/resource/Supplier%20Quotation%20Item/" + URLEncoder.encode(itemName, StandardCharsets.UTF_8);
             
