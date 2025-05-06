@@ -14,6 +14,7 @@ import org.springframework.ui.Model;
 import itu.prom16.ERPNextClient.DTO.PurchaseOrderDTO;
 import itu.prom16.ERPNextClient.DTO.SupplierDTO;
 import itu.prom16.ERPNextClient.DTO.SupplierQuotationDTO;
+import itu.prom16.ERPNextClient.exception.CSRFTokenException;
 import itu.prom16.ERPNextClient.service.PurchaseOrderService;
 import itu.prom16.ERPNextClient.service.SupplierQuotationService;
 import itu.prom16.ERPNextClient.service.SupplierService;
@@ -83,6 +84,7 @@ public class SupplierController {
         @CookieValue(value = "sid", required = false) String sid,
         @RequestParam("itemName") List<String> itemName,
         @RequestParam("supplierName") String supplierName,
+        @RequestParam("supplierQuotationName") String supplierQuotationName,
         @RequestParam("qty") List<Double> qty,
         @RequestParam("rate") List<Double> rate,
         RedirectAttributes redirectAttributes,
@@ -96,8 +98,11 @@ public class SupplierController {
             for (int i = 0; i < itemName.size(); i++) {
                 supplierQuotationservice.updateSupplierQuotationItem(sid, itemName.get(i), qty.get(i), rate.get(i));
             }
-            redirectAttributes.addFlashAttribute("success", "Supplier Quotation updated successfully.");
-        } catch (RuntimeException e) {
+            supplierQuotationservice.submitSupplierQuotation(sid, supplierQuotationName);
+            redirectAttributes.addFlashAttribute("success", "Supplier Quotation updated and submitted successfully.");
+        } catch (CSRFTokenException ex) {
+            return "redirect:/logout";
+        }catch (RuntimeException e) {
             model.addAttribute("code", "500");
             model.addAttribute("error", e.getMessage());
             return "error-500";

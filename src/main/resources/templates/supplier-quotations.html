@@ -218,8 +218,13 @@
                                           </td>
                                         </tr>
                                         <tr>
+                                          <div class="alert alert-info text-white text-sm mb-3" role="alert">
+                                            <i class="material-symbols-rounded me-2" style="vertical-align: middle;">info</i>
+                                            This Supplier Quotation will be automatically submitted.
+                                          </div>
                                           <td colspan="4" class="text-end">
                                             <input type="hidden" name="supplierName" th:value="${supplierName}" />
+                                            <input type="hidden" name="supplierQuotationName" th:value="${sq.name}" />
                                             <button type="submit" class="btn btn-info mb-0">Update</button>
                                           </td>
                                         </tr>
