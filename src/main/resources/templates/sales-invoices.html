@@ -200,7 +200,7 @@
                                   <input type="hidden" name="invoiceId" th:value="${pi.name}" />
                                   <div class="input-group input-group-static my-3">
                                     <label>Posting Date</label>
-                                    <input type="date" id="postingDate" name="postingDate" required class="form-control">
+                                    <input type="date" name="postingDate" required class="form-control inputDate">
                                   </div>
                                   <div class="input-group input-group-static my-3">
                                     <label>Paid Amount (<span th:text="${pi.currency}"></span>)</label>
@@ -219,7 +219,7 @@
                                   </div>
                                   <div class="input-group input-group-static my-3">
                                     <label>Cheque/Reference Date</label>
-                                    <input type="date" class="form-control" id="referenceDate" name="referenceDate" required>
+                                    <input type="date" class="form-control inputDate" name="referenceDate" required>
                                   </div>
                                   <div class="alert alert-info text-white text-sm mb-3" role="alert">
                                     <i class="material-symbols-rounded me-2" style="vertical-align: middle;">info</i>
@@ -239,15 +239,15 @@
                                   // On page load, set correct required state
                                   document.addEventListener('DOMContentLoaded', function() {
                                     var select = document.getElementById('paymentMethod');
-                                    var select = document.getElementById('paymentMethod');
                                     var today = new Date();
                                     var yyyy = today.getFullYear();
                                     var mm = String(today.getMonth() + 1).padStart(2, '0');
                                     var dd = String(today.getDate()).padStart(2, '0');
                                     var formatted = yyyy + '-' + mm + '-' + dd;
                                     
-                                    document.getElementById('postingDate').value = formatted;
-                                    document.getElementById('referenceDate').value = formatted;
+                                    document.querySelectorAll('.inputDate').forEach(function(input) {
+                                      input.value = formatted;
+                                    });
                                     toggleReferenceFields(select);
                                   });
                                 </script>
