@@ -150,7 +150,7 @@ public class SupplierQuotationService {
         }
     }
 
-    public void submitSupplierQuotation(String sid, String quotationName) {
+    public SupplierQuotationDTO submitSupplierQuotation(String sid, String quotationName) {
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             HttpClient httpClient = HttpClient.newHttpClient();
@@ -171,6 +171,15 @@ public class SupplierQuotationService {
                 }
                 throw new RuntimeException("Failed to submit Supplier Quotation, HTTP status code: " + response.statusCode() + " - " + response.body());
             }
+
+            objectMapper.registerModule(new JavaTimeModule());
+            objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+            objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
+            JsonNode root = objectMapper.readTree(response.body());
+            JsonNode dataNode = root.path("data");
+
+            return objectMapper.treeToValue(dataNode, SupplierQuotationDTO.class);
         } catch (CSRFTokenException e) {
             throw e;
         } catch (Exception e) {

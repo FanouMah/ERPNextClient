@@ -2,6 +2,7 @@ package itu.prom16.ERPNextClient.DTO;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -327,6 +328,8 @@ public class PurchaseOrderDTO {
     @JsonProperty("is_old_subcontracting_flow")
     private Integer isOldSubcontractingFlow;
 
+    private List<SupplierQuotationItemDTO> items;
+
 
     public PurchaseOrderDTO() {
     }
@@ -467,6 +470,9 @@ public class PurchaseOrderDTO {
     }
 
     // Getters and Setters
+
+    public List<SupplierQuotationItemDTO> getItems() {return items;}
+    public void setItems(List<SupplierQuotationItemDTO> items) {this.items = items;}
 
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }

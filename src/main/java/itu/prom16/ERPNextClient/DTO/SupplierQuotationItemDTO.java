@@ -1,5 +1,6 @@
 package itu.prom16.ERPNextClient.DTO;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -143,6 +144,9 @@ public class SupplierQuotationItemDTO {
     @JsonProperty("doctype")
     private String doctype;
 
+    @JsonProperty("schedule_date")
+    private LocalDate scheduleDate;
+
     public SupplierQuotationItemDTO() {
     }
 
@@ -191,6 +195,9 @@ public class SupplierQuotationItemDTO {
         this.parentType = parentType;
         this.doctype = doctype;
     }
+
+    public LocalDate getScheduleDate() { return scheduleDate; }
+    public void setScheduleDate(LocalDate scheduleDate) { this.scheduleDate = scheduleDate; }
 
     public String getName() { return name;}
     public void setName(String name) {this.name = name; }
