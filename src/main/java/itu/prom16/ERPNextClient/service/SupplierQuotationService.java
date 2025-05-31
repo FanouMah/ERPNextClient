@@ -31,7 +31,7 @@ public class SupplierQuotationService {
     @Value("${erpnext.api.base-url}")
     private String baseUrl;
 
-    public SupplierQuotationDTO getRequestForQuotationsByName(String sid, String name) {
+    public SupplierQuotationDTO getSupplierQuotationsByName(String sid, String name) {
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             String url = baseUrl + "/api/resource/Supplier%20Quotation/" + URLEncoder.encode(name, StandardCharsets.UTF_8);
@@ -70,7 +70,7 @@ public class SupplierQuotationService {
         }
     }
 
-    public List<SupplierQuotationDTO> getRequestForQuotationsBySupplier(String sid, String supplierName) {
+    public List<SupplierQuotationDTO> getSupplierQuotationsBySupplier(String sid, String supplierName) {
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             String filters = URLEncoder.encode("[[\"supplier\",\"=\",\"" + supplierName + "\"]]", StandardCharsets.UTF_8);
@@ -106,7 +106,7 @@ public class SupplierQuotationService {
 
             for (JsonNode node : dataNode) {
                 String name = node.path("name").asText();
-                fullQuotations.add(getRequestForQuotationsByName(sid, name));
+                fullQuotations.add(getSupplierQuotationsByName(sid, name));
             }
 
             return fullQuotations;

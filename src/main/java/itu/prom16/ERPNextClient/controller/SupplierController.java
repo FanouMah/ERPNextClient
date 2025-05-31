@@ -67,7 +67,7 @@ public class SupplierController {
 
         if (sid != null && !sid.isEmpty()) {
             try {
-                List<SupplierQuotationDTO> supplierQuotations = supplierQuotationservice.getRequestForQuotationsBySupplier(sid, supplierName);
+                List<SupplierQuotationDTO> supplierQuotations = supplierQuotationservice.getSupplierQuotationsBySupplier(sid, supplierName);
                 model.addAttribute("supplierQuotations", supplierQuotations);
                 model.addAttribute("supplierName", supplierName);
             } catch (CSRFTokenException ex) {
