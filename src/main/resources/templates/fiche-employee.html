@@ -159,7 +159,15 @@
                     </div>
                     <img th:if="${employee.image != null}" th:src="'http://localhost:8000' + ${employee.image}" alt="Employee Photo" class="rounded-circle mb-3" style="width: 120px; height: 120px; object-fit: cover; border: 3px solid #eee;">
                     <h4 class="mb-1 text-center" th:text="${employee.employeeName}"></h4>
-                    <span class="badge bg-success mb-2" th:text="${employee.status}"></span>
+                    <span class="mb-2" th:switch="${employee.status}">
+                        <span th:case="'Active'" class="badge badge-sm bg-gradient-success">Active</span>
+                        <span th:case="'Inactive'" class="badge badge-sm bg-gradient-warning">Inactive</span>
+                        <span th:case="'Suspended'" class="badge badge-sm bg-gradient-danger">Suspended</span>
+                        <span th:case="'Left'" class="badge badge-sm bg-gradient-dark">Left</span>
+                        <span th:case="*"
+                          class="badge badge-sm bg-gradient-secondary"
+                          th:text="${employee.status}">Unknown</span>
+                    </span>
                     <p class="mb-0 text-muted" th:text="${employee.company}"></p>
                     <p class="mb-0 text-muted" th:text="${employee.name}"></p>
                 </div>
