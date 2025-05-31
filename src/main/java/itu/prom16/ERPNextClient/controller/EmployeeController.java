@@ -10,9 +10,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.ui.Model;
 
 import itu.prom16.ERPNextClient.DTO.EmployeeDTO;
+import itu.prom16.ERPNextClient.DTO.LangueDTO;
 import itu.prom16.ERPNextClient.DTO.SalarySlipDTO;
 import itu.prom16.ERPNextClient.exception.CSRFTokenException;
 import itu.prom16.ERPNextClient.service.EmployeeService;
+import itu.prom16.ERPNextClient.service.LangueService;
 import itu.prom16.ERPNextClient.service.SalarySlipService;
 
 /**
@@ -27,6 +29,9 @@ public class EmployeeController {
 
     @Autowired
     private SalarySlipService salarySlipService;
+
+    @Autowired
+    private LangueService langueService;
 
     @GetMapping("/employees")
     public String showEmployees(@CookieValue(value = "sid", required = false) String sid, Model model) {
@@ -54,10 +59,15 @@ public class EmployeeController {
         Model model) {
         if (sid != null) {
             try {
+                List<String> printFormats = salarySlipService.getSalarySlipPrintFormat(sid);
+                List<LangueDTO> langues = langueService.getLanguesEnabled(sid);
                 List<SalarySlipDTO> salarySlips = salarySlipService.getSalarySlipsByEmployee(sid, employeeName);
                 EmployeeDTO emp = employeeService.getEmployeeByName(sid, employeeName);
+                
                 model.addAttribute("employee", emp);
                 model.addAttribute("salarySlips", salarySlips);
+                model.addAttribute("printFormats", printFormats);
+                model.addAttribute("langues", langues);
             } catch (CSRFTokenException ex) {
                 return "redirect:/logout";
             } catch (RuntimeException e) {
