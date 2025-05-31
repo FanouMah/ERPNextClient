@@ -33,7 +33,7 @@ public class SalarySlipService {
     public List<String> getSalarySlipPrintFormat(String sid) {
         try {
             ObjectMapper objectMapper = new ObjectMapper();
-            String filters = URLEncoder.encode("[[\"doc_type\",\"=\",\"Salary%20Slip\"]]", StandardCharsets.UTF_8);
+            String filters = URLEncoder.encode("[[\"doc_type\",\"=\",\"Salary Slip\"]]", StandardCharsets.UTF_8);
 
             String url = baseUrl + "/api/resource/Print%20Format"
                     + "?filters=" + filters;
@@ -59,7 +59,17 @@ public class SalarySlipService {
             JsonNode root = objectMapper.readTree(response.body());
             JsonNode dataNode = root.path("data");
 
-            return objectMapper.readValue(dataNode.toString(), new TypeReference<List<String>>() {});
+            // Extract the "name" field from each object in the data array
+            List<String> printFormatNames = new java.util.ArrayList<>();
+            if (dataNode.isArray()) {
+                for (JsonNode node : dataNode) {
+                    String name = node.path("name").asText();
+                    if (name != null && !name.isEmpty()) {
+                        printFormatNames.add(name);
+                    }
+                }
+            }
+            return printFormatNames;
 
         } catch (CSRFTokenException e) {
             throw e;
