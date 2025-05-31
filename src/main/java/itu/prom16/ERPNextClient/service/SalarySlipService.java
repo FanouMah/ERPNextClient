@@ -35,7 +35,7 @@ public class SalarySlipService {
             ObjectMapper objectMapper = new ObjectMapper();
             String filters = URLEncoder.encode("[[\"doc_type\",\"=\",\"Salary%20Slip\"]]", StandardCharsets.UTF_8);
 
-            String url = baseUrl + "/api/resource/Salary%20Slip"
+            String url = baseUrl + "/api/resource/Print%20Format"
                     + "?filters=" + filters;
 
             HttpClient httpClient = HttpClient.newHttpClient();
