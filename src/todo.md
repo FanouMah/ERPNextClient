@@ -2,10 +2,10 @@
 - get all employee
 - filtre :
     - Id (name)
-    - Full Name (employee_name)
+    - Full Name (employeeName)
     - Genre (gender)
     - Age (date_of_birth)
-    - Date Of Joining (date_of_joining)
+    - Date Of Joining (dateOfJoining)
     - Status (status)
     - Company (company)
 
