@@ -1,0 +1,18 @@
+# Employe
+    - first_name
+    - last_name (optional)
+    - gender (select)
+    - date_of_joining
+    - date_of_birth
+    - status (select - default 'Active')
+    - Company (select - default company)
+
+# Salary Component
+
+# Salary Structure
+
+# Salary Structure Assignment
+
+# Payroll Entry
+
+# Salary Slip
