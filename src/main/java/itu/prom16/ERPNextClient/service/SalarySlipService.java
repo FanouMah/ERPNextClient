@@ -30,6 +30,44 @@ public class SalarySlipService {
     @Value("${erpnext.api.base-url}")
     private String baseUrl;
 
+    public List<String> getSalarySlipPrintFormat(String sid) {
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            String filters = URLEncoder.encode("[[\"doc_type\",\"=\",\"Salary%20Slip\"]]", StandardCharsets.UTF_8);
+
+            String url = baseUrl + "/api/resource/Salary%20Slip"
+                    + "?filters=" + filters;
+
+            HttpClient httpClient = HttpClient.newHttpClient();
+
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(url))
+                    .header("Cookie", "sid=" + sid)
+                    .GET()
+                    .build();
+
+            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+            if (response.statusCode() != 200) {
+                JsonNode root = objectMapper.readTree(response.body());
+                String excType = root.path("exc_type").asText();
+                if ("CSRFTokenError".equals(excType)) {
+                    throw new CSRFTokenException("CSRF token error while retrieving Print Format for Salary Slip : " + response.body());
+                }
+                throw new RuntimeException("Failed to fetch Print Format for Salary Slip, HTTP status code: " + response.statusCode() + " - " + response.body());
+            }
+
+            JsonNode root = objectMapper.readTree(response.body());
+            JsonNode dataNode = root.path("data");
+
+            return objectMapper.readValue(dataNode.toString(), new TypeReference<List<String>>() {});
+
+        } catch (CSRFTokenException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to fetch Print Format for Salary Slip : " + e.getMessage(), e);
+        }
+    }
+
     public List<SalarySlipDTO> getSalarySlipsByEmployee(String sid, String employee) {
         try {
             ObjectMapper objectMapper = new ObjectMapper();
