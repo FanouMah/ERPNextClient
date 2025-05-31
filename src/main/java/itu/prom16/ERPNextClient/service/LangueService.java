@@ -19,7 +19,6 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import itu.prom16.ERPNextClient.DTO.LangueDTO;
-import itu.prom16.ERPNextClient.DTO.SalarySlipDTO;
 import itu.prom16.ERPNextClient.exception.CSRFTokenException;
 
 /**
