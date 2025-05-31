@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.ui.Model;
 
 import itu.prom16.ERPNextClient.DTO.EmployeeDTO;
@@ -36,6 +37,28 @@ public class EmployeeController {
                 return "error-500";
             } 
             return "employees";
+        } else {
+            return "redirect:/";
+        }
+    }
+
+    @GetMapping("/employee/{employeeName}")
+    public String ficheEmployee(
+        @PathVariable("employeeName") String employeeName,
+        @CookieValue(value = "sid", required = false) String sid,
+        Model model) {
+        if (sid != null) {
+            try {
+                EmployeeDTO emp = employeeService.getEmployeeByName(sid, employeeName);
+                model.addAttribute("employee", emp);
+            } catch (CSRFTokenException ex) {
+                return "redirect:/logout";
+            } catch (RuntimeException e) {
+                model.addAttribute("code", "500");
+                model.addAttribute("error", e.getMessage());
+                return "error-500";
+            } 
+            return "fiche-employee";
         } else {
             return "redirect:/";
         }
