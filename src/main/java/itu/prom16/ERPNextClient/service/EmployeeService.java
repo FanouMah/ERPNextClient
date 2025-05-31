@@ -1,5 +1,6 @@
 package itu.prom16.ERPNextClient.service;
 
+import java.net.URI;
 import java.net.URLEncoder;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -29,6 +30,45 @@ public class EmployeeService {
     @Value("${erpnext.api.base-url}")
     private String baseUrl;
 
+    public EmployeeDTO getEmployeeByName(String sid, String name) {
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            String url = baseUrl + "/api/resource/Employee/" + URLEncoder.encode(name, StandardCharsets.UTF_8);
+
+            HttpClient httpClient = HttpClient.newHttpClient();
+
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(url))
+                    .header("Cookie", "sid=" + sid)
+                    .GET()
+                    .build();
+
+            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+            if (response.statusCode() != 200) {
+                JsonNode root = objectMapper.readTree(response.body());
+                String excType = root.path("exc_type").asText();
+                if ("CSRFTokenError".equals(excType)) {
+                    throw new CSRFTokenException("CSRF token error while retrieving employee "+name+" : " + response.body());
+                }
+                throw new RuntimeException("Failed to fetch employee "+name+", HTTP status code: " + response.statusCode() + " - " + response.body());
+            }
+
+            objectMapper.registerModule(new JavaTimeModule());
+            objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+            objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
+            JsonNode root = objectMapper.readTree(response.body());
+            JsonNode dataNode = root.path("data");
+
+            return objectMapper.treeToValue(dataNode, EmployeeDTO.class);
+
+        } catch (CSRFTokenException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to fetch employee "+name+" : " + e.getMessage(), e);
+        }
+    }
+
     public List<EmployeeDTO> getEmployees(String sid) {
         try {
             ObjectMapper objectMapper = new ObjectMapper();
@@ -48,9 +88,9 @@ public class EmployeeService {
                 JsonNode root = objectMapper.readTree(response.body());
                 String excType = root.path("exc_type").asText();
                 if ("CSRFTokenError".equals(excType)) {
-                    throw new CSRFTokenException("CSRF token error while retrieving employee : " + response.body());
+                    throw new CSRFTokenException("CSRF token error while retrieving employees : " + response.body());
                 }
-                throw new RuntimeException("Failed to fetch Employee, HTTP status code : " + response.statusCode() + " - " + response.body());
+                throw new RuntimeException("Failed to fetch Employees, HTTP status code : " + response.statusCode() + " - " + response.body());
             }
 
             objectMapper.registerModule(new JavaTimeModule());
@@ -65,7 +105,7 @@ public class EmployeeService {
         } catch (CSRFTokenException e) {
             throw e;
         } catch (Exception e) {
-            throw new RuntimeException("Failed to fetch Employee : " + e.getMessage(), e);
+            throw new RuntimeException("Failed to fetch Employees : " + e.getMessage(), e);
         }
     }
 }
