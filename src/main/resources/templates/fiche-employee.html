@@ -287,7 +287,10 @@
                   </table>
                 </div>
                 <div class="mt-4">
-                  <small class="text-muted">Last update : 01/06/2025</small>
+                <small class="text-muted" th:if="${salarySlips != null and !salarySlips.isEmpty()}">
+                    Last update : 
+                    <span th:text="${#temporals.format(salarySlips.get(0).postingDate, 'dd/MM/yyyy', T(java.util.Locale).ENGLISH)}"></span>
+                  </small>
                 </div>
               </div>
             </div>
