@@ -41,19 +41,20 @@ public class ImportCSVController {
         }
         
         try {
-            // Static mock data for import stats
             java.util.Map<String, Object> stats = new java.util.HashMap<>();
             stats.put("created_documents", 10);
-            stats.put("created_suppliers", 8);
-            stats.put("created_material_requests", 7);
-            stats.put("created_rfqs", 6);
-            stats.put("created_supplier_quotations", 5);
-            stats.put("created_items", 12);
-            stats.put("created_item_groups", 3);
-            stats.put("created_warehouse", 2);
-            stats.put("created_country", 1);
+            stats.put("created_employee", 8);
+            stats.put("created_company", 7);
+            stats.put("created_holiday_list", 6);
+            stats.put("created_salary_structures", 5);
+            stats.put("created_salary_components", 12);
+            stats.put("created_salary_structure_assignment", 3);
+            stats.put("created_payroll_entry", 2);
+            stats.put("created_salary_slip", 1);
+            stats.put("created_journal_entry", 1);
             stats.put("duration_seconds", 4.2);
-            stats.put("end_time", java.time.LocalDateTime.now().toString());
+            java.time.format.DateTimeFormatter formatter = java.time.format.DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+            stats.put("end_time", java.time.LocalDateTime.now().format(formatter));
             stats.put("error_count", 2);
             java.util.List<String> errors = new java.util.ArrayList<>();
             errors.add("Row 3: Invalid supplier email address.");
@@ -71,6 +72,6 @@ public class ImportCSVController {
             return "error-500";
         }
 
-        return "import-csv-hr";
+        return "redirect:/import-csv-hr";
     }
 }
