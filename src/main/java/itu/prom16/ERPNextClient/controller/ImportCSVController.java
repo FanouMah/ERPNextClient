@@ -1,5 +1,6 @@
 package itu.prom16.ERPNextClient.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,6 +11,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import org.springframework.ui.Model;
 import itu.prom16.ERPNextClient.exception.CSRFTokenException;
+import itu.prom16.ERPNextClient.service.ImportCSVService;
 
 /**
  *
@@ -17,6 +19,9 @@ import itu.prom16.ERPNextClient.exception.CSRFTokenException;
  */
 @Controller
 public class ImportCSVController {
+
+    @Autowired
+    private ImportCSVService importCSVService;
 
     @GetMapping("/import-csv-hr")
     public String showImportCSVPage(@CookieValue(value = "sid", required = false) String sid) {
@@ -39,34 +44,21 @@ public class ImportCSVController {
         if (sid == null || sid.isEmpty()) {
             return "redirect:/";
         }
-        
-        try {
-            java.util.Map<String, Object> stats = new java.util.HashMap<>();
-            stats.put("created_documents", 10);
-            stats.put("created_employee", 8);
-            stats.put("created_company", 7);
-            stats.put("created_holiday_list", 6);
-            stats.put("created_salary_structures", 5);
-            stats.put("created_salary_components", 12);
-            stats.put("created_salary_structure_assignment", 3);
-            stats.put("created_payroll_entry", 2);
-            stats.put("created_salary_slip", 1);
-            stats.put("created_journal_entry", 1);
-            stats.put("duration_seconds", 4.2);
-            java.time.format.DateTimeFormatter formatter = java.time.format.DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
-            stats.put("end_time", java.time.LocalDateTime.now().format(formatter));
-            stats.put("error_count", 2);
-            java.util.List<String> errors = new java.util.ArrayList<>();
-            errors.add("Row 3: Invalid supplier email address.");
-            errors.add("Row 7: Item code already exists.");
-            stats.put("errors", errors);
 
-            redirectAttributes.addFlashAttribute("importStats", stats);
-            redirectAttributes.addFlashAttribute("success", "Import completed successfully.");
+        try {
+            java.util.Map<String, Object> stats = importCSVService.importCSV(file1.getInputStream(), file2.getInputStream(), file3.getInputStream());
+
+            if ("error".equals(stats.get("status"))) {
+                redirectAttributes.addFlashAttribute("importStats", stats);
+                redirectAttributes.addFlashAttribute("error", stats.get("error"));
+            } else {
+                redirectAttributes.addFlashAttribute("importStats", stats);
+                redirectAttributes.addFlashAttribute("success", "Import completed successfully.");
+            }
 
         } catch (CSRFTokenException ex) {
             return "redirect:/logout";
-        } catch (RuntimeException e) {
+        } catch (Exception e) {
             model.addAttribute("code", "500");
             model.addAttribute("error", e.getMessage());
             return "error-500";
