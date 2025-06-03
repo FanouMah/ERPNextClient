@@ -37,7 +37,7 @@ public class SalarySlipController {
                 model.addAttribute("error", e.getMessage());
                 return "error-500";
             } 
-            return "fiche-employee";
+            return "salary-slips";
         } else {
             return "redirect:/";
         }
