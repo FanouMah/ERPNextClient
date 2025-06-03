@@ -1,5 +1,14 @@
 package itu.prom16.ERPNextClient.service;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.ArrayList;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -20,13 +29,9 @@ public class ImportCSVService {
      * @param file3 Contenu du fichier 3 (salaires mensuels)
      * @return Un objet contenant les statistiques d'import (créés, erreurs, etc.)
      */
-    public java.util.Map<String, Object> importCSV(
-            java.io.InputStream file1,
-            java.io.InputStream file2,
-            java.io.InputStream file3
-    ) throws java.io.IOException {
+    public Map<String, Object> importCSV(InputStream file1, InputStream file2, InputStream file3) throws IOException {
         long start = System.currentTimeMillis();
-        java.util.Map<String, Object> stats = new java.util.HashMap<>();
+        Map<String, Object> stats = new HashMap<>();
         int createdDocuments = 0;
         int createdEmployee = 0;
         int createdCompany = 0;
@@ -37,7 +42,7 @@ public class ImportCSVService {
         int createdPayrollEntry = 0;
         int createdSalarySlip = 0;
         int createdJournalEntry = 0;
-        java.util.List<String> errors = new java.util.ArrayList<>();
+        List<String> errors = new ArrayList<>();
 
         // On utilise une transaction pour simuler le comportement de rollback en cas d'erreur critique
         // (En vrai, il faudrait une vraie transaction DB, ici on simule la logique)
@@ -46,7 +51,7 @@ public class ImportCSVService {
 
         try {
             // --- Fichier 1 : Employés ---
-            try (java.io.BufferedReader reader = new java.io.BufferedReader(new java.io.InputStreamReader(file1))) {
+            try (BufferedReader reader = new BufferedReader(new InputStreamReader(file1))) {
                 String line = reader.readLine(); // header
                 int lineNum = 1;
                 while ((line = reader.readLine()) != null) {
@@ -90,7 +95,7 @@ public class ImportCSVService {
             }
 
             // --- Fichier 2 : Structures de salaire ---
-            try (java.io.BufferedReader reader = new java.io.BufferedReader(new java.io.InputStreamReader(file2))) {
+            try (BufferedReader reader = new BufferedReader(new InputStreamReader(file2))) {
                 String line = reader.readLine(); // header
                 int lineNum = 1;
                 while ((line = reader.readLine()) != null) {
@@ -128,7 +133,7 @@ public class ImportCSVService {
             }
 
             // --- Fichier 3 : Salaires mensuels ---
-            try (java.io.BufferedReader reader = new java.io.BufferedReader(new java.io.InputStreamReader(file3))) {
+            try (BufferedReader reader = new BufferedReader(new InputStreamReader(file3))) {
                 String line = reader.readLine(); // header
                 int lineNum = 1;
                 while ((line = reader.readLine()) != null) {
@@ -187,7 +192,7 @@ public class ImportCSVService {
         } catch (Exception critical) {
             // Rollback simulé : on retourne une erreur critique et on n'enregistre rien
             // (En vrai, il faudrait annuler la transaction DB)
-            java.util.Map<String, Object> errorResult = new java.util.HashMap<>();
+            Map<String, Object> errorResult = new HashMap<>();
             errorResult.put("status", "error");
             errorResult.put("error", criticalErrorMessage != null ? criticalErrorMessage : critical.getMessage());
             errorResult.put("created_documents", 0);
@@ -204,7 +209,7 @@ public class ImportCSVService {
             java.time.format.DateTimeFormatter formatter = java.time.format.DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
             errorResult.put("end_time", java.time.LocalDateTime.now().format(formatter));
             errorResult.put("error_count", 1);
-            java.util.List<String> errorList = new java.util.ArrayList<>();
+            List<String> errorList = new ArrayList<>();
             errorList.add(criticalErrorMessage != null ? criticalErrorMessage : critical.getMessage());
             errorResult.put("errors", errorList);
             return errorResult;
