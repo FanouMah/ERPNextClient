@@ -4,6 +4,12 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,189 +36,107 @@ public class ImportCSVService {
      * @return Un objet contenant les statistiques d'import (créés, erreurs, etc.)
      */
     public Map<String, Object> importCSV(InputStream file1, InputStream file2, InputStream file3) throws IOException {
-        long start = System.currentTimeMillis();
-        Map<String, Object> stats = new HashMap<>();
-        int createdDocuments = 0;
-        int createdEmployee = 0;
-        int createdCompany = 0;
-        int createdHolidayList = 0;
-        int createdSalaryStructures = 0;
-        int createdSalaryComponents = 0;
-        int createdSalaryStructureAssignment = 0;
-        int createdPayrollEntry = 0;
-        int createdSalarySlip = 0;
-        int createdJournalEntry = 0;
-        List<String> errors = new ArrayList<>();
+        // Appelle une API Python (Frappe/ERPNext) qui prend les 3 fichiers et retourne un JSON de stats d'import
+        // L'API attend un POST multipart/form-data avec les 3 fichiers
+        String apiUrl = baseUrl + "/api/method/your_app.import_data.import_all";
+        HttpClient client = HttpClient.newBuilder()
+                .version(HttpClient.Version.HTTP_1_1)
+                .build();
 
-        // On utilise une transaction pour simuler le comportement de rollback en cas d'erreur critique
-        // (En vrai, il faudrait une vraie transaction DB, ici on simule la logique)
-        boolean criticalError = false;
-        String criticalErrorMessage = null;
+        // On doit convertir les InputStream en fichiers temporaires pour l'envoi multipart
+        Path tempFile1 = Files.createTempFile("import1-", ".csv");
+        Path tempFile2 = Files.createTempFile("import2-", ".csv");
+        Path tempFile3 = Files.createTempFile("import3-", ".csv");
+        Files.copy(file1, tempFile1, StandardCopyOption.REPLACE_EXISTING);
+        Files.copy(file2, tempFile2, StandardCopyOption.REPLACE_EXISTING);
+        Files.copy(file3, tempFile3, StandardCopyOption.REPLACE_EXISTING);
 
+        String boundary = "----ERPNextImportBoundary" + System.currentTimeMillis();
+        var byteArrays = new ArrayList<byte[]>();
+
+        // Helper pour construire le multipart
         try {
-            // --- Fichier 1 : Employés ---
-            try (BufferedReader reader = new BufferedReader(new InputStreamReader(file1))) {
-                String line = reader.readLine(); // header
-                int lineNum = 1;
-                while ((line = reader.readLine()) != null) {
-                    lineNum++;
-                    String[] cols = line.split(",", -1);
-                    if (cols.length < 7) {
-                        errors.add("Fichier 1: Ligne invalide (ligne " + lineNum + "): " + line);
-                        continue;
-                    }
-                    try {
-                        // Exemples de traitement
-                        String ref = cols[0].trim();
-                        String nom = cols[1].trim();
-                        String prenom = cols[2].trim();
-                        String genre = cols[3].trim();
-                        String dateEmbauche = cols[4].trim();
-                        String dateNaissance = cols[5].trim();
-                        String company = cols[6].trim();
+            String CRLF = "\r\n";
+            StringBuilder sb = new StringBuilder();
 
-                        // Simuler la création d'un employé et d'une compagnie
-                        // Si une erreur d'insertion critique survient, on lève une exception
-                        if (ref.isEmpty() || nom.isEmpty()) {
-                            throw new RuntimeException("Donnée employé manquante (ref ou nom vide)");
-                        }
-                        createdEmployee++;
-                        createdCompany++;
-                        createdDocuments++;
-                    } catch (Exception e) {
-                        // Erreur critique d'insertion
-                        criticalError = true;
-                        criticalErrorMessage = "Erreur critique lors de l'insertion d'un employé (ligne " + lineNum + "): " + e.getMessage();
-                        throw e;
-                    }
-                }
-            } catch (RuntimeException ex) {
-                // On laisse passer l'exception pour rollback global
-                throw ex;
-            } catch (Exception ex) {
-                // Erreur mineure de lecture
-                errors.add("Erreur lors de la lecture du fichier 1: " + ex.getMessage());
+            // File 1
+            sb.append("--").append(boundary).append(CRLF);
+            sb.append("Content-Disposition: form-data; name=\"file1\"; filename=\"file1.csv\"").append(CRLF);
+            sb.append("Content-Type: text/csv").append(CRLF).append(CRLF);
+            byteArrays.add(sb.toString().getBytes());
+            byteArrays.add(Files.readAllBytes(tempFile1));
+            byteArrays.add(CRLF.getBytes());
+            sb.setLength(0);
+
+            // File 2
+            sb.append("--").append(boundary).append(CRLF);
+            sb.append("Content-Disposition: form-data; name=\"file2\"; filename=\"file2.csv\"").append(CRLF);
+            sb.append("Content-Type: text/csv").append(CRLF).append(CRLF);
+            byteArrays.add(sb.toString().getBytes());
+            byteArrays.add(Files.readAllBytes(tempFile2));
+            byteArrays.add(CRLF.getBytes());
+            sb.setLength(0);
+
+            // File 3
+            sb.append("--").append(boundary).append(CRLF);
+            sb.append("Content-Disposition: form-data; name=\"file3\"; filename=\"file3.csv\"").append(CRLF);
+            sb.append("Content-Type: text/csv").append(CRLF).append(CRLF);
+            byteArrays.add(sb.toString().getBytes());
+            byteArrays.add(Files.readAllBytes(tempFile3));
+            byteArrays.add(CRLF.getBytes());
+            sb.setLength(0);
+
+            // End boundary
+            sb.append("--").append(boundary).append("--").append(CRLF);
+            byteArrays.add(sb.toString().getBytes());
+
+            // Concaténer tous les bytes
+            int totalLength = byteArrays.stream().mapToInt(b -> b.length).sum();
+            byte[] multipartBody = new byte[totalLength];
+            int pos = 0;
+            for (byte[] arr : byteArrays) {
+                System.arraycopy(arr, 0, multipartBody, pos, arr.length);
+                pos += arr.length;
             }
 
-            // --- Fichier 2 : Structures de salaire ---
-            try (BufferedReader reader = new BufferedReader(new InputStreamReader(file2))) {
-                String line = reader.readLine(); // header
-                int lineNum = 1;
-                while ((line = reader.readLine()) != null) {
-                    lineNum++;
-                    String[] cols = line.split(",", -1);
-                    if (cols.length < 6) {
-                        errors.add("Fichier 2: Ligne invalide (ligne " + lineNum + "): " + line);
-                        continue;
-                    }
-                    try {
-                        String salaryStructure = cols[0].trim();
-                        String name = cols[1].trim();
-                        String abbr = cols[2].trim();
-                        String type = cols[3].trim();
-                        String valeur = cols[4].trim();
-                        String remarque = cols[5].trim();
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(java.net.URI.create(apiUrl))
+                    .header("Content-Type", "multipart/form-data; boundary=" + boundary)
+                    .POST(HttpRequest.BodyPublishers.ofByteArray(multipartBody))
+                    .build();
 
-                        // Simuler la création de structure et composant de salaire
-                        if (salaryStructure.isEmpty() || name.isEmpty()) {
-                            throw new RuntimeException("Donnée structure de salaire manquante (structure ou nom vide)");
-                        }
-                        createdSalaryStructures++;
-                        createdSalaryComponents++;
-                        createdDocuments++;
-                    } catch (Exception e) {
-                        criticalError = true;
-                        criticalErrorMessage = "Erreur critique lors de l'insertion d'une structure de salaire (ligne " + lineNum + "): " + e.getMessage();
-                        throw e;
-                    }
-                }
-            } catch (RuntimeException ex) {
-                throw ex;
-            } catch (Exception ex) {
-                errors.add("Erreur lors de la lecture du fichier 2: " + ex.getMessage());
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+            // Nettoyage des fichiers temporaires
+            Files.deleteIfExists(tempFile1);
+            Files.deleteIfExists(tempFile2);
+            Files.deleteIfExists(tempFile3);
+
+            // Vérification du code retour
+            if (response.statusCode() != 200) {
+                Map<String, Object> error = new HashMap<>();
+                error.put("status", "error");
+                error.put("error", "Erreur HTTP " + response.statusCode() + " lors de l'appel à l'API Python");
+                return error;
             }
 
-            // --- Fichier 3 : Salaires mensuels ---
-            try (BufferedReader reader = new BufferedReader(new InputStreamReader(file3))) {
-                String line = reader.readLine(); // header
-                int lineNum = 1;
-                while ((line = reader.readLine()) != null) {
-                    lineNum++;
-                    String[] cols = line.split(",", -1);
-                    if (cols.length < 4) {
-                        errors.add("Fichier 3: Ligne invalide (ligne " + lineNum + "): " + line);
-                        continue;
-                    }
-                    try {
-                        String mois = cols[0].trim();
-                        String refEmploye = cols[1].trim();
-                        String salaireBase = cols[2].trim();
-                        String salaryStructure = cols[3].trim();
+            // On parse le JSON retourné
+            com.fasterxml.jackson.databind.ObjectMapper mapper = new com.fasterxml.jackson.databind.ObjectMapper();
+            @SuppressWarnings("unchecked")
+            Map<String, Object> result = mapper.readValue(response.body(), Map.class);
 
-                        // Simuler la création d'une fiche de paie, d'une affectation, etc.
-                        if (mois.isEmpty() || refEmploye.isEmpty()) {
-                            throw new RuntimeException("Donnée salaire mensuel manquante (mois ou ref employé vide)");
-                        }
-                        createdSalaryStructureAssignment++;
-                        createdPayrollEntry++;
-                        createdSalarySlip++;
-                        createdJournalEntry++;
-                        createdDocuments++;
-                    } catch (Exception e) {
-                        criticalError = true;
-                        criticalErrorMessage = "Erreur critique lors de l'insertion d'un salaire mensuel (ligne " + lineNum + "): " + e.getMessage();
-                        throw e;
-                    }
-                }
-            } catch (RuntimeException ex) {
-                throw ex;
-            } catch (Exception ex) {
-                errors.add("Erreur lors de la lecture du fichier 3: " + ex.getMessage());
-            }
+            return result;
 
-            // Si tout s'est bien passé, on retourne les stats
-            stats.put("created_documents", createdDocuments);
-            stats.put("created_employee", createdEmployee);
-            stats.put("created_company", createdCompany);
-            stats.put("created_holiday_list", createdHolidayList);
-            stats.put("created_salary_structures", createdSalaryStructures);
-            stats.put("created_salary_components", createdSalaryComponents);
-            stats.put("created_salary_structure_assignment", createdSalaryStructureAssignment);
-            stats.put("created_payroll_entry", createdPayrollEntry);
-            stats.put("created_salary_slip", createdSalarySlip);
-            stats.put("created_journal_entry", createdJournalEntry);
-            stats.put("duration_seconds", (System.currentTimeMillis() - start) / 1000.0);
-            java.time.format.DateTimeFormatter formatter = java.time.format.DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
-            stats.put("end_time", java.time.LocalDateTime.now().format(formatter));
-            stats.put("error_count", errors.size());
-            stats.put("errors", errors);
+        } catch (Exception e) {
+            // Nettoyage en cas d'erreur
+            try { Files.deleteIfExists(tempFile1); } catch (Exception ignore) {}
+            try { Files.deleteIfExists(tempFile2); } catch (Exception ignore) {}
+            try { Files.deleteIfExists(tempFile3); } catch (Exception ignore) {}
 
-            return stats;
-
-        } catch (Exception critical) {
-            // Rollback simulé : on retourne une erreur critique et on n'enregistre rien
-            // (En vrai, il faudrait annuler la transaction DB)
-            Map<String, Object> errorResult = new HashMap<>();
-            errorResult.put("status", "error");
-            errorResult.put("error", criticalErrorMessage != null ? criticalErrorMessage : critical.getMessage());
-            errorResult.put("created_documents", 0);
-            errorResult.put("created_employee", 0);
-            errorResult.put("created_company", 0);
-            errorResult.put("created_holiday_list", 0);
-            errorResult.put("created_salary_structures", 0);
-            errorResult.put("created_salary_components", 0);
-            errorResult.put("created_salary_structure_assignment", 0);
-            errorResult.put("created_payroll_entry", 0);
-            errorResult.put("created_salary_slip", 0);
-            errorResult.put("created_journal_entry", 0);
-            errorResult.put("duration_seconds", (System.currentTimeMillis() - start) / 1000.0);
-            java.time.format.DateTimeFormatter formatter = java.time.format.DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
-            errorResult.put("end_time", java.time.LocalDateTime.now().format(formatter));
-            errorResult.put("error_count", 1);
-            List<String> errorList = new ArrayList<>();
-            errorList.add(criticalErrorMessage != null ? criticalErrorMessage : critical.getMessage());
-            errorResult.put("errors", errorList);
-            return errorResult;
+            Map<String, Object> error = new HashMap<>();
+            error.put("status", "error");
+            error.put("error", "Erreur lors de l'appel à l'API Python : " + e.getMessage());
+            return error;
         }
     }
 }
