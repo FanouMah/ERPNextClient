@@ -128,7 +128,7 @@ public class SalarySlipService {
             String fieldsParam = URLEncoder.encode("[\"*\"]", StandardCharsets.UTF_8.toString());
 
             String url = baseUrl + "/api/resource/Salary%20Slip"
-                    + "&fields=" + fieldsParam;
+                    + "?fields=" + fieldsParam;
 
             HttpClient httpClient = HttpClient.newHttpClient();
 
