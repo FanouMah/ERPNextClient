@@ -312,7 +312,7 @@
                 <div class="mt-4">
                 <small class="text-muted" th:if="${salarySlips != null and !salarySlips.isEmpty()}">
                     Last update : 
-                    <span th:text="${#temporals.format(salarySlips.get(0).postingDate, 'dd/MM/yyyy', T(java.util.Locale).ENGLISH)}"></span>
+                    <span th:text="${#temporals.format(salarySlips.get(0).modified, 'dd/MM/yyyy', T(java.util.Locale).ENGLISH)}"></span>
                   </small>
                 </div>
               </div>
