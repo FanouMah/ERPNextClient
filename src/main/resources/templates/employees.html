@@ -249,7 +249,7 @@
                   </thead>
                   <tbody id="employee-table-body">
                     <tr th:if="${employees.empty}">
-                      <td colspan="4" class="text-center text-muted">Empty</td>
+                      <td colspan="5" class="text-center text-muted">Empty</td>
                     </tr>
                     <tr th:each="employee : ${employees}" class="employee-row"
                       th:data-name="${employee.name}"
