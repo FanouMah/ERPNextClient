@@ -18,6 +18,8 @@ import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 /**
  *
  * @author Fanou
@@ -116,12 +118,13 @@ public class ImportCSVService {
             if (response.statusCode() != 200) {
                 Map<String, Object> error = new HashMap<>();
                 error.put("status", "error");
-                error.put("error", "Erreur HTTP " + response.statusCode() + " lors de l'appel à l'API Python");
+                error.put("error", "Error HTTP " + response.statusCode());
+                error.put("response", response.body());
                 return error;
             }
 
             // On parse le JSON retourné
-            com.fasterxml.jackson.databind.ObjectMapper mapper = new com.fasterxml.jackson.databind.ObjectMapper();
+            ObjectMapper mapper = new ObjectMapper();
             @SuppressWarnings("unchecked")
             Map<String, Object> result = mapper.readValue(response.body(), Map.class);
 

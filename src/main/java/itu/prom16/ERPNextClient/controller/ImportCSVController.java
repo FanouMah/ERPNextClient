@@ -1,5 +1,7 @@
 package itu.prom16.ERPNextClient.controller;
 
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CookieValue;
@@ -46,7 +48,7 @@ public class ImportCSVController {
         }
 
         try {
-            java.util.Map<String, Object> stats = importCSVService.importCSV(file1.getInputStream(), file2.getInputStream(), file3.getInputStream());
+            Map<String, Object> stats = importCSVService.importCSV(file1.getInputStream(), file2.getInputStream(), file3.getInputStream());
 
             if ("error".equals(stats.get("status"))) {
                 redirectAttributes.addFlashAttribute("importStats", stats);
