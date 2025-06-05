@@ -54,7 +54,7 @@ public class ImportCSVController {
                 redirectAttributes.addFlashAttribute("importStats", stats);
                 redirectAttributes.addFlashAttribute("error", stats.get("error"));
             } else {
-                redirectAttributes.addFlashAttribute("importStats", stats);
+                redirectAttributes.addFlashAttribute("importStats", stats.get("stats"));
                 redirectAttributes.addFlashAttribute("success", "Import completed successfully.");
             }
 

@@ -40,7 +40,7 @@ public class ImportCSVService {
     public Map<String, Object> importCSV(InputStream file1, InputStream file2, InputStream file3) throws IOException {
         // Appelle une API Python (Frappe/ERPNext) qui prend les 3 fichiers et retourne un JSON de stats d'import
         // L'API attend un POST multipart/form-data avec les 3 fichiers
-        String apiUrl = baseUrl + "/api/method/your_app.import_data.import_all";
+        String apiUrl = baseUrl + "/api/method/hrms.api.data_import_hr.import_all";
         HttpClient client = HttpClient.newBuilder()
                 .version(HttpClient.Version.HTTP_1_1)
                 .build();
@@ -126,9 +126,11 @@ public class ImportCSVService {
             // On parse le JSON retourné
             ObjectMapper mapper = new ObjectMapper();
             @SuppressWarnings("unchecked")
-            Map<String, Object> result = mapper.readValue(response.body(), Map.class);
-
+            Map<String, Object> responseMap = mapper.readValue(response.body(), Map.class);
+            @SuppressWarnings("unchecked")
+            Map<String, Object> result = (Map<String, Object>) responseMap.get("message");
             return result;
+            
 
         } catch (Exception e) {
             // Nettoyage en cas d'erreur
