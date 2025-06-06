@@ -37,7 +37,7 @@ public class ImportCSVService {
      * @param file3 Contenu du fichier 3 (salaires mensuels)
      * @return Un objet contenant les statistiques d'import (créés, erreurs, etc.)
      */
-    public Map<String, Object> importCSV(InputStream file1, InputStream file2, InputStream file3) throws IOException {
+    public Map<String, Object> importCSV(String sid, InputStream file1, InputStream file2, InputStream file3) throws IOException {
         // Appelle une API Python (Frappe/ERPNext) qui prend les 3 fichiers et retourne un JSON de stats d'import
         // L'API attend un POST multipart/form-data avec les 3 fichiers
         String apiUrl = baseUrl + "/api/method/hrms.api.data_import_hr.import_all";
@@ -103,6 +103,7 @@ public class ImportCSVService {
 
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(java.net.URI.create(apiUrl))
+                    .header("Cookie", "sid=" + sid)
                     .header("Content-Type", "multipart/form-data; boundary=" + boundary)
                     .POST(HttpRequest.BodyPublishers.ofByteArray(multipartBody))
                     .build();

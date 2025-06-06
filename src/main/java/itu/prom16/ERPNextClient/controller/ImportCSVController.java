@@ -48,10 +48,9 @@ public class ImportCSVController {
         }
 
         try {
-            Map<String, Object> stats = importCSVService.importCSV(file1.getInputStream(), file2.getInputStream(), file3.getInputStream());
+            Map<String, Object> stats = importCSVService.importCSV(sid, file1.getInputStream(), file2.getInputStream(), file3.getInputStream());
 
             if ("error".equals(stats.get("status"))) {
-                redirectAttributes.addFlashAttribute("importStats", stats);
                 redirectAttributes.addFlashAttribute("error", stats.get("error"));
             } else {
                 redirectAttributes.addFlashAttribute("importStats", stats.get("stats"));
