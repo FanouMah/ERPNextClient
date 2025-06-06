@@ -18,7 +18,10 @@ import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import itu.prom16.ERPNextClient.exception.CSRFTokenException;
 
 /**
  *
@@ -58,6 +61,7 @@ public class ImportCSVService {
 
         // Helper pour construire le multipart
         try {
+            ObjectMapper mapper = new ObjectMapper();
             String CRLF = "\r\n";
             StringBuilder sb = new StringBuilder();
 
@@ -117,6 +121,13 @@ public class ImportCSVService {
 
             // Vérification du code retour
             if (response.statusCode() != 200) {
+                JsonNode root = mapper.readTree(response.body());
+                String excType = root.path("exc_type").asText();
+
+                if ("CSRFTokenError".equals(excType)) {
+                    throw new CSRFTokenException("CSRF token error while Import CSV: " + response.body());
+                }
+                
                 Map<String, Object> error = new HashMap<>();
                 error.put("status", "error");
                 error.put("error", "Error HTTP " + response.statusCode());
@@ -125,7 +136,6 @@ public class ImportCSVService {
             }
 
             // On parse le JSON retourné
-            ObjectMapper mapper = new ObjectMapper();
             @SuppressWarnings("unchecked")
             Map<String, Object> responseMap = mapper.readValue(response.body(), Map.class);
             @SuppressWarnings("unchecked")
@@ -133,6 +143,8 @@ public class ImportCSVService {
             return result;
             
 
+        } catch (CSRFTokenException e) {
+            throw e;
         } catch (Exception e) {
             // Nettoyage en cas d'erreur
             try { Files.deleteIfExists(tempFile1); } catch (Exception ignore) {}
