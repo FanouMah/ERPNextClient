@@ -280,4 +280,65 @@ public class SalarySlipService {
             throw new RuntimeException("Failed to fetch SalarySlips by month " + filterMonth + " : " + e.getMessage(), e);
         }
     }
+
+    public List<SalarySlipDTO> getSalarySlipsByYear(String sid, String filterYear) {
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+    
+            // Parse year (e.g. "2025")
+            int year = Integer.parseInt(filterYear);
+    
+            // Dates from 1st Jan to 31st Dec of that year
+            String fromDate = String.format("%04d-01-01", year);
+            String toDate = String.format("%04d-12-31", year);
+    
+            // Frappe expects a "between" filter for dates
+            String filter = String.format("{\"posting_date\":[\"between\",[\"%s\",\"%s\"]]}", fromDate, toDate);
+            String filtersParam = URLEncoder.encode(filter, StandardCharsets.UTF_8.toString());
+            String fieldsParam = URLEncoder.encode("[\"name\", \"posting_date\"]", StandardCharsets.UTF_8.toString());
+    
+            String url = baseUrl + "/api/resource/Salary%20Slip"
+                    + "?fields=" + fieldsParam
+                    + "&filters=" + filtersParam;
+    
+            HttpClient httpClient = HttpClient.newHttpClient();
+    
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(url))
+                    .header("Cookie", "sid=" + sid)
+                    .GET()
+                    .build();
+    
+            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+            if (response.statusCode() != 200) {
+                JsonNode root = objectMapper.readTree(response.body());
+                String excType = root.path("exc_type").asText();
+                if ("CSRFTokenError".equals(excType)) {
+                    throw new CSRFTokenException("CSRF token error while retrieving SalarySlips by year: " + response.body());
+                }
+                throw new RuntimeException("Failed to fetch SalarySlips by year, HTTP status code: " + response.statusCode() + " - " + response.body());
+            }
+    
+            objectMapper.registerModule(new JavaTimeModule());
+            objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+            objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+    
+            JsonNode root = objectMapper.readTree(response.body());
+            JsonNode dataNode = root.path("data");
+    
+            List<SalarySlipDTO> slips = new ArrayList<>();
+            for (JsonNode node : dataNode) {
+                String name = node.path("name").asText();
+                SalarySlipDTO slip = getSalarySlip(sid, name);
+                slips.add(slip);
+            }
+    
+            return slips;
+    
+        } catch (CSRFTokenException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to fetch SalarySlips by year " + filterYear + " : " + e.getMessage(), e);
+        }
+    }    
 }
