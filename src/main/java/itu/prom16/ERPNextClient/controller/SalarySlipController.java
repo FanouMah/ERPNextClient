@@ -84,54 +84,54 @@ public class SalarySlipController {
         if (sid != null) {
             try {
                 List<SalarySlipDTO> salarySlips = salarySlipService.getSalarySlipsByYear(sid, filterYear);
+    
+                if (filterYear == null || filterYear.trim().isEmpty()) {
+                    filterYear = java.time.Year.now().toString();
+                } 
+    
                 model.addAttribute("filterYear", filterYear);
-
-                // Regrouper par mois (format "yyyy-MM")
+    
+                // Groupement des salaires par "yyyy-MM"
                 Map<String, List<SalarySlipDTO>> grouped = salarySlips.stream()
-                    .collect(Collectors.groupingBy(ss -> {
-                        LocalDate pd = ss.getPostingDate(); 
-                        return pd.format(DateTimeFormatter.ofPattern("yyyy-MM"));
-                    }));
-
-                // Transformer en liste de SalarySlipsMonth, triée par mois croissant
-                List<SalarySlipsMonth> salarySlipsMonths = grouped.entrySet().stream()
-                .map(entry -> {
-                    List<SalarySlipDTO> slips = entry.getValue();
-            
+                    .collect(Collectors.groupingBy(ss -> ss.getPostingDate().format(DateTimeFormatter.ofPattern("yyyy-MM"))));
+    
+                List<SalarySlipsMonth> salarySlipsMonths = new ArrayList<>();
+    
+                // Boucle sur les 12 mois de l’année sélectionnée
+                for (int month = 1; month <= 12; month++) {
+                    String key = String.format("%s-%02d", filterYear, month);
+                    List<SalarySlipDTO> slips = grouped.getOrDefault(key, new ArrayList<>());
+    
                     BigDecimal totalEarnings = slips.stream()
                         .map(ss -> BigDecimal.valueOf(ss.getGrossPay()))
                         .filter(Objects::nonNull)
                         .reduce(BigDecimal.ZERO, BigDecimal::add);
-            
+    
                     BigDecimal totalDeductions = slips.stream()
                         .map(ss -> BigDecimal.valueOf(ss.getTotalDeduction()))
                         .filter(Objects::nonNull)
                         .reduce(BigDecimal.ZERO, BigDecimal::add);
-            
+    
                     BigDecimal totalNetPay = slips.stream()
                         .map(ss -> BigDecimal.valueOf(ss.getNetPay()))
                         .filter(Objects::nonNull)
                         .reduce(BigDecimal.ZERO, BigDecimal::add);
-            
-                    SalarySlipsMonth m = new SalarySlipsMonth(entry.getKey(), totalEarnings, totalDeductions, totalNetPay, slips);
-            
-                    return m;
-                })
-                .sorted(Comparator.comparing(SalarySlipsMonth::getMonth))
-                .collect(Collectors.toList());            
-
+    
+                    salarySlipsMonths.add(new SalarySlipsMonth(key, totalEarnings, totalDeductions, totalNetPay, slips));
+                }
+    
                 model.addAttribute("salarySlipsMonths", salarySlipsMonths);
-
+    
             } catch (CSRFTokenException ex) {
                 return "redirect:/logout";
             } catch (RuntimeException e) {
                 model.addAttribute("code", "500");
                 model.addAttribute("error", e.getMessage());
                 return "error-500";
-            } 
+            }
             return "salary-slips-dashboard";
         } else {
             return "redirect:/";
         }
-    }
+    }    
 }
