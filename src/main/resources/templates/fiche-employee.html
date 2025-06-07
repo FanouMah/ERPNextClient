@@ -198,41 +198,41 @@
               </div>
               <div class="card-body">
                   <dl class="row mb-0">
-                      <dt class="col-sm-4">Employee ID</dt>
-                      <dd class="col-sm-8 text-end" th:text="${employee.name}"></dd>
+                      <dt class="col-sm-4 text-sm">Employee ID</dt>
+                      <dd class="col-sm-8 text-end text-sm" th:text="${employee.name}"></dd>
 
-                      <dt class="col-sm-4">Salutation</dt>
-                      <dd class="col-sm-8 text-end" th:text="${employee.salutation}"></dd>
+                      <dt class="col-sm-4 text-sm">Salutation</dt>
+                      <dd class="col-sm-8 text-end text-sm" th:text="${employee.salutation}"></dd>
 
-                      <dt class="col-sm-4">First Name</dt>
-                      <dd class="col-sm-8 text-end" th:text="${employee.firstName}"></dd>
+                      <dt class="col-sm-4 text-sm">First Name</dt>
+                      <dd class="col-sm-8 text-end text-sm" th:text="${employee.firstName}"></dd>
 
-                      <dt class="col-sm-4">Middle Name</dt>
-                      <dd class="col-sm-8 text-end" th:text="${employee.middleName}"></dd>
+                      <dt class="col-sm-4 text-sm">Middle Name</dt>
+                      <dd class="col-sm-8 text-end text-sm" th:text="${employee.middleName}"></dd>
 
-                      <dt class="col-sm-4">Last Name</dt>
-                      <dd class="col-sm-8 text-end" th:text="${employee.lastName}"></dd>
+                      <dt class="col-sm-4 text-sm">Last Name</dt>
+                      <dd class="col-sm-8 text-end text-sm" th:text="${employee.lastName}"></dd>
 
-                      <dt class="col-sm-4">Gender</dt>
-                      <dd class="col-sm-8 text-end" th:text="${employee.gender}"></dd>
+                      <dt class="col-sm-4 text-sm">Gender</dt>
+                      <dd class="col-sm-8 text-end text-sm" th:text="${employee.gender}"></dd>
 
-                      <dt class="col-sm-4">Date of Birth</dt>
-                      <dd class="col-sm-8 text-end" th:text="${employee.dateOfBirth}"></dd>
+                      <dt class="col-sm-4 text-sm">Date of Birth</dt>
+                      <dd class="col-sm-8 text-end text-sm" th:text="${employee.dateOfBirth}"></dd>
 
-                      <dt class="col-sm-4">Date of Joining</dt>
-                      <dd class="col-sm-8 text-end" th:text="${employee.dateOfJoining}"></dd>
+                      <dt class="col-sm-4 text-sm">Date of Joining</dt>
+                      <dd class="col-sm-8 text-end text-sm" th:text="${employee.dateOfJoining}"></dd>
 
-                      <dt class="col-sm-4">Date of Retirement</dt>
-                      <dd class="col-sm-8 text-end" th:text="${employee.dateOfRetirement}"></dd>
+                      <dt class="col-sm-4 text-sm">Date of Retirement</dt>
+                      <dd class="col-sm-8 text-end text-sm" th:text="${employee.dateOfRetirement}"></dd>
 
-                      <dt class="col-sm-4">Status</dt>
-                      <dd class="col-sm-8 text-end" th:text="${employee.status}"></dd>
+                      <dt class="col-sm-4 text-sm">Status</dt>
+                      <dd class="col-sm-8 text-end text-sm" th:text="${employee.status}"></dd>
 
-                      <dt class="col-sm-4">Company</dt>
-                      <dd class="col-sm-8 text-end" th:text="${employee.company}"></dd>
+                      <dt class="col-sm-4 text-sm">Company</dt>
+                      <dd class="col-sm-8 text-end text-sm" th:text="${employee.company}"></dd>
 
-                      <dt class="col-sm-4">Salary Currency</dt>
-                      <dd class="col-sm-8 text-end" th:text="${employee.salaryCurrency}"></dd>
+                      <dt class="col-sm-4 text-sm">Salary Currency</dt>
+                      <dd class="col-sm-8 text-end text-sm" th:text="${employee.salaryCurrency}"></dd>
                   </dl>
               </div>
             </div>
@@ -244,28 +244,58 @@
               </div>
               <div class="card-body">
                 <div class="table-responsive">
-                  <table class="table align-middle">
+                  <table class="table">
                     <thead class="table-light">
                       <tr>
-                        <th class="text-center">Month</th>
-                        <th class="text-end px-0">Gross Pay (<span th:text="${employee.salaryCurrency}"></span>)</th>
-                        <th class="text-end px-0">Total Deduction (<span th:text="${employee.salaryCurrency}"></span>)</th>
-                        <th class="text-end px-0">Net Pay (<span th:text="${employee.salaryCurrency}"></span>)</th>
-                        <th class="text-end px-0">Rounded Total (<span th:text="${employee.salaryCurrency}"></span>)</th>
-                        <th class="text-center">Export PDF</th>
+                        <th class="text-center text-sm">Month</th>
+                        <th class="text-center px-0 text-sm">Earnings (<span th:text="${employee.salaryCurrency}"></span>)</th>
+                        <th class="text-center px-0 text-sm">Deductions (<span th:text="${employee.salaryCurrency}"></span>)</th>
+                        <th class="text-end px-0 text-sm">Net Pay (<span th:text="${employee.salaryCurrency}"></span>)</th>
+                        <th class="text-end px-0 text-sm">Rounded Total (<span th:text="${employee.salaryCurrency}"></span>)</th>
+                        <th class="text-center text-sm">Export PDF</th>
                       </tr>
                     </thead>
                     <tbody>
                       <tr th:if="${salarySlips.empty}">
-                        <td colspan="6" class="text-center text-muted">Empty</td>
+                        <td colspan="6" class="text-center text-muted text-sm">Empty</td>
                       </tr>
                       <tr th:each="salarySlip : ${salarySlips}">
-                        <td class="text-center" th:text="${salarySlip.postingDate != null ? #temporals.format(salarySlip.postingDate, 'MMMM yyyy', T(java.util.Locale).ENGLISH) : ''}"></td>
-                        <td class="text-end" th:text="${#numbers.formatDecimal(salarySlip.grossPay, 1, 'COMMA', 2, 'POINT')}"></td>
-                        <td class="text-end text-danger" th:text="${#numbers.formatDecimal(salarySlip.totalDeduction, 1, 'COMMA', 2, 'POINT')}"></td>
-                        <td class="text-end text-success" th:text="${#numbers.formatDecimal(salarySlip.netPay, 1, 'COMMA', 2, 'POINT')}"></td>
-                        <td class="text-end" th:text="${#numbers.formatDecimal(salarySlip.roundedTotal, 1, 'COMMA', 2, 'POINT')}"></td>
-                        <td class="text-center">
+                        <td class="text-center text-sm" th:text="${salarySlip.postingDate != null ? #temporals.format(salarySlip.postingDate, 'MMMM yyyy', T(java.util.Locale).ENGLISH) : ''}"></td>
+                        <!-- Earnings section -->
+                        <td class="text-sm font-weight-bold mb-0">
+                          <div class="d-flex flex-column gap-1">
+                            <div th:each="earning : ${salarySlip.earnings}" class="d-flex justify-content-between align-items-center px-2">
+                              <span class="text-dark font-weight-normal" 
+                                    th:text="${earning.salary_component}"></span>
+                              <span class="text-sm font-weight-normal" 
+                                    th:text="${#numbers.formatDecimal(earning.amount, 1, 'COMMA', 2, 'POINT')}"></span>
+                            </div>
+                            <div class="border-top m-0"></div>
+                            <div class="d-flex justify-content-between align-items-center px-2 py-1">
+                              <span class="text-dark font-weight-bold"></span>
+                              <span class="text-sm font-weight-bold mb-0 text-success" th:text="${#numbers.formatDecimal(salarySlip.grossPay, 1, 'COMMA', 2, 'POINT')}"></span>
+                            </div>
+                          </div>
+                        </td>
+                        <!-- Deductions section -->
+                        <td class="text-sm font-weight-bold mb-0">
+                          <div class="d-flex flex-column gap-1">
+                            <div th:each="deduction : ${salarySlip.deductions}" class="d-flex justify-content-between align-items-center px-2">
+                              <span class="text-dark font-weight-normal" 
+                                    th:text="${deduction.salary_component}"></span>
+                              <span class="text-sm font-weight-normal" 
+                                    th:text="${#numbers.formatDecimal(deduction.amount, 1, 'COMMA', 2, 'POINT')}"></span>
+                            </div>
+                            <div class="border-top m-0"></div>
+                            <div class="d-flex justify-content-between align-items-center px-2 py-1">
+                              <span class="text-dark font-weight-bold"></span>
+                              <span class="text-sm font-weight-bold mb-0 text-danger" th:text="${#numbers.formatDecimal(salarySlip.totalDeduction, 1, 'COMMA', 2, 'POINT')}"></span>
+                            </div>
+                          </div>
+                        </td>
+                        <td class="text-end text-success text-sm" th:text="${#numbers.formatDecimal(salarySlip.netPay, 1, 'COMMA', 2, 'POINT')}"></td>
+                        <td class="text-end text-sm" th:text="${#numbers.formatDecimal(salarySlip.roundedTotal, 1, 'COMMA', 2, 'POINT')}"></td>
+                        <td class="text-center text-sm">
                           <button type="button" class="btn btn-outline-info btn-sm mb-0" data-bs-toggle="modal" data-bs-target="#exportPdfModal">
                             <span class="material-symbols-rounded align-middle">picture_as_pdf</span>
                           </button>

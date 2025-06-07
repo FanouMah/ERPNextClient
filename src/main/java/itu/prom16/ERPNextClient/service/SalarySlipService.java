@@ -83,7 +83,7 @@ public class SalarySlipService {
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             String filters = URLEncoder.encode("[[\"employee\",\"=\",\"" + employee + "\"]]", StandardCharsets.UTF_8);
-            String fieldsParam = URLEncoder.encode("[\"*\"]", StandardCharsets.UTF_8.toString());
+            String fieldsParam = URLEncoder.encode("[\"name\", \"employee\"]", StandardCharsets.UTF_8.toString());
 
             String url = baseUrl + "/api/resource/Salary%20Slip"
                     + "?filters=" + filters
@@ -114,7 +114,14 @@ public class SalarySlipService {
             JsonNode root = objectMapper.readTree(response.body());
             JsonNode dataNode = root.path("data");
 
-            return objectMapper.readValue(dataNode.toString(), new TypeReference<List<SalarySlipDTO>>() {});
+            List<SalarySlipDTO> slips = new ArrayList<>();
+            for (JsonNode node : dataNode) {
+                String name = node.path("name").asText();
+                SalarySlipDTO slip = getSalarySlip(sid, name);
+                slips.add(slip);
+            }
+
+            return slips;
 
         } catch (CSRFTokenException e) {
             throw e;
