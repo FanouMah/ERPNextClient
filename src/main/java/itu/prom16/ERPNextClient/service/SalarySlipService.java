@@ -286,7 +286,12 @@ public class SalarySlipService {
             ObjectMapper objectMapper = new ObjectMapper();
     
             // Parse year (e.g. "2025")
-            int year = Integer.parseInt(filterYear);
+            int year;
+            if (filterYear == null || filterYear.trim().isEmpty()) {
+                year = java.time.Year.now().getValue();
+            } else {
+                year = Integer.parseInt(filterYear.trim());
+            }
     
             // Dates from 1st Jan to 31st Dec of that year
             String fromDate = String.format("%04d-01-01", year);
