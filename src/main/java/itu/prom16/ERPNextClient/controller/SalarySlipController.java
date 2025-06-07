@@ -1,6 +1,14 @@
 package itu.prom16.ERPNextClient.controller;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Comparator;
+import java.util.Objects;
+import java.math.BigDecimal;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -11,6 +19,7 @@ import org.springframework.ui.Model;
 
 import itu.prom16.ERPNextClient.DTO.SalarySlipDTO;
 import itu.prom16.ERPNextClient.exception.CSRFTokenException;
+import itu.prom16.ERPNextClient.model.SalarySlipsMonth;
 import itu.prom16.ERPNextClient.service.SalarySlipService;
 
 /**
@@ -60,6 +69,67 @@ public class SalarySlipController {
                 return "error-500";
             } 
             return "salary-slips";
+        } else {
+            return "redirect:/";
+        }
+    }
+
+    
+    @GetMapping("/salary-slips/dashboard")
+    public String showSalarySlipsDashboard(
+        @CookieValue(value = "sid", required = false) String sid,
+        Model model,
+        @RequestParam(value = "filter-year", required = false) String filterYear
+    ) {
+        if (sid != null) {
+            try {
+                List<SalarySlipDTO> salarySlips = salarySlipService.getSalarySlipsByYear(sid, filterYear);
+                model.addAttribute("filterYear", filterYear);
+
+                // Regrouper par mois (format "yyyy-MM")
+                Map<String, List<SalarySlipDTO>> grouped = salarySlips.stream()
+                    .collect(Collectors.groupingBy(ss -> {
+                        LocalDate pd = ss.getPostingDate(); 
+                        return pd.format(DateTimeFormatter.ofPattern("yyyy-MM"));
+                    }));
+
+                // Transformer en liste de SalarySlipsMonth, triée par mois croissant
+                List<SalarySlipsMonth> salarySlipsMonths = grouped.entrySet().stream()
+                .map(entry -> {
+                    List<SalarySlipDTO> slips = entry.getValue();
+            
+                    BigDecimal totalEarnings = slips.stream()
+                        .map(ss -> BigDecimal.valueOf(ss.getGrossPay()))
+                        .filter(Objects::nonNull)
+                        .reduce(BigDecimal.ZERO, BigDecimal::add);
+            
+                    BigDecimal totalDeductions = slips.stream()
+                        .map(ss -> BigDecimal.valueOf(ss.getTotalDeduction()))
+                        .filter(Objects::nonNull)
+                        .reduce(BigDecimal.ZERO, BigDecimal::add);
+            
+                    BigDecimal totalNetPay = slips.stream()
+                        .map(ss -> BigDecimal.valueOf(ss.getNetPay()))
+                        .filter(Objects::nonNull)
+                        .reduce(BigDecimal.ZERO, BigDecimal::add);
+            
+                    SalarySlipsMonth m = new SalarySlipsMonth(entry.getKey(), totalEarnings, totalDeductions, totalNetPay, slips);
+            
+                    return m;
+                })
+                .sorted(Comparator.comparing(SalarySlipsMonth::getMonth))
+                .collect(Collectors.toList());            
+
+                model.addAttribute("salarySlipsMonths", salarySlipsMonths);
+
+            } catch (CSRFTokenException ex) {
+                return "redirect:/logout";
+            } catch (RuntimeException e) {
+                model.addAttribute("code", "500");
+                model.addAttribute("error", e.getMessage());
+                return "error-500";
+            } 
+            return "salary-slips-dashboard";
         } else {
             return "redirect:/";
         }
