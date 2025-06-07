@@ -9,6 +9,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -122,13 +123,52 @@ public class SalarySlipService {
         }
     }
 
+    public SalarySlipDTO getSalarySlip(String sid, String name) {
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+
+            String encodedName = URLEncoder.encode(name, StandardCharsets.UTF_8).replace("+", "%20");
+
+            String url = baseUrl + "/api/resource/Salary%20Slip/" + encodedName;
+
+            HttpClient httpClient = HttpClient.newHttpClient();
+
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(url))
+                    .header("Cookie", "sid=" + sid)
+                    .GET()
+                    .build();
+
+            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+            if (response.statusCode() != 200) {
+                JsonNode root = objectMapper.readTree(response.body());
+                String excType = root.path("exc_type").asText();
+                if ("CSRFTokenError".equals(excType)) {
+                    throw new CSRFTokenException("CSRF token error while retrieving SalarySlip : " + response.body());
+                }
+                throw new RuntimeException("Failed to fetch SalarySlip, HTTP status code: " + response.statusCode() + " - " + response.body());
+            }
+
+            objectMapper.registerModule(new JavaTimeModule());
+            objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+            objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
+            JsonNode root = objectMapper.readTree(response.body());
+            JsonNode dataNode = root.path("data");
+
+            return objectMapper.readValue(dataNode.toString(), new TypeReference<SalarySlipDTO>() {});
+        } catch (CSRFTokenException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to fetch SalarySlip : " + e.getMessage(), e);
+        }
+    }
+
     public List<SalarySlipDTO> getSalarySlips(String sid) {
         try {
             ObjectMapper objectMapper = new ObjectMapper();
-            String fieldsParam = URLEncoder.encode("[\"*\"]", StandardCharsets.UTF_8.toString());
 
-            String url = baseUrl + "/api/resource/Salary%20Slip"
-                    + "?fields=" + fieldsParam;
+            String url = baseUrl + "/api/resource/Salary%20Slip";
 
             HttpClient httpClient = HttpClient.newHttpClient();
 
@@ -155,7 +195,14 @@ public class SalarySlipService {
             JsonNode root = objectMapper.readTree(response.body());
             JsonNode dataNode = root.path("data");
 
-            return objectMapper.readValue(dataNode.toString(), new TypeReference<List<SalarySlipDTO>>() {});
+            List<SalarySlipDTO> slips = new ArrayList<>();
+            for (JsonNode node : dataNode) {
+                String name = node.path("name").asText();
+                SalarySlipDTO slip = getSalarySlip(sid, name);
+                slips.add(slip);
+            }
+    
+            return slips;
 
         } catch (CSRFTokenException e) {
             throw e;
@@ -187,7 +234,7 @@ public class SalarySlipService {
             // Frappe expects a "between" filter for dates as: ["between", ["YYYY-MM-01", "YYYY-MM-last"]]
             String filter = String.format("{\"posting_date\":[\"between\",[\"%s\",\"%s\"]]}", fromDate, toDate);
             String filtersParam = URLEncoder.encode(filter, StandardCharsets.UTF_8.toString());
-            String fieldsParam = URLEncoder.encode("[\"*\"]", StandardCharsets.UTF_8.toString());
+            String fieldsParam = URLEncoder.encode("[\"name\", \"posting_date\"]", StandardCharsets.UTF_8.toString());
 
             String url = baseUrl + "/api/resource/Salary%20Slip"
                     + "?fields=" + fieldsParam
@@ -218,7 +265,14 @@ public class SalarySlipService {
             JsonNode root = objectMapper.readTree(response.body());
             JsonNode dataNode = root.path("data");
 
-            return objectMapper.readValue(dataNode.toString(), new TypeReference<List<SalarySlipDTO>>() {});
+            List<SalarySlipDTO> slips = new ArrayList<>();
+            for (JsonNode node : dataNode) {
+                String name = node.path("name").asText();
+                SalarySlipDTO slip = getSalarySlip(sid, name);
+                slips.add(slip);
+            }
+    
+            return slips;
 
         } catch (CSRFTokenException e) {
             throw e;

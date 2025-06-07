@@ -37,12 +37,21 @@ public class SalarySlipController {
                 } else {
                     salarySlips = salarySlipService.getSalarySlips(sid);
                 }
-                double total = 0;
+                double sommeRoundedTotal = 0;
+                double sommeEarnings = 0;
+                double sommeDeductions = 0;
+                double sommeNetPay = 0;
                 for (SalarySlipDTO ss : salarySlips) {
-                    total += ss.getRoundedTotal();
+                    sommeRoundedTotal += ss.getRoundedTotal();
+                    sommeEarnings += ss.getGrossPay();
+                    sommeDeductions += ss.getTotalDeduction();
+                    sommeNetPay += ss.getNetPay();
                 }
                 model.addAttribute("salarySlips", salarySlips);
-                model.addAttribute("sommeRoundedTotal", total);
+                model.addAttribute("sommeRoundedTotal", sommeRoundedTotal);
+                model.addAttribute("sommeNetPay", sommeNetPay);
+                model.addAttribute("sommeEarnings", sommeEarnings);
+                model.addAttribute("sommeDeductions", sommeDeductions);
             } catch (CSRFTokenException ex) {
                 return "redirect:/logout";
             } catch (RuntimeException e) {

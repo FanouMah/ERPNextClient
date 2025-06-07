@@ -2,6 +2,7 @@ package itu.prom16.ERPNextClient.DTO;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -226,6 +227,12 @@ public class SalarySlipDTO {
     @JsonProperty("bank_account_no")
     private String bankAccountNo;
 
+    @JsonProperty("earnings")
+    private List<Object> earnings; 
+
+    @JsonProperty("deductions")
+    private List<Object> deductions;
+
     public SalarySlipDTO() {
     }
 
@@ -245,7 +252,7 @@ public class SalarySlipDTO {
             double nonTaxableEarnings, double standardTaxExemptionAmount, double taxExemptionDeclaration,
             double deductionsBeforeTaxCalculation, double annualTaxableAmount, double incomeTaxDeductedTillDate,
             double currentMonthIncomeTax, double futureIncomeTaxDeductions, double totalIncomeTax, String journalEntry,
-            String amendedFrom, String bankName, String bankAccountNo) { 
+            String amendedFrom, String bankName, String bankAccountNo, List<Object> earnings, List<Object> deductions) { 
         this.name = name;
         this.owner = owner;
         this.creation = creation;
@@ -315,6 +322,8 @@ public class SalarySlipDTO {
         this.amendedFrom = amendedFrom;
         this.bankName = bankName;
         this.bankAccountNo = bankAccountNo;
+        this.earnings = earnings;
+        this.deductions = deductions;
     }
 
     public String getName() { return name; }
@@ -524,5 +533,9 @@ public class SalarySlipDTO {
     public String getBankAccountNo() { return bankAccountNo; }
     public void setBankAccountNo(String bankAccountNo) { this.bankAccountNo = bankAccountNo; }
 
-    
+    public List<Object> getEarnings() { return earnings; }
+    public void setEarnings(List<Object> earnings) { this.earnings = earnings; }
+
+    public List<Object> getDeductions() { return deductions; }
+    public void setDeductions(List<Object> deductions) { this.deductions = deductions; }
 }

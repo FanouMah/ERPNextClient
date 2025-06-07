@@ -191,13 +191,13 @@
               </div>
               <!-- End Filter Section -->
               <div class="table-responsive p-0">
-                <table class="table align-items-center mb-0" id="salary-table">
+                <table class="table mb-0" id="salary-table">
                   <thead>
                     <tr>
                         <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Month</th>
                         <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Employee</th>
-                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Gross Pay</th>
-                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Total Deduction</th>
+                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Earnings</th>
+                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Deductions</th>
                         <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Net Pay</th>
                         <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Rounded Total</th>
                     </tr>
@@ -215,15 +215,48 @@
                               <a th:href="@{'/employee/' + ${salarySlip.employee}}" th:text="${salarySlip.employeeName}"></a>
                             </h6>
                         </td>
-                        <td class="text-sm font-weight-bold mb-0" th:text="${#numbers.formatDecimal(salarySlip.grossPay, 1, 'COMMA', 2, 'POINT')}"></td>
-                        <td class="text-sm font-weight-bold mb-0 text-danger" th:text="${#numbers.formatDecimal(salarySlip.totalDeduction, 1, 'COMMA', 2, 'POINT')}"></td>
-                        <td class="text-sm font-weight-bold mb-0 text-success" th:text="${#numbers.formatDecimal(salarySlip.netPay, 1, 'COMMA', 2, 'POINT')}"></td>
+                        <!-- Earnings section -->
+                        <td class="text-sm font-weight-bold mb-0">
+                          <div class="d-flex flex-column gap-1">
+                            <div th:each="earning : ${salarySlip.earnings}" class="d-flex justify-content-between align-items-center px-2 py-1">
+                              <span class="text-dark font-weight-normal" 
+                                    th:text="${earning.salary_component}"></span>
+                              <span class="text-sm font-weight-normal" 
+                                    th:text="${#numbers.formatDecimal(earning.amount, 1, 'COMMA', 2, 'POINT')}"></span>
+                            </div>
+                            <div class="border-top m-0"></div>
+                            <div class="d-flex justify-content-between align-items-center px-2 py-1">
+                              <span class="text-dark font-weight-bold"></span>
+                              <span class="text-sm font-weight-bold mb-0 text-success" th:text="${#numbers.formatDecimal(salarySlip.grossPay, 1, 'COMMA', 2, 'POINT')}"></span>
+                            </div>
+                          </div>
+                        </td>
+                        <!-- Deductions section -->
+                        <td class="text-sm font-weight-bold mb-0">
+                          <div class="d-flex flex-column gap-1">
+                            <div th:each="deduction : ${salarySlip.deductions}" class="d-flex justify-content-between align-items-center px-2 py-1">
+                              <span class="text-dark font-weight-normal" 
+                                    th:text="${deduction.salary_component}"></span>
+                              <span class="text-sm font-weight-normal" 
+                                    th:text="${#numbers.formatDecimal(deduction.amount, 1, 'COMMA', 2, 'POINT')}"></span>
+                            </div>
+                            <div class="border-top m-0"></div>
+                            <div class="d-flex justify-content-between align-items-center px-2 py-1">
+                              <span class="text-dark font-weight-bold"></span>
+                              <span class="text-sm font-weight-bold mb-0 text-danger" th:text="${#numbers.formatDecimal(salarySlip.totalDeduction, 1, 'COMMA', 2, 'POINT')}"></span>
+                            </div>
+                          </div>
+                        </td>
+                        <td class="text-sm font-weight-bold mb-0" th:text="${#numbers.formatDecimal(salarySlip.netPay, 1, 'COMMA', 2, 'POINT')}"></td>
                         <td class="text-sm font-weight-bold mb-0" th:text="${#numbers.formatDecimal(salarySlip.roundedTotal, 1, 'COMMA', 2, 'POINT')}"></td>
                       </tr>
                   </tbody>
                   <tfoot>
                     <tr style="border-bottom: none !important;">
-                        <td colspan="5" class="font-weight-bold text-end" style="border-bottom: none !important;">Total : </td>
+                        <td colspan="2" class="font-weight-bold text-end" style="border-bottom: none !important;">TOTAL :</td>
+                        <td class="font-weight-bold text-end text-success" th:text="${#numbers.formatDecimal(sommeEarnings, 1, 'COMMA', 2, 'POINT')}" style="border-bottom: none !important;">0</td>
+                        <td class="font-weight-bold text-end text-danger" th:text="${#numbers.formatDecimal(sommeDeductions, 1, 'COMMA', 2, 'POINT')}" style="border-bottom: none !important;">0</td>
+                        <td style="border-bottom: none !important;"></td>
                         <td class="font-weight-bold" th:text="${#numbers.formatDecimal(sommeRoundedTotal, 1, 'COMMA', 2, 'POINT')}" style="border-bottom: none !important;">0</td>
                     </tr>
                   </tfoot>
