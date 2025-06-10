@@ -1,6 +1,7 @@
 package itu.prom16.ERPNextClient.controller;
 
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -9,17 +10,23 @@ import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
 import java.util.Objects;
 import java.math.BigDecimal;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.ui.Model;
 
 import itu.prom16.ERPNextClient.DTO.SalarySlipDTO;
 import itu.prom16.ERPNextClient.exception.CSRFTokenException;
 import itu.prom16.ERPNextClient.model.SalarySlipsMonth;
+import itu.prom16.ERPNextClient.service.PDFGeneratorService;
 import itu.prom16.ERPNextClient.service.SalarySlipService;
 
 /**
@@ -30,7 +37,34 @@ import itu.prom16.ERPNextClient.service.SalarySlipService;
 public class SalarySlipController {
     @Autowired
     private SalarySlipService salarySlipService;
+
+    @Autowired
+    private PDFGeneratorService pdfGeneratorService;
     
+    @GetMapping(value = "/salary-slip/pdf", produces = MediaType.APPLICATION_PDF_VALUE)
+    public ResponseEntity<byte[]> getPayslipPDF(
+            @CookieValue(value = "sid", required = false) String sid,
+            @RequestParam("name") String salarySlipName) {    
+            try {
+                SalarySlipDTO salarySlip = salarySlipService.getSalarySlip(sid, salarySlipName);
+
+                byte[] pdf = pdfGeneratorService.generateSalarySlipPDF(salarySlip);
+
+                System.out.println(pdf);
+                if (pdf == null) {
+                    return ResponseEntity.notFound().build();
+                }
+
+                String safeFilename = salarySlip.getName().replaceAll("[^a-zA-Z0-9]", "_") + ".pdf";
+
+                return ResponseEntity.ok()
+                        .header("Content-Disposition", "attachment; filename=\"" + safeFilename + "\"")
+                        .body(pdf);
+            } catch (IllegalArgumentException e) {
+                return ResponseEntity.badRequest().build();
+            }
+        }
+
     @GetMapping("/salary-slips")
     public String showSalarySlips(
         @CookieValue(value = "sid", required = false) String sid,

@@ -87,7 +87,8 @@ public class SalarySlipService {
 
             String url = baseUrl + "/api/resource/Salary%20Slip"
                     + "?filters=" + filters
-                    + "&fields=" + fieldsParam;
+                    + "&fields=" + fieldsParam
+                    + "&limit_page_length=none";
 
             HttpClient httpClient = HttpClient.newHttpClient();
 
@@ -175,7 +176,7 @@ public class SalarySlipService {
         try {
             ObjectMapper objectMapper = new ObjectMapper();
 
-            String url = baseUrl + "/api/resource/Salary%20Slip";
+            String url = baseUrl + "/api/resource/Salary%20Slip?limit_page_length=none";
 
             HttpClient httpClient = HttpClient.newHttpClient();
 
@@ -245,7 +246,8 @@ public class SalarySlipService {
 
             String url = baseUrl + "/api/resource/Salary%20Slip"
                     + "?fields=" + fieldsParam
-                    + "&filters=" + filtersParam;
+                    + "&filters=" + filtersParam
+                    + "&limit_page_length=none";
 
             HttpClient httpClient = HttpClient.newHttpClient();
 
@@ -311,7 +313,8 @@ public class SalarySlipService {
     
             String url = baseUrl + "/api/resource/Salary%20Slip"
                     + "?fields=" + fieldsParam
-                    + "&filters=" + filtersParam;
+                    + "&filters=" + filtersParam
+                    + "&limit_page_length=none";
     
             HttpClient httpClient = HttpClient.newHttpClient();
     

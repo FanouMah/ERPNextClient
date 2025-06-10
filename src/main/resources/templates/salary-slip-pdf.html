@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #0066cc;
+            padding-bottom: 10px;
+        }
+        .company-name {
+            font-size: 24px;
+            font-weight: bold;
+            color: #0066cc;
+        }
+        .document-title {
+            font-size: 20px;
+            margin-top: 10px;
+        }
+        .info-section {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        .employee-info, .salary-info {
+            width: 48%;
+        }
+        .section-title {
+            font-weight: bold;
+            background-color: #f0f0f0;
+            padding: 5px 10px;
+            margin: 15px 0 10px 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .earnings, .deductions {
+            width: 48%;
+            float: left;
+        }
+        .deductions {
+            float: right;
+        }
+        .clear {
+            clear: both;
+        }
+        .total {
+            font-weight: bold;
+        }
+        .footer {
+            margin-top: 30px;
+            text-align: center;
+            font-size: 12px;
+            color: #666;
+            border-top: 1px solid #ddd;
+            padding-top: 10px;
+        }
+        .signature {
+            margin-top: 40px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .signature-line {
+            width: 200px;
+            border-top: 1px solid #333;
+            text-align: center;
+            padding-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="company-name" th:text="${salarySlip.company}"></div>
+        <div class="document-title" th:text=" 'SALARY SLIP ' + ${salarySlip.name}"></div>
+        <div>For the month of <span id="month-year" th:text="${monthName}"></span></div>
+        <div><strong>Status:</strong> <span th:text="${salarySlip.status}"></span></div>
+    </div>
+
+    <div class="info-section">
+        <div class="employee-info">
+            <div><strong>Employee ID:</strong> <span th:text="${salarySlip.employee}"></span></div>
+            <div><strong>Name:</strong> <span th:text="${salarySlip.employeeName}"></span></div>
+        </div>
+        <div class="salary-info">
+            <div><strong>Payment Date:</strong> <span th:text="${salarySlip.postingDate}"></span></div>
+            <div><strong>Pay Period:</strong> <span th:text="${salarySlip.startDate}"></span> to <span th:text="${salarySlip.endDate}"></span></div>
+            <!-- <div><strong>Working Days:</strong> <span th:text="${salarySlip.totalWorkingDays}"></span></div>
+            <div><strong>Absent Days:</strong> <span th:text="${salarySlip.absentDays}"></span></div>
+            <div><strong>Payment Days:</strong> <span th:text="${salarySlip.paymentDays}"></span></div> -->
+        </div>
+    </div>
+
+    <div class="earnings">
+        <div class="section-title">Earnings</div>
+        <table>
+            <tr>
+                <th>Description</th>
+                <th>Amount (USD)</th>
+            </tr>
+            <tr th:each="earning : ${salarySlip.earnings}">
+                <td th:text="${earning.salary_component}"></td>
+                <td th:text="${#numbers.formatDecimal(earning.amount, 0, 'COMMA', 2, 'POINT')} + ' ' + ${salarySlip.currency}"></td>
+            </tr>
+            <tr class="total">
+                <td>Total Earnings</td>
+                <td th:text="${#numbers.formatDecimal(salarySlip.grossPay, 0, 'COMMA', 2, 'POINT')} + ' ' + ${salarySlip.currency}"></td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="deductions">
+        <div class="section-title">Deductions</div>
+        <table>
+            <tr>
+                <th>Description</th>
+                <th>Amount (USD)</th>
+            </tr>
+            <tr th:each="deduction : ${salarySlip.deductions}">
+                <td th:text="${deduction.salary_component}"></td>
+                <td th:text="${#numbers.formatDecimal(deduction.amount, 0, 'COMMA', 2, 'POINT')} + ' ' + ${salarySlip.currency}"></td>
+            </tr>
+            <tr class="total">
+                <td>Total Deductions</td>
+                <td th:text=" ${#numbers.formatDecimal(salarySlip.totalDeduction, 0, 'COMMA', 2, 'POINT')} + ' ' + ${salarySlip.currency}"></td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="clear"></div>
+
+    <div class="section-title">Summary</div>
+    <table>
+        <tr class="total">
+            <td>Gross Salary</td>
+            <td th:text="${#numbers.formatDecimal(salarySlip.grossPay, 0, 'COMMA', 2, 'POINT')} + ' ' + ${salarySlip.currency}"></td>
+        </tr>
+        <tr class="total">
+            <td>Total Deductions</td>
+            <td th:text="${#numbers.formatDecimal(salarySlip.totalDeduction, 0, 'COMMA', 2, 'POINT')} + ' ' + ${salarySlip.currency}"></td>
+        </tr>
+        <tr class="total">
+            <td>Net Pay</td>
+            <td th:text="${#numbers.formatDecimal(salarySlip.netPay, 0, 'COMMA', 2, 'POINT')} + ' ' + ${salarySlip.currency}"></td>
+        </tr>
+        <tr>
+            <td>Amount in words:</td>
+            <td th:text="${salarySlip.totalInWords}"></td>
+        </tr>
+    </table>
+</body>
+</html>

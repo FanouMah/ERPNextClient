@@ -299,6 +299,11 @@
                           <button type="button" class="btn btn-outline-info btn-sm mb-0" data-bs-toggle="modal" data-bs-target="#exportPdfModal">
                             <span class="material-symbols-rounded align-middle">picture_as_pdf</span>
                           </button>
+                          <a th:href="@{'/salary-slip/pdf'(name=${salarySlip.name})}"
+                              class="btn btn-outline-info btn-sm mb-0">
+                              <span class="material-symbols-rounded align-middle">download</span>
+                          </a>
+                       
 
                           <!-- Modal -->
                           <div class="modal fade" id="exportPdfModal" tabindex="-1" aria-labelledby="exportPdfModalLabel" aria-hidden="true">
