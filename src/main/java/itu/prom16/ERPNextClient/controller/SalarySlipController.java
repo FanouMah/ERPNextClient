@@ -74,7 +74,7 @@ public class SalarySlipController {
             }
         }
 
-    @GetMapping("/salary-slip/new")
+    @GetMapping("/salary-slips/new")
     public String showSalarySlipForm(@CookieValue(value = "sid", required = false) String sid, Model model) {
         if (sid != null) {
             try {
@@ -87,13 +87,13 @@ public class SalarySlipController {
                 model.addAttribute("error", e.getMessage());
                 return "error-500";
             } 
-            return "new-salary-slip";
+            return "new-salary-slips";
         } else {
             return "redirect:/";
         }
     }
 
-    @PostMapping("/salary-slip/new")
+    @PostMapping("/salary-slips/new")
     public String createSalarySlip(
         @CookieValue(value = "sid", required = false) String sid, 
         Model model,
