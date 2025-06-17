@@ -4,7 +4,6 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -49,20 +48,19 @@ public class PaymentEntryService {
                 .build();
     
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-    
+            JsonNode root = mapper.readTree(response.body());
+
             if (response.statusCode() != 200) {
-                JsonNode root = mapper.readTree(response.body());
                 String excType = root.path("exc_type").asText();
                 if ("CSRFTokenError".equals(excType)) {
                     throw new CSRFTokenException("CSRF token error while updating Supplier Quotation Item: " + response.body());
                 }
                 throw new RuntimeException("Failed to create Payment Entry, HTTP status code: " + response.statusCode() + ", Response: " + response.body());
             }
-    
-            Map<String, Object> responseMap = mapper.readValue(response.body(), Map.class);
-            Object data = responseMap.get("data");
-            String dataJson = mapper.writeValueAsString(data);
-            return mapper.readValue(dataJson, PaymentEntryDTO.class);
+            
+            JsonNode dataNode = root.path("data");
+
+            return mapper.treeToValue(dataNode, PaymentEntryDTO.class);
     
         } catch (CSRFTokenException e) {
             throw e;
