@@ -28,16 +28,21 @@
         .info-section {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 20px;
+            margin-bottom: 2cm;
         }
         .employee-info, .salary-info {
             width: 48%;
+            float: left;
+        }
+        .salary-info {
+            float: right;
         }
         .section-title {
             font-weight: bold;
             background-color: #f0f0f0;
             padding: 5px 10px;
             margin: 15px 0 10px 0;
+            text-align: center;
         }
         table {
             width: 100%;
@@ -84,6 +89,10 @@
             text-align: center;
             padding-top: 5px;
         }
+
+        .prix {
+            text-align: right;
+        }
     </style>
 </head>
 <body>
@@ -116,12 +125,12 @@
                 <th>Amount (USD)</th>
             </tr>
             <tr th:each="earning : ${salarySlip.earnings}">
-                <td th:text="${earning.salary_component}"></td>
-                <td th:text="${#numbers.formatDecimal(earning.amount, 0, 'COMMA', 2, 'POINT')} + ' ' + ${salarySlip.currency}"></td>
+                <td th:text="${earning.salaryComponent}"></td>
+                <td class="prix" th:text="${#numbers.formatDecimal(earning.amount, 0, 'COMMA', 2, 'POINT')} + ' ' + ${salarySlip.currency}"></td>
             </tr>
             <tr class="total">
                 <td>Total Earnings</td>
-                <td th:text="${#numbers.formatDecimal(salarySlip.grossPay, 0, 'COMMA', 2, 'POINT')} + ' ' + ${salarySlip.currency}"></td>
+                <td class="prix" th:text="${#numbers.formatDecimal(salarySlip.grossPay, 0, 'COMMA', 2, 'POINT')} + ' ' + ${salarySlip.currency}"></td>
             </tr>
         </table>
     </div>
@@ -134,12 +143,12 @@
                 <th>Amount (USD)</th>
             </tr>
             <tr th:each="deduction : ${salarySlip.deductions}">
-                <td th:text="${deduction.salary_component}"></td>
-                <td th:text="${#numbers.formatDecimal(deduction.amount, 0, 'COMMA', 2, 'POINT')} + ' ' + ${salarySlip.currency}"></td>
+                <td th:text="${deduction.salaryComponent}"></td>
+                <td class="prix" th:text="${#numbers.formatDecimal(deduction.amount, 0, 'COMMA', 2, 'POINT')} + ' ' + ${salarySlip.currency}"></td>
             </tr>
             <tr class="total">
                 <td>Total Deductions</td>
-                <td th:text=" ${#numbers.formatDecimal(salarySlip.totalDeduction, 0, 'COMMA', 2, 'POINT')} + ' ' + ${salarySlip.currency}"></td>
+                <td class="prix" th:text=" ${#numbers.formatDecimal(salarySlip.totalDeduction, 0, 'COMMA', 2, 'POINT')} + ' ' + ${salarySlip.currency}"></td>
             </tr>
         </table>
     </div>
@@ -150,15 +159,19 @@
     <table>
         <tr class="total">
             <td>Gross Salary</td>
-            <td th:text="${#numbers.formatDecimal(salarySlip.grossPay, 0, 'COMMA', 2, 'POINT')} + ' ' + ${salarySlip.currency}"></td>
+            <td class="prix" th:text="${#numbers.formatDecimal(salarySlip.grossPay, 0, 'COMMA', 2, 'POINT')} + ' ' + ${salarySlip.currency}"></td>
         </tr>
         <tr class="total">
             <td>Total Deductions</td>
-            <td th:text="${#numbers.formatDecimal(salarySlip.totalDeduction, 0, 'COMMA', 2, 'POINT')} + ' ' + ${salarySlip.currency}"></td>
+            <td class="prix" th:text="${#numbers.formatDecimal(salarySlip.totalDeduction, 0, 'COMMA', 2, 'POINT')} + ' ' + ${salarySlip.currency}"></td>
         </tr>
         <tr class="total">
             <td>Net Pay</td>
-            <td th:text="${#numbers.formatDecimal(salarySlip.netPay, 0, 'COMMA', 2, 'POINT')} + ' ' + ${salarySlip.currency}"></td>
+            <td class="prix" th:text="${#numbers.formatDecimal(salarySlip.netPay, 0, 'COMMA', 2, 'POINT')} + ' ' + ${salarySlip.currency}"></td>
+        </tr>
+        <tr class="total">
+            <td>Rounded Total</td>
+            <td class="prix" th:text="${#numbers.formatDecimal(salarySlip.roundedTotal, 0, 'COMMA', 2, 'POINT')} + ' ' + ${salarySlip.currency}"></td>
         </tr>
         <tr>
             <td>Amount in words:</td>

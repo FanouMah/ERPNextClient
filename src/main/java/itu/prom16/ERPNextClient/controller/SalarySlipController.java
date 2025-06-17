@@ -1,17 +1,13 @@
 package itu.prom16.ERPNextClient.controller;
 
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Comparator;
 import java.util.Objects;
 import java.math.BigDecimal;
-import java.net.URLDecoder;
-import java.nio.charset.StandardCharsets;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -19,15 +15,22 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.ui.Model;
 
+import itu.prom16.ERPNextClient.DTO.EmployeeDTO;
 import itu.prom16.ERPNextClient.DTO.SalarySlipDTO;
+import itu.prom16.ERPNextClient.DTO.SalaryStructureAssignmentDTO;
 import itu.prom16.ERPNextClient.exception.CSRFTokenException;
+import itu.prom16.ERPNextClient.exception.ValidationException;
 import itu.prom16.ERPNextClient.model.SalarySlipsMonth;
+import itu.prom16.ERPNextClient.service.EmployeeService;
 import itu.prom16.ERPNextClient.service.PDFGeneratorService;
 import itu.prom16.ERPNextClient.service.SalarySlipService;
+import itu.prom16.ERPNextClient.service.SalaryStructureAssignmentService;
+import itu.prom16.ERPNextClient.utils.Tools;
 
 /**
  *
@@ -40,6 +43,12 @@ public class SalarySlipController {
 
     @Autowired
     private PDFGeneratorService pdfGeneratorService;
+
+    @Autowired
+    private EmployeeService employeeService;
+
+    @Autowired
+    private SalaryStructureAssignmentService salaryStructureAssignmentService;
     
     @GetMapping(value = "/salary-slip/pdf", produces = MediaType.APPLICATION_PDF_VALUE)
     public ResponseEntity<byte[]> getPayslipPDF(
@@ -65,6 +74,112 @@ public class SalarySlipController {
             }
         }
 
+    @GetMapping("/salary-slip/new")
+    public String showSalarySlipForm(@CookieValue(value = "sid", required = false) String sid, Model model) {
+        if (sid != null) {
+            try {
+                List<EmployeeDTO> employees = employeeService.getEmployees(sid);
+                model.addAttribute("employees", employees);
+            } catch (CSRFTokenException ex) {
+                return "redirect:/logout";
+            } catch (RuntimeException e) {
+                model.addAttribute("code", "500");
+                model.addAttribute("error", e.getMessage());
+                return "error-500";
+            } 
+            return "new-salary-slip";
+        } else {
+            return "redirect:/";
+        }
+    }
+
+    @PostMapping("/salary-slip/new")
+    public String createSalarySlip(
+        @CookieValue(value = "sid", required = false) String sid, 
+        Model model,
+        RedirectAttributes redirectAttributes,
+        @RequestParam(value = "employee", required = true) String employee,
+        @RequestParam(value = "base", required = false) Double base,
+        @RequestParam(value = "start-month", required = true) String startMonth,
+        @RequestParam(value = "end-month", required = true) String endMonth) throws Exception {
+
+        if (sid != null) {
+            try {
+                List<String> postigDates = Tools.StartMonthsBetweenTwoMonth(startMonth, endMonth);
+                List<String> errors = new ArrayList<>();
+                List<String> success = new ArrayList<>();
+                int createdDocuments = 0;
+                int createdSSA = 0;
+                int createdSS = 0;
+                for (String postingDate : postigDates) {
+
+                    SalarySlipDTO ss = new SalarySlipDTO();
+                    ss.setEmployee(employee);
+                    ss.setPayrollFrequency("Monthly");
+                    ss.setPostingDate(LocalDate.parse(postingDate));
+
+                    if (base != null) {
+                        SalaryStructureAssignmentDTO ssa = new SalaryStructureAssignmentDTO();
+                        ssa.setEmployee(employee);
+                        ssa.setBase(base);
+                        ssa.setFromDate(LocalDate.parse(postingDate));
+                        ssa.setSalaryStructure("g1");
+
+                        try {
+                            ssa = salaryStructureAssignmentService.createSalaryStructureAssignment(sid, ssa);
+                            try {
+                                ssa = salaryStructureAssignmentService.submitSSA(sid, ssa.getName());
+                                createdDocuments ++;
+                                createdSSA ++;
+                            } catch (ValidationException e) {
+                                salaryStructureAssignmentService.deleteSSSA(sid, ssa.getName());
+                                errors.add(ss.getPostingDate().getMonth() + " " + ss.getPostingDate().getYear() + " : " + e.getMessage());
+                                continue;
+                            }
+                        } catch (ValidationException e) {
+                            errors.add(ss.getPostingDate().getMonth() + " " + ss.getPostingDate().getYear() + " : " + e.getMessage());
+                            continue;
+                        }
+                    }
+
+                    try {
+                        ss =  salarySlipService.createSalarySlip(sid, ss);
+                        try {
+                            ss = salarySlipService.submitSalarySlip(sid, ss.getName());
+                            createdDocuments ++;
+                            createdSS ++;
+                        } catch (ValidationException e) {
+                            salarySlipService.deleteSalarySlip(sid, ss.getName());
+                            errors.add(ss.getPostingDate().getMonth() + " " + ss.getPostingDate().getYear() + " : " + e.getMessage());
+                            continue;
+                        }
+                    } catch (Exception e) {
+                        errors.add(ss.getPostingDate().getMonth() + " " + ss.getPostingDate().getYear() + " : " + e.getMessage());
+                        continue;
+                    }
+                    success.add(ss.getPostingDate().getMonth() + " " + ss.getPostingDate().getYear());
+                }
+                redirectAttributes.addFlashAttribute("success",String.join(", ", success));
+                redirectAttributes.addFlashAttribute("errors", errors);
+                redirectAttributes.addFlashAttribute("createdDocuments", createdDocuments);
+                redirectAttributes.addFlashAttribute("createdSSA", createdSSA);
+                redirectAttributes.addFlashAttribute("createdSS", createdSS);
+            } catch (CSRFTokenException ex) {
+                return "redirect:/logout";
+            } catch (ValidationException ve) {
+                redirectAttributes.addFlashAttribute("error", ve.getMessage());
+                return "redirect:/salary-slip/new";
+            } catch (RuntimeException e) {
+                model.addAttribute("code", "500");
+                model.addAttribute("error", e.getMessage());
+                return "error-500";
+            }
+            return "redirect:/salary-slip/new";
+        } else {
+            return "redirect:/";
+        }
+    }
+    
     @GetMapping("/salary-slips")
     public String showSalarySlips(
         @CookieValue(value = "sid", required = false) String sid,

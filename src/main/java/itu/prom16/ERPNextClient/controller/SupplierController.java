@@ -103,7 +103,7 @@ public class SupplierController {
                 supplierQuotationservice.updateSupplierQuotationItem(sid, itemName.get(i), qty.get(i), rate.get(i));
             }
             SupplierQuotationDTO sq = supplierQuotationservice.submitSupplierQuotation(sid, supplierQuotationName);
-            PurchaseOrderDTO po = purchaseOrderService.createPurchaseOrder(sid, sq);
+            purchaseOrderService.createPurchaseOrder(sid, sq);
 
             redirectAttributes.addFlashAttribute("success", "Supplier Quotation updated and submitted successfully.");
         } catch (CSRFTokenException ex) {

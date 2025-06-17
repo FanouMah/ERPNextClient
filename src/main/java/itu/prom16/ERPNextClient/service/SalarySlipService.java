@@ -21,6 +21,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import itu.prom16.ERPNextClient.DTO.SalarySlipDTO;
 import itu.prom16.ERPNextClient.exception.CSRFTokenException;
+import itu.prom16.ERPNextClient.exception.ValidationException;
 
 /**
  *
@@ -30,6 +31,141 @@ import itu.prom16.ERPNextClient.exception.CSRFTokenException;
 public class SalarySlipService {
     @Value("${erpnext.api.base-url}")
     private String baseUrl;
+
+    public void deleteSalarySlip(String sid, String name) {
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            objectMapper.registerModule(new JavaTimeModule());
+            objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+            objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
+            String url = baseUrl + "/api/resource/Salary%20Slip/" + URLEncoder.encode(name, StandardCharsets.UTF_8).replace("+", "%20");
+
+            HttpClient httpClient = HttpClient.newHttpClient();
+
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(url))
+                    .header("Content-Type", "application/json")
+                    .header("Cookie", "sid=" + sid)
+                    .DELETE()
+                    .build();
+
+            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+            if (response.statusCode() != 202) {
+                JsonNode root = objectMapper.readTree(response.body());
+                String excType = root.path("exc_type").asText();
+                if ("CSRFTokenError".equals(excType)) {
+                    throw new CSRFTokenException("CSRF token error while deleting Salary Slip : " + response.body());
+                }
+                if ("ValidationError".equals(excType)) {
+                    String message = root.path("exception").asText();
+                    if (message != null && !message.isEmpty()) {
+                        throw new ValidationException("Error while deleting Salary Slip: " + message);
+                    }
+                }
+                throw new RuntimeException("Failed to delete Salary Slip, HTTP status code: " + response.statusCode() + " - " + response.body());
+            }
+
+        } catch (CSRFTokenException | ValidationException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to delete Salary Slip : " + e.getMessage(), e);
+        }
+    }
+
+    public SalarySlipDTO submitSalarySlip(String sid, String name) {
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            objectMapper.registerModule(new JavaTimeModule());
+            objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+            objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
+            String url = baseUrl + "/api/resource/Salary%20Slip/" + URLEncoder.encode(name, StandardCharsets.UTF_8).replace("+", "%20") + "?run_method=submit";
+
+            HttpClient httpClient = HttpClient.newHttpClient();
+
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(url))
+                    .header("Content-Type", "application/json")
+                    .header("Cookie", "sid=" + sid)
+                    .POST(HttpRequest.BodyPublishers.noBody())
+                    .build();
+
+            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+            if (response.statusCode() != 200) {
+                JsonNode root = objectMapper.readTree(response.body());
+                String excType = root.path("exc_type").asText();
+                if ("CSRFTokenError".equals(excType)) {
+                    throw new CSRFTokenException("CSRF token error while submitting Salary Slip : " + response.body());
+                }
+                if ("ValidationError".equals(excType)) {
+                    String message = root.path("exception").asText();
+                    if (message != null && !message.isEmpty()) {
+                        throw new ValidationException("Error while submitting Salary Slip: " + message);
+                    }
+                }
+                throw new RuntimeException("Failed to submit Salary Slip, HTTP status code: " + response.statusCode() + " - " + response.body());
+            }
+
+            JsonNode root = objectMapper.readTree(response.body());
+            JsonNode dataNode = root.path("data");
+
+            return objectMapper.treeToValue(dataNode, SalarySlipDTO.class);
+
+        } catch (CSRFTokenException | ValidationException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to submit Salary Slip : " + e.getMessage(), e);
+        }
+    }
+
+    public SalarySlipDTO createSalarySlip(String sid, SalarySlipDTO salarySlip) {
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            objectMapper.registerModule(new JavaTimeModule());
+            objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+            objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
+            String url = baseUrl + "/api/resource/Salary%20Slip";
+
+            HttpClient httpClient = HttpClient.newHttpClient();
+
+            String requestBody = objectMapper.writeValueAsString(salarySlip);
+
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(url))
+                    .header("Content-Type", "application/json")
+                    .header("Cookie", "sid=" + sid)
+                    .POST(HttpRequest.BodyPublishers.ofString(requestBody))
+                    .build();
+
+            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+            JsonNode root = objectMapper.readTree(response.body());
+
+            if (response.statusCode() != 200) {
+                String excType = root.path("exc_type").asText();
+                if ("CSRFTokenError".equals(excType)) {
+                    throw new CSRFTokenException("CSRF token error while creating Salary Slip : " + response.body());
+                }
+                if ("ValidationError".equals(excType)) {
+                    String message = root.path("exception").asText();
+                    if (message != null && !message.isEmpty()) {
+                        throw new ValidationException("Error while creating Salary Slip: " + message);
+                    }
+                }
+                throw new RuntimeException("Failed to create Salary Slip, HTTP status code: " + response.statusCode() + " - " + response.body());
+            }
+
+            JsonNode dataNode = root.path("data");
+
+            return objectMapper.treeToValue(dataNode, SalarySlipDTO.class);
+
+        } catch (CSRFTokenException | ValidationException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to create Salary Slip : " + e.getMessage(), e);
+        } 
+    }
 
     public List<String> getSalarySlipPrintFormat(String sid) {
         try {
@@ -88,6 +224,7 @@ public class SalarySlipService {
             String url = baseUrl + "/api/resource/Salary%20Slip"
                     + "?filters=" + filters
                     + "&fields=" + fieldsParam
+                    + "&order_by=posting_date%20asc"
                     + "&limit_page_length=none";
 
             HttpClient httpClient = HttpClient.newHttpClient();
