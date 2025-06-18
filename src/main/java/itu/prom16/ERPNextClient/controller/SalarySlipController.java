@@ -74,6 +74,24 @@ public class SalarySlipController {
             }
         }
 
+    @GetMapping("/salary-slips/update")
+    public String showUpdateSalarySlipForm(
+        @CookieValue(value = "sid", required = false) String sid, Model model) {
+        if (sid != null) {
+            try {
+            } catch (CSRFTokenException ex) {
+                return "redirect:/logout";
+            } catch (RuntimeException e) {
+                model.addAttribute("code", "500");
+                model.addAttribute("error", e.getMessage());
+                return "error-500";
+            }
+            return "update-salary-slips";
+        } else {
+            return "redirect:/";
+        }
+    }
+
     @GetMapping("/salary-slips/new")
     public String showSalarySlipForm(@CookieValue(value = "sid", required = false) String sid, Model model) {
         if (sid != null) {
