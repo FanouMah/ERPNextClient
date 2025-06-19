@@ -146,8 +146,7 @@ public class SalarySlipController {
                         ssa.setEmployee(employee);
                         ssa.setBase(base);
                         ssa.setFromDate(LocalDate.parse(postingDate));
-                        SalaryStructureDTO salStruct = salaryStructureService.getSalaryStructure(sid);
-                        ssa.setSalaryStructure(salStruct.getName());
+                        ssa.setSalaryStructure(salaryStructureService.getSalaryStructureName(sid));
 
                         try {
                             ssa = salaryStructureAssignmentService.createSalaryStructureAssignment(sid, ssa);
