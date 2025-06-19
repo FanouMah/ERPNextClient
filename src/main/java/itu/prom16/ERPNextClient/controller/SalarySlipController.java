@@ -21,6 +21,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.ui.Model;
 
 import itu.prom16.ERPNextClient.DTO.EmployeeDTO;
+import itu.prom16.ERPNextClient.DTO.SalaryDetailDTO;
 import itu.prom16.ERPNextClient.DTO.SalarySlipDTO;
 import itu.prom16.ERPNextClient.DTO.SalaryStructureAssignmentDTO;
 import itu.prom16.ERPNextClient.DTO.SalaryStructureDTO;
@@ -84,6 +85,11 @@ public class SalarySlipController {
         @CookieValue(value = "sid", required = false) String sid, Model model) {
         if (sid != null) {
             try {
+                SalaryStructureDTO salaryStructure = salaryStructureService.getSalaryStructure(sid);
+                List<SalaryDetailDTO> salaryDetails = salaryStructure.getEarnings();
+                salaryDetails.addAll(salaryStructure.getDeductions());
+                
+                model.addAttribute("salaryDetails", salaryDetails);
             } catch (CSRFTokenException ex) {
                 return "redirect:/logout";
             } catch (RuntimeException e) {
@@ -92,6 +98,130 @@ public class SalarySlipController {
                 return "error-500";
             }
             return "update-salary-slips";
+        } else {
+            return "redirect:/";
+        }
+    }
+
+    @PostMapping("/salary-slips/update")
+    public String updateSalarySlip(
+            @CookieValue(value = "sid", required = false) String sid, 
+            Model model,
+            RedirectAttributes redirectAttributes,
+            @RequestParam(value = "salaryElement", required = true) String salaryElement,
+            @RequestParam(value = "signeSalaryElement", required = true) String signeSalaryElement,
+            @RequestParam(value = "amountSalaryElement", required = true) Double amountSalaryElement,
+            @RequestParam(value = "signeBase", required = true) String signeBase,
+            @RequestParam(value = "pourcentageBase", required = true) Double pourcentageBase) {
+        
+        if (sid != null) {
+            try {
+                String abbrSalaryElement = salaryElement.split(";")[0]; 
+                String typeSalaryElement = salaryElement.split(";")[1]; 
+
+                // List<SalarySlipDTO> salarySlips = new ArrayList<>();
+
+                // for (SalarySlipDTO ss : salarySlipService.getSalarySlips(sid)) {
+                //     SalaryDetailDTO salaryDetail = null;
+                //     if (typeSalaryElement.equals("earnings")) {
+                //         for (SalaryDetailDTO sd : ss.getEarnings()) {
+                //             if (sd.getAbbr().equals(abbrSalaryElement)) {
+                //                 salaryDetail = sd;
+                //             }
+                //         }
+                //     } else if (typeSalaryElement.equals("deductions")) {
+                //         for (SalaryDetailDTO sd : ss.getDeductions()) {
+                //             if (sd.getAbbr().equals(abbrSalaryElement)) {
+                //                 salaryDetail = sd;
+                //             }
+                //         }
+                //     } 
+
+                //     if (salaryDetail != null) {
+                //         if (signeSalaryElement.equals("inf")) {
+                //             if (salaryDetail.getAmount() < amountSalaryElement) {
+                //                 salarySlips.add(ss);
+                //             }
+                //         } else if (signeSalaryElement.equals("sup")) {
+                //             if (salaryDetail.getAmount() > amountSalaryElement) {
+                //                 salarySlips.add(ss);
+                //             }
+                //         }
+                //     }
+                // }
+
+                List<SalarySlipDTO> salarySlips = salarySlipService.getSalarySlips(sid).stream()
+                    .filter(ss -> {
+                        List<SalaryDetailDTO> details = typeSalaryElement.equals("earnings") ? ss.getEarnings() : ss.getDeductions();
+                        return details.stream()
+                            .filter(sd -> sd.getAbbr().equals(abbrSalaryElement))
+                            .anyMatch(sd -> 
+                                ("inf".equals(signeSalaryElement) && sd.getAmount() < amountSalaryElement) ||
+                                ("sup".equals(signeSalaryElement) && sd.getAmount() > amountSalaryElement)
+                            );
+                    })
+                    .collect(Collectors.toList());
+                
+                if (salarySlips.isEmpty()) {
+                    throw new ValidationException("No Salary Found");
+                }
+
+                int salaryUpdated = 0;
+
+                for (SalarySlipDTO salarySlip : salarySlips) {
+                    //cancel salary assignment by employee and date
+                    SalaryStructureAssignmentDTO ssa = salaryStructureAssignmentService.cancelSSAtByEmployeeAndfromDate(sid, salarySlip.getEmployee(), salarySlip.getPostingDate().toString());
+                    if (ssa == null) {
+                        throw new ValidationException("No Salary Structure Assignment Found for " + salarySlip.getEmployee() + " on " + salarySlip.getPostingDate());   
+                    }
+
+                    //create salary assignment with new base
+                    SalaryStructureAssignmentDTO newSsa = new SalaryStructureAssignmentDTO();
+                    newSsa.setAmendedFrom(ssa.getName());
+                    newSsa.setEmployee(ssa.getEmployee());
+                    newSsa.setSalaryStructure(ssa.getSalaryStructure());
+                    newSsa.setFromDate(ssa.getFromDate());
+                    newSsa.setCompany(ssa.getCompany());
+                    newSsa.setPayrollPayableAccount(ssa.getPayrollPayableAccount());
+                    Double ratioBase = ssa.getBase() * pourcentageBase / 100;
+                    if (signeBase.equals("plus")) {
+                        newSsa.setBase(ssa.getBase() + ratioBase);
+                    } else if (signeBase.equals("moins")) {
+                        newSsa.setBase(ssa.getBase() - ratioBase);
+                    } 
+                    
+                    newSsa = salaryStructureAssignmentService.createSalaryStructureAssignment(sid, newSsa);
+                    newSsa = salaryStructureAssignmentService.submitSSA(sid, newSsa.getName());
+
+                    //cancel salary slip by name
+                    salarySlip = salarySlipService.cancelSalarySlip(sid, salarySlip.getName());
+
+                    //create salary slip
+                    SalarySlipDTO ss = new SalarySlipDTO();
+                    ss.setEmployee(salarySlip.getEmployee());
+                    ss.setPayrollFrequency("Monthly");
+                    ss.setPostingDate(salarySlip.getPostingDate());
+                    ss.setAmendedFrom(salarySlip.getName());
+
+                    ss = salarySlipService.createSalarySlip(sid, ss);
+                    ss = salarySlipService.submitSalarySlip(sid, ss.getName());
+
+                    salaryUpdated++;
+                }
+
+                redirectAttributes.addFlashAttribute("success", salaryUpdated);
+
+            } catch (CSRFTokenException ex) {
+                return "redirect:/logout";
+            } catch (ValidationException ve) {
+                redirectAttributes.addFlashAttribute("error", ve.getMessage());
+                return "redirect:/salary-slips/update";
+            } catch (RuntimeException e) {
+                model.addAttribute("code", "500");
+                model.addAttribute("error", e.getMessage());
+                return "error-500";
+            }
+            return "redirect:/salary-slips/update";
         } else {
             return "redirect:/";
         }

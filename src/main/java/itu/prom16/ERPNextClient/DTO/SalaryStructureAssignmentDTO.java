@@ -71,6 +71,9 @@ public class SalaryStructureAssignmentDTO {
     @JsonProperty("tax_deducted_till_date")
     private double taxDeductedTillDate;
 
+    @JsonProperty("amended_from")
+    private String amendedFrom;
+
     public SalaryStructureAssignmentDTO() {}
 
     public SalaryStructureAssignmentDTO(String name, String owner, LocalDateTime creation, LocalDateTime modified,
@@ -151,5 +154,7 @@ public class SalaryStructureAssignmentDTO {
     public double getTaxDeductedTillDate() { return taxDeductedTillDate; }
     public void setTaxDeductedTillDate(double taxDeductedTillDate) { this.taxDeductedTillDate = taxDeductedTillDate; }
 
+    public String getAmendedFrom() { return amendedFrom; }
+    public void setAmendedFrom(String amendedFrom) { this.amendedFrom = amendedFrom; }
 
 }

@@ -259,6 +259,90 @@ public class SalaryStructureAssignmentService {
         }
     }
 
+    public SalaryStructureAssignmentDTO cancelSSAtByEmployeeAndfromDate(String sid, String employee, String fromDate) {
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            objectMapper.registerModule(new JavaTimeModule());
+            objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+            objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
+            String filters = URLEncoder.encode("[[\"employee\",\"=\",\"" + employee + "\"],[\"from_date\",\"=\",\"" + fromDate + "\"],[\"docstatus\",\"=\",\"1\"]]", StandardCharsets.UTF_8);
+            String url = baseUrl + "/api/resource/Salary%20Structure%20Assignment" + "?filters=" + filters;
+
+            HttpClient httpClient = HttpClient.newHttpClient();
+
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(url))
+                    .header("Cookie", "sid=" + sid)
+                    .GET()
+                    .build();
+
+            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+            if (response.statusCode() != 200) {
+                JsonNode root = objectMapper.readTree(response.body());
+                String excType = root.path("exc_type").asText();
+                if ("CSRFTokenError".equals(excType)) {
+                    throw new CSRFTokenException("CSRF token error while retrieving Salary Structure Assignment : " + response.body());
+                }
+                throw new RuntimeException("Failed to fetch Salary Structure Assignment, HTTP status code: " + response.statusCode() + " - " + response.body());
+            }
+
+            JsonNode root = objectMapper.readTree(response.body());
+            JsonNode dataNode = root.path("data");
+
+            if (!dataNode.isArray() || dataNode.isEmpty()) {
+                return null;
+            } else {
+                String name = dataNode.get(0).path("name").asText();
+                return cancelSalaryStructureAssignment(sid, name);
+            }
+
+        } catch (CSRFTokenException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to cancel Salary Structure Assignment : " + e.getMessage(), e);
+        }
+    }
+
+    public SalaryStructureAssignmentDTO cancelSalaryStructureAssignment(String sid, String name) {
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            objectMapper.registerModule(new JavaTimeModule());
+            objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+            objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
+            String url = baseUrl + "/api/resource/Salary%20Structure%20Assignment/" + URLEncoder.encode(name, StandardCharsets.UTF_8) + "?run_method=cancel";
+
+            HttpClient httpClient = HttpClient.newHttpClient();
+
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(url))
+                    .header("Content-Type", "application/json")
+                    .header("Cookie", "sid=" + sid)
+                    .POST(HttpRequest.BodyPublishers.noBody())
+                    .build();
+
+            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+            if (response.statusCode() != 200) {
+                JsonNode root = objectMapper.readTree(response.body());
+                String excType = root.path("exc_type").asText();
+                if ("CSRFTokenError".equals(excType)) {
+                    throw new CSRFTokenException("CSRF token error while cancelling Salary Structure Assignment: " + response.body());
+                }
+                throw new RuntimeException("Failed to cancel Salary Structure Assignment, HTTP status code: " + response.statusCode() + " - " + response.body());
+            }
+
+            JsonNode root = objectMapper.readTree(response.body());
+            JsonNode dataNode = root.path("data");
+
+            return objectMapper.treeToValue(dataNode, SalaryStructureAssignmentDTO.class);
+        } catch (CSRFTokenException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to cancel Salary Structure Assignment: " + e.getMessage(), e);
+        }
+    }
+
     public SalaryStructureAssignmentDTO getLastSalaryStructureAssignmentByEmployee(String sid, String employee) {
         try {
             ObjectMapper objectMapper = new ObjectMapper();

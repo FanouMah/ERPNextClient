@@ -218,7 +218,7 @@ public class SalarySlipService {
     public List<SalarySlipDTO> getSalarySlipsByEmployee(String sid, String employee) {
         try {
             ObjectMapper objectMapper = new ObjectMapper();
-            String filters = URLEncoder.encode("[[\"employee\",\"=\",\"" + employee + "\"]]", StandardCharsets.UTF_8);
+            String filters = URLEncoder.encode("[[\"employee\",\"=\",\"" + employee + "\"],[\"status\",\"=\",\"Submitted\"]]", StandardCharsets.UTF_8);
             String fieldsParam = URLEncoder.encode("[\"name\", \"employee\"]", StandardCharsets.UTF_8.toString());
 
             String url = baseUrl + "/api/resource/Salary%20Slip"
@@ -313,7 +313,10 @@ public class SalarySlipService {
         try {
             ObjectMapper objectMapper = new ObjectMapper();
 
-            String url = baseUrl + "/api/resource/Salary%20Slip?limit_page_length=none";
+            String filters = URLEncoder.encode("[[\"status\",\"=\",\"Submitted\"]]", StandardCharsets.UTF_8);
+
+            String url = baseUrl + "/api/resource/Salary%20Slip?limit_page_length=none&filters=" + filters
+                    + "&order_by=posting_date%20asc";
 
             HttpClient httpClient = HttpClient.newHttpClient();
 
@@ -377,7 +380,8 @@ public class SalarySlipService {
             String toDate = String.format("%04d-%02d-%02d", year, month, lastDay);
 
             // Frappe expects a "between" filter for dates as: ["between", ["YYYY-MM-01", "YYYY-MM-last"]]
-            String filter = String.format("{\"posting_date\":[\"between\",[\"%s\",\"%s\"]]}", fromDate, toDate);
+            // Add status = Submitted filter in addition to posting_date between
+            String filter = String.format("{\"posting_date\":[\"between\",[\"%s\",\"%s\"]],\"status\":\"Submitted\"}", fromDate, toDate);
             String filtersParam = URLEncoder.encode(filter, StandardCharsets.UTF_8.toString());
             String fieldsParam = URLEncoder.encode("[\"name\", \"posting_date\"]", StandardCharsets.UTF_8.toString());
 
@@ -492,5 +496,45 @@ public class SalarySlipService {
         } catch (Exception e) {
             throw new RuntimeException("Failed to fetch SalarySlips by year " + filterYear + " : " + e.getMessage(), e);
         }
-    }    
+    }  
+    
+    public SalarySlipDTO cancelSalarySlip(String sid, String name) {
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            objectMapper.registerModule(new JavaTimeModule());
+            objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+            objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
+            String url = baseUrl + "/api/resource/Salary%20Slip/" + URLEncoder.encode(name, StandardCharsets.UTF_8).replace("+", "%20") + "?run_method=cancel";
+
+            HttpClient httpClient = HttpClient.newHttpClient();
+
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(url))
+                    .header("Content-Type", "application/json")
+                    .header("Cookie", "sid=" + sid)
+                    .POST(HttpRequest.BodyPublishers.noBody())
+                    .build();
+
+            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+            if (response.statusCode() != 200) {
+                JsonNode root = objectMapper.readTree(response.body());
+                String excType = root.path("exc_type").asText();
+                if ("CSRFTokenError".equals(excType)) {
+                    throw new CSRFTokenException("CSRF token error while cancelling Salary Slip : " + response.body());
+                }
+                throw new RuntimeException("Failed to cancel Salary Slip, HTTP status code: " + response.statusCode() + " - " + response.body());
+            }
+
+            JsonNode root = objectMapper.readTree(response.body());
+            JsonNode dataNode = root.path("data");
+
+            return objectMapper.treeToValue(dataNode, SalarySlipDTO.class);
+
+        } catch (CSRFTokenException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to cancel Salary Slip : " + e.getMessage(), e);
+        }
+    }
 }

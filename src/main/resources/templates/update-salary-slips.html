@@ -193,7 +193,7 @@
                         <div class="col-md-4">
                             <div class="input-group input-group-static mb-4">
                                 <select class="form-control" name="salaryElement" required>
-                                    <option value="">element</option>
+                                    <option th:each="salaryDetail : ${salaryDetails}" th:value="${salaryDetail.abbr}+';'+${salaryDetail.parentfield}" th:text="${salaryDetail.salaryComponent} + ' - ' + ${salaryDetail.parentfield}"></option>
                                 </select>
                             </div>
                         </div>
@@ -235,48 +235,21 @@
         </div>
       </div>
       <div th:if="${success}">
-        <div class="modal fade show" id="modal-updateSS-success" tabindex="-1" role="dialog" aria-labelledby="modal-updateSS-success" aria-modal="true" style="display: block; background: rgba(0,0,0,0.3);">
+        <div class="modal fade show" id="modal-createSS-success" tabindex="-1" role="dialog" aria-labelledby="modal-createSS-success" aria-modal="true" style="display: block; background: rgba(0,0,0,0.3);">
           <div class="modal-dialog modal-success modal-dialog" role="document">
             <div class="modal-content">
               <div class="modal-header">
                 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded" rel="stylesheet" />
                 <span class="material-symbols-rounded text-success me-1">check_circle</span>
-                <h6 class="modal-title font-weight-normal" id="modal-title-updateSS-success">Update Salary Slips successfully</h6>
+                <h6 class="modal-title font-weight-normal" id="modal-title-createSS-success">Salary Slip(s) updated successfully.</h6>
               </div>
               <div class="modal-body">
                 <div class="py-2">
                   <div>
                     <p class="small mb-1">
-                      <b>Month :</b>
+                      <b>Salary Slips updated :</b>
                       <span th:text="${success}">0</span>
                     </p>
-                    <p class="small mb-1">
-                      <b>Doctype created:</b>
-                      <span th:text="${createdDocuments}">0</span>
-                    </p>
-                    <p class="small mb-1">
-                      <b>Doctype canceled:</b>
-                      <span th:text="${createdDocuments}">0</span>
-                    </p>
-                    <p class="small mb-1">
-                      <b>Salary Structure Assignment created:</b>
-                      <span th:text="${createdSSA}">0</span>/<span th:text="${createdDocuments}">0</span>
-                    </p>
-                    <p class="small mb-1">
-                      <b>Salary Slip created:</b>
-                      <span th:text="${createdSS}">0</span>/<span th:text="${createdDocuments}">0</span>
-                    </p>
-                    <div th:if="${errors.size > 0}" class="alert alert-warning small mt-2">
-                      <strong>
-                        <span th:text="${errors.size}">0</span>
-                        minor errors occurred :
-                      </strong>
-                      <div style="max-height: 200px; overflow-y: auto; background: #fff8e6; padding: 10px; margin-top: 5px; border-radius: 3px;">
-                        <div th:each="err : ${errors}">
-                          <div class="text-muted small" style="font-family: monospace; word-break: break-word; padding: 3px 0; border-bottom: 1px solid #ffe8b8;" th:text="${err}"></div>
-                        </div>
-                      </div>
-                    </div>
                   </div>
                 </div>
               </div>
