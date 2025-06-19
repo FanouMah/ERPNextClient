@@ -86,10 +86,11 @@ public class SalarySlipController {
         if (sid != null) {
             try {
                 SalaryStructureDTO salaryStructure = salaryStructureService.getSalaryStructure(sid);
-                List<SalaryDetailDTO> salaryDetails = salaryStructure.getEarnings();
-                salaryDetails.addAll(salaryStructure.getDeductions());
-                
-                model.addAttribute("salaryDetails", salaryDetails);
+                if (salaryStructure != null) {
+                    List<SalaryDetailDTO> salaryDetails = salaryStructure.getEarnings();
+                    salaryDetails.addAll(salaryStructure.getDeductions());
+                    model.addAttribute("salaryDetails", salaryDetails);
+                }
             } catch (CSRFTokenException ex) {
                 return "redirect:/logout";
             } catch (RuntimeException e) {

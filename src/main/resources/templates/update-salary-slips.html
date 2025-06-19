@@ -193,6 +193,7 @@
                         <div class="col-md-4">
                             <div class="input-group input-group-static mb-4">
                                 <select class="form-control" name="salaryElement" required>
+                                    <option th:if="!${salaryDetails}" value="" disabled selected>No Salary Element available</option>
                                     <option th:each="salaryDetail : ${salaryDetails}" th:value="${salaryDetail.abbr}+';'+${salaryDetail.parentfield}" th:text="${salaryDetail.salaryComponent} + ' - ' + ${salaryDetail.parentfield}"></option>
                                 </select>
                             </div>
