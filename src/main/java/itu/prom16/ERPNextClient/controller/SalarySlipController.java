@@ -160,18 +160,13 @@ public class SalarySlipController {
                         }
                     }
 
+                    ss =  salarySlipService.createSalarySlip(sid, ss);
                     try {
-                        ss =  salarySlipService.createSalarySlip(sid, ss);
-                        try {
-                            ss = salarySlipService.submitSalarySlip(sid, ss.getName());
-                            createdDocuments ++;
-                            createdSS ++;
-                        } catch (ValidationException e) {
-                            salarySlipService.deleteSalarySlip(sid, ss.getName());
-                            errors.add(ss.getPostingDate().getMonth() + " " + ss.getPostingDate().getYear() + " : " + e.getMessage());
-                            continue;
-                        }
-                    } catch (Exception e) {
+                        ss = salarySlipService.submitSalarySlip(sid, ss.getName());
+                        createdDocuments ++;
+                        createdSS ++;
+                    } catch (ValidationException e) {
+                        salarySlipService.deleteSalarySlip(sid, ss.getName());
                         errors.add(ss.getPostingDate().getMonth() + " " + ss.getPostingDate().getYear() + " : " + e.getMessage());
                         continue;
                     }
@@ -186,13 +181,13 @@ public class SalarySlipController {
                 return "redirect:/logout";
             } catch (ValidationException ve) {
                 redirectAttributes.addFlashAttribute("error", ve.getMessage());
-                return "redirect:/salary-slip/new";
+                return "redirect:/salary-slips/new";
             } catch (RuntimeException e) {
                 model.addAttribute("code", "500");
                 model.addAttribute("error", e.getMessage());
                 return "error-500";
             }
-            return "redirect:/salary-slip/new";
+            return "redirect:/salary-slips/new";
         } else {
             return "redirect:/";
         }
