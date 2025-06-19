@@ -23,6 +23,7 @@ import org.springframework.ui.Model;
 import itu.prom16.ERPNextClient.DTO.EmployeeDTO;
 import itu.prom16.ERPNextClient.DTO.SalarySlipDTO;
 import itu.prom16.ERPNextClient.DTO.SalaryStructureAssignmentDTO;
+import itu.prom16.ERPNextClient.DTO.SalaryStructureDTO;
 import itu.prom16.ERPNextClient.exception.CSRFTokenException;
 import itu.prom16.ERPNextClient.exception.ValidationException;
 import itu.prom16.ERPNextClient.model.SalarySlipsMonth;
@@ -30,6 +31,7 @@ import itu.prom16.ERPNextClient.service.EmployeeService;
 import itu.prom16.ERPNextClient.service.PDFGeneratorService;
 import itu.prom16.ERPNextClient.service.SalarySlipService;
 import itu.prom16.ERPNextClient.service.SalaryStructureAssignmentService;
+import itu.prom16.ERPNextClient.service.SalaryStructureService;
 import itu.prom16.ERPNextClient.utils.Tools;
 
 /**
@@ -49,6 +51,9 @@ public class SalarySlipController {
 
     @Autowired
     private SalaryStructureAssignmentService salaryStructureAssignmentService;
+
+    @Autowired
+    private SalaryStructureService salaryStructureService;    
     
     @GetMapping(value = "/salary-slip/pdf", produces = MediaType.APPLICATION_PDF_VALUE)
     public ResponseEntity<byte[]> getPayslipPDF(
@@ -141,7 +146,8 @@ public class SalarySlipController {
                         ssa.setEmployee(employee);
                         ssa.setBase(base);
                         ssa.setFromDate(LocalDate.parse(postingDate));
-                        ssa.setSalaryStructure("g1");
+                        SalaryStructureDTO salStruct = salaryStructureService.getSalaryStructure(sid);
+                        ssa.setSalaryStructure(salStruct.getName());
 
                         try {
                             ssa = salaryStructureAssignmentService.createSalaryStructureAssignment(sid, ssa);
