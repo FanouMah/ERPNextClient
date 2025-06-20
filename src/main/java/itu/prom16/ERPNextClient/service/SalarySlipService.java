@@ -1,5 +1,6 @@
 package itu.prom16.ERPNextClient.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +23,8 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import itu.prom16.ERPNextClient.DTO.SalarySlipDTO;
 import itu.prom16.ERPNextClient.exception.CSRFTokenException;
 import itu.prom16.ERPNextClient.exception.ValidationException;
+import itu.prom16.ERPNextClient.model.SalarySlip;
+import itu.prom16.ERPNextClient.repository.SalarySlipRepository;
 
 /**
  *
@@ -31,6 +34,13 @@ import itu.prom16.ERPNextClient.exception.ValidationException;
 public class SalarySlipService {
     @Value("${erpnext.api.base-url}")
     private String baseUrl;
+
+    @Autowired
+    private SalarySlipRepository salarySlipRepository;
+
+    public List<SalarySlip> getAllSalarySlips() {
+        return salarySlipRepository.findAll();
+    }
 
     public void deleteSalarySlip(String sid, String name) {
         try {
