@@ -8,6 +8,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -157,14 +158,14 @@ public class SalarySlipController {
                         return details.stream()
                             .filter(sd -> sd.getAbbr().equals(abbrSalaryElement))
                             .anyMatch(sd -> 
-                                ("inf".equals(signeSalaryElement) && sd.getAmount() < amountSalaryElement) ||
-                                ("sup".equals(signeSalaryElement) && sd.getAmount() > amountSalaryElement)
+                                ("less".equals(signeSalaryElement) && sd.getAmount() < amountSalaryElement) ||
+                                ("more".equals(signeSalaryElement) && sd.getAmount() > amountSalaryElement)
                             );
                     })
                     .collect(Collectors.toList());
                 
                 if (salarySlips.isEmpty()) {
-                    throw new ValidationException("No Salary Found");
+                    throw new ValidationException("No Salary Slip Found with " + abbrSalaryElement + " " + signeSalaryElement + " than " + new DecimalFormat("#,##0.00").format(amountSalaryElement));
                 }
 
                 int salaryUpdated = 0;
@@ -184,12 +185,17 @@ public class SalarySlipController {
                     newSsa.setFromDate(ssa.getFromDate());
                     newSsa.setCompany(ssa.getCompany());
                     newSsa.setPayrollPayableAccount(ssa.getPayrollPayableAccount());
-                    Double ratioBase = ssa.getBase() * pourcentageBase / 100;
-                    if (signeBase.equals("plus")) {
-                        newSsa.setBase(ssa.getBase() + ratioBase);
-                    } else if (signeBase.equals("moins")) {
-                        newSsa.setBase(ssa.getBase() - ratioBase);
-                    } 
+                    double ratioBase = ssa.getBase() * pourcentageBase / 100;
+                    switch (signeBase) {
+                        case "plus":
+                            newSsa.setBase(ssa.getBase() + ratioBase);
+                            break;
+                        case "minus":
+                            newSsa.setBase(ssa.getBase() - ratioBase);
+                            break;
+                    }
+
+                    
                     
                     newSsa = salaryStructureAssignmentService.createSalaryStructureAssignment(sid, newSsa);
                     newSsa = salaryStructureAssignmentService.submitSSA(sid, newSsa.getName());
@@ -271,6 +277,8 @@ public class SalarySlipController {
                     ss.setEmployee(employee);
                     ss.setPayrollFrequency("Monthly");
                     ss.setPostingDate(LocalDate.parse(postingDate));
+                    ss.setStartDate(LocalDate.parse(postingDate));
+                    ss.setEndDate(LocalDate.parse(postingDate).withDayOfMonth(LocalDate.parse(postingDate).lengthOfMonth()));
 
                     if (base != null) {
                         SalaryStructureAssignmentDTO ssa = new SalaryStructureAssignmentDTO();
@@ -296,15 +304,20 @@ public class SalarySlipController {
                         }
                     }
 
-                    ss =  salarySlipService.createSalarySlip(sid, ss);
                     try {
-                        ss = salarySlipService.submitSalarySlip(sid, ss.getName());
-                        createdDocuments ++;
-                        createdSS ++;
+                        ss =  salarySlipService.createSalarySlip(sid, ss);
+                        try {
+                            ss = salarySlipService.submitSalarySlip(sid, ss.getName());
+                            createdDocuments ++;
+                            createdSS ++;
+                        } catch (ValidationException e) {
+                            salarySlipService.deleteSalarySlip(sid, ss.getName());
+                            errors.add(ss.getPostingDate().getMonth() + " " + ss.getPostingDate().getYear() + " : " + e.getMessage());
+                            continue;
+                        }
                     } catch (ValidationException e) {
-                        salarySlipService.deleteSalarySlip(sid, ss.getName());
-                        errors.add(ss.getPostingDate().getMonth() + " " + ss.getPostingDate().getYear() + " : " + e.getMessage());
-                        continue;
+                            errors.add(ss.getPostingDate().getMonth() + " " + ss.getPostingDate().getYear() + " : " + e.getMessage());
+                            continue;
                     }
                     success.add(ss.getPostingDate().getMonth() + " " + ss.getPostingDate().getYear());
                 }
@@ -431,5 +444,5 @@ public class SalarySlipController {
         } else {
             return "redirect:/";
         }
-    }    
+    }
 }
