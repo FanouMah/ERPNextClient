@@ -311,7 +311,58 @@ public class SalarySlipService {
             JsonNode root = objectMapper.readTree(response.body());
             JsonNode dataNode = root.path("data");
 
-            return objectMapper.readValue(dataNode.toString(), new TypeReference<SalarySlipDTO>() {});
+            if (dataNode.isEmpty()) {
+                return null;
+            } else {
+                return objectMapper.readValue(dataNode.toString(), new TypeReference<SalarySlipDTO>() {});
+            }
+
+        } catch (CSRFTokenException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to fetch SalarySlip : " + e.getMessage(), e);
+        }
+    }
+
+    public SalarySlipDTO getSalarySlipByEmployeeDate(String sid, String employee, String date) {
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            String filters = URLEncoder.encode("[[\"employee\",\"=\",\"" + employee + "\"],[\"posting_date\",\"=\",\"" + date + "\"]]", StandardCharsets.UTF_8);
+            String url = baseUrl + "/api/resource/Salary%20Slip?filters="+filters;
+
+            HttpClient httpClient = HttpClient.newHttpClient();
+
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(url))
+                    .header("Cookie", "sid=" + sid)
+                    .GET()
+                    .build();
+
+            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+            if (response.statusCode() != 200) {
+                JsonNode root = objectMapper.readTree(response.body());
+                String excType = root.path("exc_type").asText();
+                if ("CSRFTokenError".equals(excType)) {
+                    throw new CSRFTokenException("CSRF token error while retrieving SalarySlip : " + response.body());
+                }
+                throw new RuntimeException("Failed to fetch SalarySlip, HTTP status code: " + response.statusCode() + " - " + response.body());
+            }
+
+            objectMapper.registerModule(new JavaTimeModule());
+            objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+            objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
+            JsonNode root = objectMapper.readTree(response.body());
+            JsonNode dataNode = root.path("data");
+
+            if (dataNode.isEmpty()) {
+                return null;
+            } else {
+                List<SalarySlipDTO> dtoList = objectMapper.readValue(dataNode.toString(), new TypeReference<List<SalarySlipDTO>>() {});
+                SalarySlipDTO  ss = dtoList.get(0);
+                return getSalarySlip(sid, ss.getName()); 
+            }
+
         } catch (CSRFTokenException e) {
             throw e;
         } catch (Exception e) {

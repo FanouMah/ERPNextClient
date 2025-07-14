@@ -211,7 +211,7 @@ public class SalarySlipController {
                     ss.setAmendedFrom(salarySlip.getName());
 
                     ss = salarySlipService.createSalarySlip(sid, ss);
-                    ss = salarySlipService.submitSalarySlip(sid, ss.getName());
+                    ss = salarySlipService.submitSalarySlip(sid, ss.getName()); 
 
                     salaryUpdated++;
                 }
@@ -233,6 +233,84 @@ public class SalarySlipController {
             return "redirect:/";
         }
     }
+
+    @GetMapping("/salary-slips/search")
+    public String showSalarySlipSearch(
+        @CookieValue(value = "sid", required = false) String sid, Model model) {
+        if (sid != null) {
+            try {
+                SalaryStructureDTO salaryStructure = salaryStructureService.getSalaryStructure(sid);
+                List<SalarySlipDTO> list = salarySlipService.getSalarySlips(sid);
+                if (salaryStructure != null) {
+                    List<SalaryDetailDTO> salaryDetails = salaryStructure.getEarnings();
+                    salaryDetails.addAll(salaryStructure.getDeductions());
+                    model.addAttribute("salaryDetails", salaryDetails);
+                }
+                model.addAttribute("salarySlips", list);
+            } catch (CSRFTokenException ex) {
+                return "redirect:/logout";
+            } catch (RuntimeException e) {
+                model.addAttribute("code", "500");
+                model.addAttribute("error", e.getMessage());
+                return "error-500";
+            }
+            return "search-salary-slips";
+        } else {
+            return "redirect:/";
+        }
+    }
+
+    @PostMapping("/salary-slips/search")
+    public String searchSalarySlip(
+            @CookieValue(value = "sid", required = false) String sid, 
+            Model model, 
+            RedirectAttributes redirectAttributes,
+            @RequestParam(value = "salaryElement", required = true) String salaryElement,
+            @RequestParam(value = "signeSalaryElement", required = true) String signeSalaryElement,
+            @RequestParam(value = "amountSalaryElement", required = true) Double amountSalaryElement) {
+        
+        if (sid != null) {
+            try {
+                String abbrSalaryElement = salaryElement.split(";")[0]; 
+                String typeSalaryElement = salaryElement.split(";")[1]; 
+
+                List<SalarySlipDTO> salarySlips = salarySlipService.getSalarySlips(sid).stream()
+                    .filter(ss -> {
+                        List<SalaryDetailDTO> details = typeSalaryElement.equals("earnings") ? ss.getEarnings() : ss.getDeductions();
+                        return details.stream()
+                            .filter(sd -> sd.getAbbr().equals(abbrSalaryElement))
+                            .anyMatch(sd -> 
+                                ("less".equals(signeSalaryElement) && sd.getAmount() <= amountSalaryElement) ||
+                                ("more".equals(signeSalaryElement) && sd.getAmount() > amountSalaryElement)
+                            );
+                    })
+                    .collect(Collectors.toList());
+
+                SalaryStructureDTO salaryStructure = salaryStructureService.getSalaryStructure(sid);
+                if (salaryStructure != null) {
+                    List<SalaryDetailDTO> salaryDetails = salaryStructure.getEarnings();
+                    salaryDetails.addAll(salaryStructure.getDeductions());
+                    model.addAttribute("salaryDetails", salaryDetails);
+                }
+                model.addAttribute("salarySlips", salarySlips);
+                
+                return "search-salary-slips";
+
+            } catch (CSRFTokenException ex) {
+                return "redirect:/logout";
+            } catch (ValidationException ve) {
+                redirectAttributes.addFlashAttribute("error", ve.getMessage());
+                return "redirect:/salary-slips/search";
+            } catch (RuntimeException e) {
+                model.addAttribute("code", "500");
+                model.addAttribute("error", e.getMessage());
+                return "error-500";
+            }
+        } else {
+            return "redirect:/";
+        }
+    }
+
 
     @GetMapping("/salary-slips/new")
     public String showSalarySlipForm(@CookieValue(value = "sid", required = false) String sid, Model model) {
@@ -258,6 +336,8 @@ public class SalarySlipController {
         @CookieValue(value = "sid", required = false) String sid, 
         Model model,
         RedirectAttributes redirectAttributes,
+        @RequestParam(value = "ismoyenne", required = false) boolean ismoyenne,
+        @RequestParam(value = "isecrase", required = false) boolean isecrase,
         @RequestParam(value = "employee", required = true) String employee,
         @RequestParam(value = "base", required = false) Double base,
         @RequestParam(value = "start-month", required = true) String startMonth,
@@ -271,6 +351,11 @@ public class SalarySlipController {
                 int createdDocuments = 0;
                 int createdSSA = 0;
                 int createdSS = 0;
+                List<SalarySlipDTO> salarySlips = salarySlipService.getSalarySlips(sid);
+                Double totalSalary = 0.0;
+                for (SalarySlipDTO ss : salarySlips) {
+                    totalSalary += ss.getRoundedTotal();
+                }
                 for (String postingDate : postigDates) {
 
                     SalarySlipDTO ss = new SalarySlipDTO();
@@ -280,10 +365,10 @@ public class SalarySlipController {
                     ss.setStartDate(LocalDate.parse(postingDate));
                     ss.setEndDate(LocalDate.parse(postingDate).withDayOfMonth(LocalDate.parse(postingDate).lengthOfMonth()));
 
-                    if (base != null) {
+                    if (ismoyenne) {
                         SalaryStructureAssignmentDTO ssa = new SalaryStructureAssignmentDTO();
                         ssa.setEmployee(employee);
-                        ssa.setBase(base);
+                        ssa.setBase(totalSalary/salarySlips.size());
                         ssa.setFromDate(LocalDate.parse(postingDate));
                         ssa.setSalaryStructure(salaryStructureService.getSalaryStructureName(sid));
 
